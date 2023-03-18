@@ -1,0 +1,28 @@
+namespace EngineBay.Blueprints
+{
+    using System;
+
+    public class OutputDataVariableBlueprintDto
+    {
+        public OutputDataVariableBlueprintDto(OutputDataVariableBlueprint outputDataVariableBlueprint)
+        {
+            if (outputDataVariableBlueprint is null)
+            {
+                throw new ArgumentNullException(nameof(outputDataVariableBlueprint));
+            }
+
+            this.Id = outputDataVariableBlueprint.Id;
+            this.Name = outputDataVariableBlueprint.Name;
+            this.Namespace = outputDataVariableBlueprint.Namespace;
+            this.Type = outputDataVariableBlueprint.Type;
+        }
+
+        public Guid Id { get; set; }
+
+        public string? Name { get; set; }
+
+        public string? Namespace { get; set; }
+
+        public string? Type { get; set; }
+    }
+}
