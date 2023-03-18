@@ -2,6 +2,7 @@ namespace EngineBay.Blueprints
 {
     using System;
     using EngineBay.Core;
+    using Humanizer;
     using Microsoft.EntityFrameworkCore;
 
     public class TriggerExpressionBlueprint : BaseModel
@@ -24,6 +25,8 @@ namespace EngineBay.Blueprints
             {
                 throw new ArgumentNullException(nameof(modelBuilder));
             }
+
+            modelBuilder.Entity<TriggerExpressionBlueprint>().ToTable(typeof(TriggerExpressionBlueprint).Name.Pluralize());
 
             modelBuilder.Entity<TriggerExpressionBlueprint>().HasKey(x => x.Id);
 

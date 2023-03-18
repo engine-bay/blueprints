@@ -2,6 +2,7 @@ namespace EngineBay.Blueprints
 {
     using System;
     using EngineBay.Core;
+    using Humanizer;
     using Microsoft.EntityFrameworkCore;
 
     public class ExpressionBlueprint : BaseModel
@@ -28,6 +29,8 @@ namespace EngineBay.Blueprints
             {
                 throw new ArgumentNullException(nameof(modelBuilder));
             }
+
+            modelBuilder.Entity<ExpressionBlueprint>().ToTable(typeof(ExpressionBlueprint).Name.Pluralize());
 
             modelBuilder.Entity<ExpressionBlueprint>().HasKey(x => x.Id);
 

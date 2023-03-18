@@ -2,6 +2,7 @@ namespace EngineBay.Blueprints
 {
     using System;
     using EngineBay.Core;
+    using Humanizer;
     using Microsoft.EntityFrameworkCore;
 
     public class DataVariableBlueprint : BaseModel
@@ -26,6 +27,8 @@ namespace EngineBay.Blueprints
             {
                 throw new ArgumentNullException(nameof(modelBuilder));
             }
+
+            modelBuilder.Entity<DataVariableBlueprint>().ToTable(typeof(DataVariableBlueprint).Name.Pluralize());
 
             modelBuilder.Entity<DataVariableBlueprint>().HasKey(x => x.Id);
             modelBuilder.Entity<DataVariableBlueprint>().HasIndex(x => new { x.Name, x.BlueprintId, x.Namespace }).IsUnique();

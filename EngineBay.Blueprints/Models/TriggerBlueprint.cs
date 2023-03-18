@@ -2,6 +2,7 @@ namespace EngineBay.Blueprints
 {
     using System;
     using EngineBay.Core;
+    using Humanizer;
     using Microsoft.EntityFrameworkCore;
 
     public class TriggerBlueprint : BaseModel
@@ -26,6 +27,8 @@ namespace EngineBay.Blueprints
             {
                 throw new ArgumentNullException(nameof(modelBuilder));
             }
+
+            modelBuilder.Entity<TriggerBlueprint>().ToTable(typeof(TriggerBlueprint).Name.Pluralize());
 
             modelBuilder.Entity<TriggerBlueprint>().HasKey(x => x.Id);
 

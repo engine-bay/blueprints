@@ -2,6 +2,7 @@ namespace EngineBay.Blueprints
 {
     using System;
     using EngineBay.Core;
+    using Humanizer;
     using Microsoft.EntityFrameworkCore;
 
     public class DataTableCellBlueprint : BaseModel
@@ -24,6 +25,8 @@ namespace EngineBay.Blueprints
             {
                 throw new ArgumentNullException(nameof(modelBuilder));
             }
+
+            modelBuilder.Entity<DataTableCellBlueprint>().ToTable(typeof(DataTableCellBlueprint).Name.Pluralize());
 
             modelBuilder.Entity<DataTableCellBlueprint>().HasKey(x => x.Id);
 

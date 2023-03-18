@@ -2,6 +2,7 @@ namespace EngineBay.Blueprints
 {
     using System;
     using EngineBay.Core;
+    using Humanizer;
     using Microsoft.EntityFrameworkCore;
 
     public class OutputDataVariableBlueprint : BaseModel
@@ -22,6 +23,8 @@ namespace EngineBay.Blueprints
             {
                 throw new ArgumentNullException(nameof(modelBuilder));
             }
+
+            modelBuilder.Entity<OutputDataVariableBlueprint>().ToTable(typeof(OutputDataVariableBlueprint).Name.Pluralize());
 
             modelBuilder.Entity<OutputDataVariableBlueprint>().HasKey(x => x.Id);
 

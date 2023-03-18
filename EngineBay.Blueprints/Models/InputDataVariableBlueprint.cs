@@ -2,6 +2,7 @@ namespace EngineBay.Blueprints
 {
     using System;
     using EngineBay.Core;
+    using Humanizer;
     using Microsoft.EntityFrameworkCore;
 
     public class InputDataVariableBlueprint : BaseModel
@@ -26,6 +27,8 @@ namespace EngineBay.Blueprints
             {
                 throw new ArgumentNullException(nameof(modelBuilder));
             }
+
+            modelBuilder.Entity<InputDataVariableBlueprint>().ToTable(typeof(InputDataVariableBlueprint).Name.Pluralize());
 
             modelBuilder.Entity<InputDataVariableBlueprint>().HasKey(x => x.Id);
 
