@@ -31,11 +31,13 @@ namespace EngineBay.Blueprints
             modelBuilder.Entity<DataVariableBlueprint>().ToTable(typeof(DataVariableBlueprint).Name.Pluralize());
 
             modelBuilder.Entity<DataVariableBlueprint>().HasKey(x => x.Id);
+
             modelBuilder.Entity<DataVariableBlueprint>().HasIndex(x => new { x.Name, x.BlueprintId, x.Namespace }).IsUnique();
 
             modelBuilder.Entity<DataVariableBlueprint>().Property(x => x.CreatedAt).IsRequired();
 
             modelBuilder.Entity<DataVariableBlueprint>().Property(x => x.LastUpdatedAt).IsRequired();
+
             modelBuilder.Entity<DataVariableBlueprint>().Property(x => x.Name).IsRequired();
 
             modelBuilder.Entity<DataVariableBlueprint>().Property(x => x.Type).IsRequired();

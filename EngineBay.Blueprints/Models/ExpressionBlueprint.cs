@@ -37,6 +37,7 @@ namespace EngineBay.Blueprints
             modelBuilder.Entity<ExpressionBlueprint>().Property(x => x.CreatedAt).IsRequired();
 
             modelBuilder.Entity<ExpressionBlueprint>().Property(x => x.LastUpdatedAt).IsRequired();
+
             modelBuilder.Entity<ExpressionBlueprint>().Property(x => x.Expression).IsRequired();
 
             modelBuilder.Entity<ExpressionBlueprint>().HasMany(x => x.InputDataTableBlueprints).WithOne(x => x.ExpressionBlueprint).HasForeignKey(x => x.ExpressionBlueprintId);

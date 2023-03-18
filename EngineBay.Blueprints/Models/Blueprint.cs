@@ -37,6 +37,7 @@ namespace EngineBay.Blueprints
             modelBuilder.Entity<Blueprint>().Property(x => x.CreatedAt).IsRequired();
 
             modelBuilder.Entity<Blueprint>().Property(x => x.LastUpdatedAt).IsRequired();
+
             modelBuilder.Entity<Blueprint>().Property(x => x.Name).IsRequired();
 
             modelBuilder.Entity<Blueprint>().HasIndex(x => new { x.Name, x.WorkbookId }).IsUnique();

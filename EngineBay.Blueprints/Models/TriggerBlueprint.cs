@@ -35,6 +35,7 @@ namespace EngineBay.Blueprints
             modelBuilder.Entity<TriggerBlueprint>().Property(x => x.CreatedAt).IsRequired();
 
             modelBuilder.Entity<TriggerBlueprint>().Property(x => x.LastUpdatedAt).IsRequired();
+
             modelBuilder.Entity<TriggerBlueprint>().Property(x => x.Name).IsRequired();
 
             modelBuilder.Entity<TriggerBlueprint>().HasIndex(x => new { x.Name, x.BlueprintId, x.OutputDataVariableBlueprintId }).IsUnique();

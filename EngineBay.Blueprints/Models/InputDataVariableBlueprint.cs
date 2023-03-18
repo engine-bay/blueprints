@@ -35,6 +35,7 @@ namespace EngineBay.Blueprints
             modelBuilder.Entity<InputDataVariableBlueprint>().Property(x => x.CreatedAt).IsRequired();
 
             modelBuilder.Entity<InputDataVariableBlueprint>().Property(x => x.LastUpdatedAt).IsRequired();
+
             modelBuilder.Entity<InputDataVariableBlueprint>().Property(x => x.Name).IsRequired();
 
             modelBuilder.Entity<InputDataVariableBlueprint>().Property(x => x.Namespace).IsRequired();

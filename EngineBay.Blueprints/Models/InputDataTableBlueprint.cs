@@ -25,11 +25,13 @@ namespace EngineBay.Blueprints
             modelBuilder.Entity<InputDataTableBlueprint>().ToTable(typeof(InputDataTableBlueprint).Name.Pluralize());
 
             modelBuilder.Entity<InputDataTableBlueprint>().HasKey(x => x.Id);
+
             modelBuilder.Entity<InputDataTableBlueprint>().HasIndex(x => new { x.Name, x.Namespace, x.ExpressionBlueprintId }).IsUnique();
 
             modelBuilder.Entity<InputDataTableBlueprint>().Property(x => x.CreatedAt).IsRequired();
 
             modelBuilder.Entity<InputDataTableBlueprint>().Property(x => x.LastUpdatedAt).IsRequired();
+
             modelBuilder.Entity<InputDataTableBlueprint>().Property(x => x.Name).IsRequired();
 
             modelBuilder.Entity<InputDataTableBlueprint>().Property(x => x.Namespace).IsRequired();

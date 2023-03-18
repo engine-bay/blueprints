@@ -29,6 +29,7 @@ namespace EngineBay.Blueprints
             modelBuilder.Entity<DataTableColumnBlueprint>().Property(x => x.CreatedAt).IsRequired();
 
             modelBuilder.Entity<DataTableColumnBlueprint>().Property(x => x.LastUpdatedAt).IsRequired();
+
             modelBuilder.Entity<DataTableColumnBlueprint>().Property(x => x.Name).IsRequired();
 
             modelBuilder.Entity<DataTableColumnBlueprint>().Property(x => x.Type).IsRequired();

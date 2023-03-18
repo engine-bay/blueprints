@@ -27,6 +27,7 @@ namespace EngineBay.Blueprints
             modelBuilder.Entity<DataTableRowBlueprint>().Property(x => x.CreatedAt).IsRequired();
 
             modelBuilder.Entity<DataTableRowBlueprint>().Property(x => x.LastUpdatedAt).IsRequired();
+
             modelBuilder.Entity<DataTableRowBlueprint>().HasMany(x => x.DataTableCellBlueprints).WithOne(x => x.DataTableRowBlueprint);
         }
     }
