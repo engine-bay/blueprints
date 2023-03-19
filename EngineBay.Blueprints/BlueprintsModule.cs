@@ -50,7 +50,7 @@ namespace EngineBay.Blueprints
             services.AddTransient<IValidator<OutputDataVariableBlueprint>, OutputDataVariableBlueprintValidator>();
 
             // register persistence services
-            var databaseConfiguration = new DatabaseConfiguration<BlueprintsEngineDb, BlueprintsEngineQueryDb, BlueprintsEngineWriteDb>();
+            var databaseConfiguration = new CQRSDatabaseConfiguration<BlueprintsEngineDb, BlueprintsEngineQueryDb, BlueprintsEngineWriteDb>();
             databaseConfiguration.RegisterDatabases(services);
 
             return services;
