@@ -7,7 +7,7 @@ namespace EngineBay.Blueprints
     public class BlueprintsModule : IModule
     {
         /// <inheritdoc/>
-        public IServiceCollection RegisterModule(IServiceCollection services)
+        public IServiceCollection RegisterModule(IServiceCollection services, IConfiguration configuration)
         {
             // Register commands
             services.AddTransient<CreateBlueprint>();
