@@ -56,6 +56,8 @@ namespace EngineBay.Blueprints
             OutputDataVariableBlueprint.CreateDataAnnotations(modelBuilder);
             TriggerBlueprint.CreateDataAnnotations(modelBuilder);
             TriggerExpressionBlueprint.CreateDataAnnotations(modelBuilder);
+
+            base.OnModelCreating(modelBuilder);
         }
     }
 }
