@@ -6,9 +6,9 @@ namespace EngineBay.Blueprints
 
     public class GetWorkbook : IQueryHandler<Guid, WorkbookDto>
     {
-        private readonly BlueprintsEngineQueryDb db;
+        private readonly BlueprintsQueryDbContext db;
 
-        public GetWorkbook(BlueprintsEngineQueryDb db)
+        public GetWorkbook(BlueprintsQueryDbContext db)
         {
             this.db = db;
         }

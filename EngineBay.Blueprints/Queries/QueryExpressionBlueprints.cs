@@ -6,9 +6,9 @@ namespace EngineBay.Blueprints
 
     public class QueryExpressionBlueprints : IQueryHandler<PaginationParameters, PaginatedDto<ExpressionBlueprintDto>>
     {
-        private readonly BlueprintsEngineQueryDb db;
+        private readonly BlueprintsQueryDbContext db;
 
-        public QueryExpressionBlueprints(BlueprintsEngineQueryDb db)
+        public QueryExpressionBlueprints(BlueprintsQueryDbContext db)
         {
             this.db = db;
         }

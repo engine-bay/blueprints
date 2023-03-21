@@ -6,9 +6,9 @@ namespace EngineBay.Blueprints
 
     public class DeleteBlueprint : ICommandHandler<Guid, BlueprintDto>
     {
-        private readonly BlueprintsEngineWriteDb db;
+        private readonly BlueprintsWriteDbContext db;
 
-        public DeleteBlueprint(BlueprintsEngineWriteDb db)
+        public DeleteBlueprint(BlueprintsWriteDbContext db)
         {
             this.db = db;
         }

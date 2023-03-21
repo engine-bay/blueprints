@@ -5,10 +5,10 @@ namespace EngineBay.Blueprints
 
     public class UpdateExpressionBlueprint : ICommandHandler<UpdateParameters<ExpressionBlueprint>, ExpressionBlueprintDto>
     {
-        private readonly BlueprintsEngineWriteDb db;
+        private readonly BlueprintsWriteDbContext db;
         private readonly IValidator<ExpressionBlueprint> validator;
 
-        public UpdateExpressionBlueprint(BlueprintsEngineWriteDb db, IValidator<ExpressionBlueprint> validator)
+        public UpdateExpressionBlueprint(BlueprintsWriteDbContext db, IValidator<ExpressionBlueprint> validator)
         {
             this.db = db;
             this.validator = validator;

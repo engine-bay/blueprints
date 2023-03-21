@@ -6,9 +6,9 @@ namespace EngineBay.Blueprints
 
     public class DeleteExpressionBlueprint : ICommandHandler<Guid, ExpressionBlueprintDto>
     {
-        private readonly BlueprintsEngineWriteDb db;
+        private readonly BlueprintsWriteDbContext db;
 
-        public DeleteExpressionBlueprint(BlueprintsEngineWriteDb db)
+        public DeleteExpressionBlueprint(BlueprintsWriteDbContext db)
         {
             this.db = db;
         }

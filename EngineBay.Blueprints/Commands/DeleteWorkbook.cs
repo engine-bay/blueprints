@@ -6,9 +6,9 @@ namespace EngineBay.Blueprints
 
     public class DeleteWorkbook : ICommandHandler<Guid, WorkbookDto>
     {
-        private readonly BlueprintsEngineWriteDb db;
+        private readonly BlueprintsWriteDbContext db;
 
-        public DeleteWorkbook(BlueprintsEngineWriteDb db)
+        public DeleteWorkbook(BlueprintsWriteDbContext db)
         {
             this.db = db;
         }

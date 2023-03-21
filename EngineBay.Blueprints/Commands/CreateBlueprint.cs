@@ -5,10 +5,10 @@ namespace EngineBay.Blueprints
 
     public class CreateBlueprint : ICommandHandler<Blueprint, BlueprintDto>
     {
-        private readonly BlueprintsEngineWriteDb db;
+        private readonly BlueprintsWriteDbContext db;
         private readonly IValidator<Blueprint> validator;
 
-        public CreateBlueprint(BlueprintsEngineWriteDb db, IValidator<Blueprint> validator)
+        public CreateBlueprint(BlueprintsWriteDbContext db, IValidator<Blueprint> validator)
         {
             this.db = db;
             this.validator = validator;

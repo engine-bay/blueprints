@@ -5,10 +5,10 @@ namespace EngineBay.Blueprints
 
     public class CreateDataVariableBlueprint : ICommandHandler<DataVariableBlueprint, DataVariableBlueprintDto>
     {
-        private readonly BlueprintsEngineWriteDb db;
+        private readonly BlueprintsWriteDbContext db;
         private readonly IValidator<DataVariableBlueprint> validator;
 
-        public CreateDataVariableBlueprint(BlueprintsEngineWriteDb db, IValidator<DataVariableBlueprint> validator)
+        public CreateDataVariableBlueprint(BlueprintsWriteDbContext db, IValidator<DataVariableBlueprint> validator)
         {
             this.db = db;
             this.validator = validator;

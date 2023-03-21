@@ -32,11 +32,19 @@ namespace EngineBay.Blueprints
 
             modelBuilder.Entity<DataVariableBlueprint>().HasKey(x => x.Id);
 
-            modelBuilder.Entity<DataVariableBlueprint>().HasIndex(x => new { x.Name, x.BlueprintId, x.Namespace }).IsUnique();
-
             modelBuilder.Entity<DataVariableBlueprint>().Property(x => x.CreatedAt).IsRequired();
 
             modelBuilder.Entity<DataVariableBlueprint>().Property(x => x.LastUpdatedAt).IsRequired();
+
+            modelBuilder.Entity<DataVariableBlueprint>().Property(x => x.CreatedById).IsRequired();
+
+            modelBuilder.Entity<DataVariableBlueprint>().HasOne(x => x.CreatedBy);
+
+            modelBuilder.Entity<DataVariableBlueprint>().Property(x => x.LastUpdatedById).IsRequired();
+
+            modelBuilder.Entity<DataVariableBlueprint>().HasOne(x => x.LastUpdatedBy);
+
+            modelBuilder.Entity<DataVariableBlueprint>().HasIndex(x => new { x.Name, x.BlueprintId, x.Namespace }).IsUnique();
 
             modelBuilder.Entity<DataVariableBlueprint>().Property(x => x.Name).IsRequired();
 

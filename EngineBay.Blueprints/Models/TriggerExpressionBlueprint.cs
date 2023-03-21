@@ -34,6 +34,14 @@ namespace EngineBay.Blueprints
 
             modelBuilder.Entity<TriggerExpressionBlueprint>().Property(x => x.LastUpdatedAt).IsRequired();
 
+            modelBuilder.Entity<TriggerExpressionBlueprint>().Property(x => x.CreatedById).IsRequired();
+
+            modelBuilder.Entity<TriggerExpressionBlueprint>().HasOne(x => x.CreatedBy);
+
+            modelBuilder.Entity<TriggerExpressionBlueprint>().Property(x => x.LastUpdatedById).IsRequired();
+
+            modelBuilder.Entity<TriggerExpressionBlueprint>().HasOne(x => x.LastUpdatedBy);
+
             modelBuilder.Entity<TriggerExpressionBlueprint>().Property(x => x.Expression).IsRequired();
 
             modelBuilder.Entity<TriggerExpressionBlueprint>().HasIndex(x => new { x.Expression, x.TriggerBlueprintId, x.InputDataVariableBlueprintId }).IsUnique();

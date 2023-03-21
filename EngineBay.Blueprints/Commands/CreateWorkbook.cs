@@ -5,10 +5,10 @@ namespace EngineBay.Blueprints
 
     public class CreateWorkbook : ICommandHandler<Workbook, WorkbookDto>
     {
-        private readonly BlueprintsEngineWriteDb db;
+        private readonly BlueprintsWriteDbContext db;
         private readonly IValidator<Workbook> validator;
 
-        public CreateWorkbook(BlueprintsEngineWriteDb db, IValidator<Workbook> validator)
+        public CreateWorkbook(BlueprintsWriteDbContext db, IValidator<Workbook> validator)
         {
             this.db = db;
             this.validator = validator;

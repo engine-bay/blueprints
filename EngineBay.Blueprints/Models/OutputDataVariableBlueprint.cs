@@ -32,6 +32,14 @@ namespace EngineBay.Blueprints
 
             modelBuilder.Entity<OutputDataVariableBlueprint>().Property(x => x.LastUpdatedAt).IsRequired();
 
+            modelBuilder.Entity<OutputDataVariableBlueprint>().Property(x => x.CreatedById).IsRequired();
+
+            modelBuilder.Entity<OutputDataVariableBlueprint>().HasOne(x => x.CreatedBy);
+
+            modelBuilder.Entity<OutputDataVariableBlueprint>().Property(x => x.LastUpdatedById).IsRequired();
+
+            modelBuilder.Entity<OutputDataVariableBlueprint>().HasOne(x => x.LastUpdatedBy);
+
             modelBuilder.Entity<OutputDataVariableBlueprint>().HasIndex(x => new { x.Name, x.ExpressionBlueprintId, x.Namespace }).IsUnique();
 
             modelBuilder.Entity<OutputDataVariableBlueprint>().Property(x => x.Name).IsRequired();

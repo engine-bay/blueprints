@@ -34,6 +34,14 @@ namespace EngineBay.Blueprints
 
             modelBuilder.Entity<DataTableCellBlueprint>().Property(x => x.LastUpdatedAt).IsRequired();
 
+            modelBuilder.Entity<DataTableCellBlueprint>().Property(x => x.CreatedById).IsRequired();
+
+            modelBuilder.Entity<DataTableCellBlueprint>().HasOne(x => x.CreatedBy);
+
+            modelBuilder.Entity<DataTableCellBlueprint>().Property(x => x.LastUpdatedById).IsRequired();
+
+            modelBuilder.Entity<DataTableCellBlueprint>().HasOne(x => x.LastUpdatedBy);
+
             modelBuilder.Entity<DataTableCellBlueprint>().Property(x => x.Key).IsRequired();
 
             modelBuilder.Entity<DataTableCellBlueprint>().Property(x => x.Value).IsRequired();

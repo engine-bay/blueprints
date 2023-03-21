@@ -28,6 +28,14 @@ namespace EngineBay.Blueprints
 
             modelBuilder.Entity<Workbook>().Property(x => x.LastUpdatedAt).IsRequired();
 
+            modelBuilder.Entity<Workbook>().Property(x => x.CreatedById).IsRequired();
+
+            modelBuilder.Entity<Workbook>().HasOne(x => x.CreatedBy);
+
+            modelBuilder.Entity<Workbook>().Property(x => x.LastUpdatedById).IsRequired();
+
+            modelBuilder.Entity<Workbook>().HasOne(x => x.LastUpdatedBy);
+
             modelBuilder.Entity<Workbook>().Property(x => x.Name).IsRequired();
 
             // modelBuilder.Entity<Workbook>().HasIndex(x => x.Name).IsUnique(); // disabled for now till a concept of data ownership can be introduced.

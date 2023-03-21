@@ -4,10 +4,10 @@ namespace EngineBay.Blueprints
 
     public class GetWorkbookComplexityScore : IQueryHandler<Guid, WorkbookComplexityScoreDto>
     {
-        private readonly BlueprintsEngineQueryDb db;
+        private readonly BlueprintsQueryDbContext db;
         private readonly GetWorkbook query;
 
-        public GetWorkbookComplexityScore(BlueprintsEngineQueryDb db, GetWorkbook query)
+        public GetWorkbookComplexityScore(BlueprintsQueryDbContext db, GetWorkbook query)
         {
             this.db = db;
             this.query = query;

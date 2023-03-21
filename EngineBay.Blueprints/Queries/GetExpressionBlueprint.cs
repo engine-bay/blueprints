@@ -4,9 +4,9 @@ namespace EngineBay.Blueprints
 
     public class GetExpressionBlueprint : IQueryHandler<Guid, ExpressionBlueprintDto>
     {
-        private readonly BlueprintsEngineQueryDb db;
+        private readonly BlueprintsQueryDbContext db;
 
-        public GetExpressionBlueprint(BlueprintsEngineQueryDb db)
+        public GetExpressionBlueprint(BlueprintsQueryDbContext db)
         {
             this.db = db;
         }

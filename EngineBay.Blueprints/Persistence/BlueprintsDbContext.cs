@@ -3,9 +3,9 @@ namespace EngineBay.Blueprints
     using EngineBay.Persistence;
     using Microsoft.EntityFrameworkCore;
 
-    public class BlueprintsEngineDb : EngineWriteDb, IEngineWriteDb
+    public class BlueprintsDbContext : ModuleWriteDbContext
     {
-        public BlueprintsEngineDb(DbContextOptions<EngineWriteDb> options)
+        public BlueprintsDbContext(DbContextOptions<ModuleWriteDbContext> options)
             : base(options)
         {
         }

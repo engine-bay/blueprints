@@ -6,9 +6,9 @@ namespace EngineBay.Blueprints
 
     public class QueryDataVariableBlueprints : IQueryHandler<PaginationParameters, PaginatedDto<DataVariableBlueprintDto>>
     {
-        private readonly BlueprintsEngineQueryDb db;
+        private readonly BlueprintsQueryDbContext db;
 
-        public QueryDataVariableBlueprints(BlueprintsEngineQueryDb db)
+        public QueryDataVariableBlueprints(BlueprintsQueryDbContext db)
         {
             this.db = db;
         }

@@ -4,9 +4,9 @@ namespace EngineBay.Blueprints
 
     public class DeleteDataVariableBlueprint : ICommandHandler<Guid, DataVariableBlueprintDto>
     {
-        private readonly BlueprintsEngineWriteDb db;
+        private readonly BlueprintsWriteDbContext db;
 
-        public DeleteDataVariableBlueprint(BlueprintsEngineWriteDb db)
+        public DeleteDataVariableBlueprint(BlueprintsWriteDbContext db)
         {
             this.db = db;
         }

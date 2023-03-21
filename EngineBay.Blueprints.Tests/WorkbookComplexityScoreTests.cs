@@ -2,11 +2,12 @@ namespace EngineBay.Blueprints.Tests
 {
     using System.Threading.Tasks;
     using EngineBay.Blueprints;
+    using EngineBay.Persistence;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Serialization;
     using Xunit;
 
-    public class WorkbookComplexityScoreTests : BaseBlueprintsQueryTest
+    public class WorkbookComplexityScoreTests : BaseBlueprintsCommandTest
     {
         public WorkbookComplexityScoreTests()
             : base()
@@ -21,9 +22,11 @@ namespace EngineBay.Blueprints.Tests
 
             if (workbooks is not null)
             {
-                this.BlueprintsDb.AddRange(workbooks);
+                this.BlueprintsDbContext.AddRange(workbooks);
 
-                this.BlueprintsDb.SaveChanges();
+                var applicationUser = new ApplicationUser();
+
+                this.BlueprintsDbContext.SaveChanges(applicationUser);
             }
         }
 
@@ -32,7 +35,7 @@ namespace EngineBay.Blueprints.Tests
         {
             var workbookId = new Guid("30be156a-91fd-4ae9-9dad-05e7ed44623a");
 
-            var command = new GetWorkbookComplexityScore(this.BlueprintsDb, new GetWorkbook(this.BlueprintsDb));
+            var command = new GetWorkbookComplexityScore(this.BlueprintsDbContext, new GetWorkbook(this.BlueprintsDbContext));
 
             var dto = await command.Handle(workbookId, CancellationToken.None).ConfigureAwait(false);
 
@@ -44,7 +47,7 @@ namespace EngineBay.Blueprints.Tests
         {
             var workbookId = new Guid("fdc26f9d-121e-40e5-b457-9a7ae6e264ad");
 
-            var command = new GetWorkbookComplexityScore(this.BlueprintsDb, new GetWorkbook(this.BlueprintsDb));
+            var command = new GetWorkbookComplexityScore(this.BlueprintsDbContext, new GetWorkbook(this.BlueprintsDbContext));
 
             var dto = await command.Handle(workbookId, CancellationToken.None).ConfigureAwait(false);
 
@@ -56,7 +59,7 @@ namespace EngineBay.Blueprints.Tests
         {
             var workbookId = new Guid("2802a321-6709-4a35-8e3d-cfd6fa6bfaf7");
 
-            var command = new GetWorkbookComplexityScore(this.BlueprintsDb, new GetWorkbook(this.BlueprintsDb));
+            var command = new GetWorkbookComplexityScore(this.BlueprintsDbContext, new GetWorkbook(this.BlueprintsDbContext));
 
             var dto = await command.Handle(workbookId, CancellationToken.None).ConfigureAwait(false);
 
@@ -68,7 +71,7 @@ namespace EngineBay.Blueprints.Tests
         {
             var workbookId = new Guid("e0dc623c-480c-4cf2-8c4e-e2f5d136ba3f");
 
-            var command = new GetWorkbookComplexityScore(this.BlueprintsDb, new GetWorkbook(this.BlueprintsDb));
+            var command = new GetWorkbookComplexityScore(this.BlueprintsDbContext, new GetWorkbook(this.BlueprintsDbContext));
 
             var dto = await command.Handle(workbookId, CancellationToken.None).ConfigureAwait(false);
 

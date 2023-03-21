@@ -5,10 +5,10 @@ namespace EngineBay.Blueprints
 
     public class CreateExpressionBlueprint : ICommandHandler<ExpressionBlueprint, ExpressionBlueprintDto>
     {
-        private readonly BlueprintsEngineWriteDb db;
+        private readonly BlueprintsWriteDbContext db;
         private readonly IValidator<ExpressionBlueprint> validator;
 
-        public CreateExpressionBlueprint(BlueprintsEngineWriteDb db, IValidator<ExpressionBlueprint> validator)
+        public CreateExpressionBlueprint(BlueprintsWriteDbContext db, IValidator<ExpressionBlueprint> validator)
         {
             this.db = db;
             this.validator = validator;

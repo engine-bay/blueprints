@@ -13,17 +13,17 @@ namespace EngineBay.Blueprints.Tests
         {
             var mockProvider = new Mock<IServiceProvider>();
 
-            var blueprintsDbOptions = new DbContextOptionsBuilder<EngineWriteDb>()
-                .UseInMemoryDatabase(databaseName: "EngineDb")
+            var blueprintsDbContextOptions = new DbContextOptionsBuilder<ModuleWriteDbContext>()
+                .UseInMemoryDatabase(databaseName: "Db")
                 .EnableSensitiveDataLogging()
                 .Options;
 
-            this.BlueprintsDb = new BlueprintsEngineWriteDb(blueprintsDbOptions);
+            this.BlueprintsDbContext = new BlueprintsWriteDbContext(blueprintsDbContextOptions);
 
-            this.BlueprintsDb.Database.EnsureCreated();
+            this.BlueprintsDbContext.Database.EnsureCreated();
         }
 
-        protected BlueprintsEngineWriteDb BlueprintsDb { get; set; }
+        protected BlueprintsWriteDbContext BlueprintsDbContext { get; set; }
 
         // Dispose() calls Dispose(true)
         public void Dispose()
@@ -43,8 +43,8 @@ namespace EngineBay.Blueprints.Tests
             if (disposing)
             {
                 // free managed resources
-                this.BlueprintsDb.Database.EnsureDeleted();
-                this.BlueprintsDb.Dispose();
+                this.BlueprintsDbContext.Database.EnsureDeleted();
+                this.BlueprintsDbContext.Dispose();
             }
 
             this.isDisposed = true;

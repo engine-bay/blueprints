@@ -4,9 +4,9 @@ namespace EngineBay.Blueprints
 
     public class GetBlueprint : IQueryHandler<Guid, BlueprintDto>
     {
-        private readonly BlueprintsEngineQueryDb db;
+        private readonly BlueprintsQueryDbContext db;
 
-        public GetBlueprint(BlueprintsEngineQueryDb db)
+        public GetBlueprint(BlueprintsQueryDbContext db)
         {
             this.db = db;
         }
