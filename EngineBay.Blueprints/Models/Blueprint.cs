@@ -1,11 +1,11 @@
 namespace EngineBay.Blueprints
 {
     using System;
-    using EngineBay.Core;
+    using EngineBay.Persistence;
     using Humanizer;
     using Microsoft.EntityFrameworkCore;
 
-    public class Blueprint : BaseModel
+    public class Blueprint : AuditableModel
     {
         public string? Name { get; set; }
 

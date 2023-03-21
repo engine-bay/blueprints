@@ -1,11 +1,11 @@
 namespace EngineBay.Blueprints
 {
     using System;
-    using EngineBay.Core;
+    using EngineBay.Persistence;
     using Humanizer;
     using Microsoft.EntityFrameworkCore;
 
-    public class TriggerExpressionBlueprint : BaseModel
+    public class TriggerExpressionBlueprint : AuditableModel
     {
         public string? Expression { get; set; }
 

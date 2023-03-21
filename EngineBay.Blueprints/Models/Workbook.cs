@@ -1,11 +1,11 @@
 namespace EngineBay.Blueprints
 {
     using System;
-    using EngineBay.Core;
+    using EngineBay.Persistence;
     using Humanizer;
     using Microsoft.EntityFrameworkCore;
 
-    public class Workbook : BaseModel
+    public class Workbook : AuditableModel
     {
         public string? Name { get; set; }
 
@@ -27,6 +27,7 @@ namespace EngineBay.Blueprints
             modelBuilder.Entity<Workbook>().Property(x => x.CreatedAt).IsRequired();
 
             modelBuilder.Entity<Workbook>().Property(x => x.LastUpdatedAt).IsRequired();
+
             modelBuilder.Entity<Workbook>().Property(x => x.Name).IsRequired();
 
             // modelBuilder.Entity<Workbook>().HasIndex(x => x.Name).IsUnique(); // disabled for now till a concept of data ownership can be introduced.
