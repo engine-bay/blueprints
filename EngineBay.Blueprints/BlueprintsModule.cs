@@ -1,8 +1,10 @@
 namespace EngineBay.Blueprints
 {
+    using System.Security.Claims;
     using EngineBay.Core;
     using EngineBay.Persistence;
     using FluentValidation;
+    using Microsoft.AspNetCore.Identity;
 
     public class BlueprintsModule : IModule
     {
@@ -78,26 +80,47 @@ namespace EngineBay.Blueprints
                 return Results.Ok(dto);
             });
 
-            endpoints.MapPost("/blueprints", async (CreateBlueprint command, Blueprint blueprint, CancellationToken cancellation) =>
+            endpoints.MapPost("/blueprints", async (UserManager<ApplicationUser> userManager, HttpContext httpContext, CreateBlueprint command, Blueprint blueprint, CancellationToken cancellation) =>
             {
-                var dto = await command.Handle(blueprint, cancellation).ConfigureAwait(false);
+                var user = await userManager.GetUserAsync(httpContext.User).ConfigureAwait(false);
+
+                if (user is null)
+                {
+                    return Results.Unauthorized();
+                }
+
+                var dto = await command.Handle(blueprint, user, cancellation).ConfigureAwait(false);
                 return Results.Created($"/blueprints/{blueprint.Id}", dto);
             });
 
-            endpoints.MapPut("/blueprints/{id}", async (UpdateBlueprint command, Blueprint updateBlueprint, Guid id, CancellationToken cancellation) =>
+            endpoints.MapPut("/blueprints/{id}", async (UserManager<ApplicationUser> userManager, HttpContext httpContext, UpdateBlueprint command, Blueprint updateBlueprint, Guid id, CancellationToken cancellation) =>
             {
+                var user = await userManager.GetUserAsync(httpContext.User).ConfigureAwait(false);
+
+                if (user is null)
+                {
+                    return Results.Unauthorized();
+                }
+
                 var updateParameters = new UpdateParameters<Blueprint>
                 {
                     Id = id,
                     Entity = updateBlueprint,
                 };
-                var dto = await command.Handle(updateParameters, cancellation).ConfigureAwait(false);
+                var dto = await command.Handle(updateParameters, user, cancellation).ConfigureAwait(false);
                 return Results.Ok(dto);
             });
 
-            endpoints.MapDelete("/blueprints/{id}", async (DeleteBlueprint command, Guid id, CancellationToken cancellation) =>
+            endpoints.MapDelete("/blueprints/{id}", async (UserManager<ApplicationUser> userManager, HttpContext httpContext, DeleteBlueprint command, Guid id, CancellationToken cancellation) =>
             {
-                var dto = await command.Handle(id, cancellation).ConfigureAwait(false);
+                var user = await userManager.GetUserAsync(httpContext.User).ConfigureAwait(false);
+
+                if (user is null)
+                {
+                    return Results.Unauthorized();
+                }
+
+                var dto = await command.Handle(id, user, cancellation).ConfigureAwait(false);
                 return Results.Ok(dto);
             });
 
@@ -120,26 +143,47 @@ namespace EngineBay.Blueprints
                 return Results.Ok(dto);
             });
 
-            endpoints.MapPost("/data-variable-blueprints", async (CreateDataVariableBlueprint command, DataVariableBlueprint dataVariableBlueprint, CancellationToken cancellation) =>
+            endpoints.MapPost("/data-variable-blueprints", async (UserManager<ApplicationUser> userManager, HttpContext httpContext, CreateDataVariableBlueprint command, DataVariableBlueprint dataVariableBlueprint, CancellationToken cancellation) =>
             {
-                var dto = await command.Handle(dataVariableBlueprint, cancellation).ConfigureAwait(false);
+                var user = await userManager.GetUserAsync(httpContext.User).ConfigureAwait(false);
+
+                if (user is null)
+                {
+                    return Results.Unauthorized();
+                }
+
+                var dto = await command.Handle(dataVariableBlueprint, user, cancellation).ConfigureAwait(false);
                 return Results.Created($"/data-variable-blueprints/{dataVariableBlueprint.Id}", dto);
             });
 
-            endpoints.MapPut("/data-variable-blueprints/{id}", async (UpdateDataVariableBlueprint command, DataVariableBlueprint updateDataVariableBlueprint, Guid id, CancellationToken cancellation) =>
+            endpoints.MapPut("/data-variable-blueprints/{id}", async (UserManager<ApplicationUser> userManager, HttpContext httpContext, UpdateDataVariableBlueprint command, DataVariableBlueprint updateDataVariableBlueprint, Guid id, CancellationToken cancellation) =>
             {
+                var user = await userManager.GetUserAsync(httpContext.User).ConfigureAwait(false);
+
+                if (user is null)
+                {
+                    return Results.Unauthorized();
+                }
+
                 var updateParameters = new UpdateParameters<DataVariableBlueprint>
                 {
                     Id = id,
                     Entity = updateDataVariableBlueprint,
                 };
-                var dto = await command.Handle(updateParameters, cancellation).ConfigureAwait(false);
+                var dto = await command.Handle(updateParameters, user, cancellation).ConfigureAwait(false);
                 return Results.Ok(dto);
             });
 
-            endpoints.MapDelete("/data-variable-blueprints/{id}", async (DeleteBlueprint command, Guid id, CancellationToken cancellation) =>
+            endpoints.MapDelete("/data-variable-blueprints/{id}", async (UserManager<ApplicationUser> userManager, HttpContext httpContext, DeleteBlueprint command, Guid id, CancellationToken cancellation) =>
             {
-                var dto = await command.Handle(id, cancellation).ConfigureAwait(false);
+                var user = await userManager.GetUserAsync(httpContext.User).ConfigureAwait(false);
+
+                if (user is null)
+                {
+                    return Results.Unauthorized();
+                }
+
+                var dto = await command.Handle(id, user, cancellation).ConfigureAwait(false);
                 return Results.Ok(dto);
             });
 
@@ -162,26 +206,47 @@ namespace EngineBay.Blueprints
                 return Results.Ok(dto);
             });
 
-            endpoints.MapPost("/expression-blueprints", async (CreateExpressionBlueprint command, ExpressionBlueprint expressionBlueprint, CancellationToken cancellation) =>
+            endpoints.MapPost("/expression-blueprints", async (UserManager<ApplicationUser> userManager, HttpContext httpContext, CreateExpressionBlueprint command, ExpressionBlueprint expressionBlueprint, CancellationToken cancellation) =>
             {
-                var dto = await command.Handle(expressionBlueprint, cancellation).ConfigureAwait(false);
+                var user = await userManager.GetUserAsync(httpContext.User).ConfigureAwait(false);
+
+                if (user is null)
+                {
+                    return Results.Unauthorized();
+                }
+
+                var dto = await command.Handle(expressionBlueprint, user, cancellation).ConfigureAwait(false);
                 return Results.Created($"/expression-blueprints/{expressionBlueprint.Id}", dto);
             });
 
-            endpoints.MapPut("/expression-blueprints/{id}", async (UpdateExpressionBlueprint command, ExpressionBlueprint updateExpressionBlueprint, Guid id, CancellationToken cancellation) =>
+            endpoints.MapPut("/expression-blueprints/{id}", async (UserManager<ApplicationUser> userManager, HttpContext httpContext, UpdateExpressionBlueprint command, ExpressionBlueprint updateExpressionBlueprint, Guid id, CancellationToken cancellation) =>
             {
+                var user = await userManager.GetUserAsync(httpContext.User).ConfigureAwait(false);
+
+                if (user is null)
+                {
+                    return Results.Unauthorized();
+                }
+
                 var updateParameters = new UpdateParameters<ExpressionBlueprint>
                 {
                     Id = id,
                     Entity = updateExpressionBlueprint,
                 };
-                var dto = await command.Handle(updateParameters, cancellation).ConfigureAwait(false);
+                var dto = await command.Handle(updateParameters, user, cancellation).ConfigureAwait(false);
                 return Results.Ok(dto);
             });
 
-            endpoints.MapDelete("/expression-blueprints/{id}", async (DeleteExpressionBlueprint command, Guid id, CancellationToken cancellation) =>
+            endpoints.MapDelete("/expression-blueprints/{id}", async (UserManager<ApplicationUser> userManager, HttpContext httpContext, DeleteExpressionBlueprint command, Guid id, CancellationToken cancellation) =>
             {
-                var dto = await command.Handle(id, cancellation).ConfigureAwait(false);
+                var user = await userManager.GetUserAsync(httpContext.User).ConfigureAwait(false);
+
+                if (user is null)
+                {
+                    return Results.Unauthorized();
+                }
+
+                var dto = await command.Handle(id, user, cancellation).ConfigureAwait(false);
                 return Results.Ok(dto);
             });
 
@@ -210,26 +275,47 @@ namespace EngineBay.Blueprints
                 return Results.Ok(dto);
             });
 
-            endpoints.MapPost("/workbooks", async (CreateWorkbook command, Workbook workbook, CancellationToken cancellation) =>
+            endpoints.MapPost("/workbooks", async (UserManager<ApplicationUser> userManager, HttpContext httpContext, CreateWorkbook command, Workbook workbook, CancellationToken cancellation) =>
             {
-                var dto = await command.Handle(workbook, cancellation).ConfigureAwait(false);
+                var user = await userManager.GetUserAsync(httpContext.User).ConfigureAwait(false);
+
+                if (user is null)
+                {
+                    return Results.Unauthorized();
+                }
+
+                var dto = await command.Handle(workbook, user, cancellation).ConfigureAwait(false);
                 return Results.Created($"/workbooks/{workbook.Id}", dto);
             });
 
-            endpoints.MapPut("/workbooks/{id}", async (UpdateWorkbook command, Workbook updateWorkbook, Guid id, CancellationToken cancellation) =>
+            endpoints.MapPut("/workbooks/{id}", async (UserManager<ApplicationUser> userManager, HttpContext httpContext, UpdateWorkbook command, Workbook updateWorkbook, Guid id, CancellationToken cancellation) =>
             {
+                var user = await userManager.GetUserAsync(httpContext.User).ConfigureAwait(false);
+
+                if (user is null)
+                {
+                    return Results.Unauthorized();
+                }
+
                 var updateParameters = new UpdateParameters<Workbook>
                 {
                     Id = id,
                     Entity = updateWorkbook,
                 };
-                var dto = await command.Handle(updateParameters, cancellation).ConfigureAwait(false);
+                var dto = await command.Handle(updateParameters, user, cancellation).ConfigureAwait(false);
                 return Results.Ok(dto);
             });
 
-            endpoints.MapDelete("/workbooks/{id}", async (DeleteWorkbook command, Guid id, CancellationToken cancellation) =>
+            endpoints.MapDelete("/workbooks/{id}", async (UserManager<ApplicationUser> userManager, HttpContext httpContext, DeleteWorkbook command, Guid id, CancellationToken cancellation) =>
             {
-                var dto = await command.Handle(id, cancellation).ConfigureAwait(false);
+                var user = await userManager.GetUserAsync(httpContext.User).ConfigureAwait(false);
+
+                if (user is null)
+                {
+                    return Results.Unauthorized();
+                }
+
+                var dto = await command.Handle(id, user, cancellation).ConfigureAwait(false);
                 return Results.Ok(dto);
             });
 

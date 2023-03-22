@@ -1,8 +1,9 @@
 namespace EngineBay.Blueprints
 {
     using EngineBay.Core;
+    using EngineBay.Persistence;
 
-    public class DeleteDataVariableBlueprint : ICommandHandler<Guid, DataVariableBlueprintDto>
+    public class DeleteDataVariableBlueprint : ICommandHandler<Guid, ApplicationUser, DataVariableBlueprintDto>
     {
         private readonly BlueprintsWriteDbContext db;
 
@@ -12,7 +13,7 @@ namespace EngineBay.Blueprints
         }
 
         /// <inheritdoc/>
-        public async Task<DataVariableBlueprintDto> Handle(Guid id, CancellationToken cancellation)
+        public async Task<DataVariableBlueprintDto> Handle(Guid id, ApplicationUser user, CancellationToken cancellation)
         {
             var dataVariableBlueprint = await this.db.DataVariableBlueprints.FindAsync(new object[] { id }, cancellation).ConfigureAwait(false);
 
@@ -22,7 +23,7 @@ namespace EngineBay.Blueprints
             }
 
             this.db.DataVariableBlueprints.Remove(dataVariableBlueprint);
-            await this.db.SaveChangesAsync(cancellation).ConfigureAwait(false);
+            await this.db.SaveChangesAsync(user, cancellation).ConfigureAwait(false);
             return new DataVariableBlueprintDto(dataVariableBlueprint);
         }
     }

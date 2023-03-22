@@ -1,9 +1,10 @@
 namespace EngineBay.Blueprints
 {
     using EngineBay.Core;
+    using EngineBay.Persistence;
     using FluentValidation;
 
-    public class UpdateBlueprint : ICommandHandler<UpdateParameters<Blueprint>, BlueprintDto>
+    public class UpdateBlueprint : ICommandHandler<UpdateParameters<Blueprint>, ApplicationUser, BlueprintDto>
     {
         private readonly BlueprintsWriteDbContext db;
         private readonly IValidator<Blueprint> validator;
@@ -15,7 +16,7 @@ namespace EngineBay.Blueprints
         }
 
         /// <inheritdoc/>
-        public async Task<BlueprintDto> Handle(UpdateParameters<Blueprint> updateParameters, CancellationToken cancellation)
+        public async Task<BlueprintDto> Handle(UpdateParameters<Blueprint> updateParameters, ApplicationUser user, CancellationToken cancellation)
         {
             if (updateParameters is null)
             {
@@ -41,7 +42,7 @@ namespace EngineBay.Blueprints
 
             blueprint.Name = updateBlueprint.Name;
             blueprint.Description = updateBlueprint.Description;
-            await this.db.SaveChangesAsync(cancellation).ConfigureAwait(false);
+            await this.db.SaveChangesAsync(user, cancellation).ConfigureAwait(false);
             return new BlueprintDto(blueprint);
         }
     }

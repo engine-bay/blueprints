@@ -1,10 +1,11 @@
 namespace EngineBay.Blueprints
 {
     using EngineBay.Core;
+    using EngineBay.Persistence;
     using LinqKit;
     using Microsoft.EntityFrameworkCore;
 
-    public class DeleteBlueprint : ICommandHandler<Guid, BlueprintDto>
+    public class DeleteBlueprint : ICommandHandler<Guid, ApplicationUser, BlueprintDto>
     {
         private readonly BlueprintsWriteDbContext db;
 
@@ -14,7 +15,7 @@ namespace EngineBay.Blueprints
         }
 
         /// <inheritdoc/>
-        public async Task<BlueprintDto> Handle(Guid id, CancellationToken cancellation)
+        public async Task<BlueprintDto> Handle(Guid id, ApplicationUser user, CancellationToken cancellation)
         {
             var blueprint = await this.db.Blueprints
                     .Include(blueprint => blueprint.ExpressionBlueprints)
@@ -45,7 +46,7 @@ namespace EngineBay.Blueprints
             }
 
             this.db.Blueprints.Remove(blueprint);
-            await this.db.SaveChangesAsync(cancellation).ConfigureAwait(false);
+            await this.db.SaveChangesAsync(user, cancellation).ConfigureAwait(false);
             return new BlueprintDto(blueprint);
         }
     }

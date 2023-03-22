@@ -1,9 +1,10 @@
 namespace EngineBay.Blueprints
 {
     using EngineBay.Core;
+    using EngineBay.Persistence;
     using FluentValidation;
 
-    public class UpdateExpressionBlueprint : ICommandHandler<UpdateParameters<ExpressionBlueprint>, ExpressionBlueprintDto>
+    public class UpdateExpressionBlueprint : ICommandHandler<UpdateParameters<ExpressionBlueprint>, ApplicationUser, ExpressionBlueprintDto>
     {
         private readonly BlueprintsWriteDbContext db;
         private readonly IValidator<ExpressionBlueprint> validator;
@@ -15,7 +16,7 @@ namespace EngineBay.Blueprints
         }
 
         /// <inheritdoc/>
-        public async Task<ExpressionBlueprintDto> Handle(UpdateParameters<ExpressionBlueprint> updateParameters, CancellationToken cancellation)
+        public async Task<ExpressionBlueprintDto> Handle(UpdateParameters<ExpressionBlueprint> updateParameters, ApplicationUser user, CancellationToken cancellation)
         {
             if (updateParameters is null)
             {
@@ -42,7 +43,7 @@ namespace EngineBay.Blueprints
             expressionBlueprint.Expression = updateExpressionBlueprint.Expression;
             expressionBlueprint.Objective = updateExpressionBlueprint.Objective;
 
-            await this.db.SaveChangesAsync(cancellation).ConfigureAwait(false);
+            await this.db.SaveChangesAsync(user, cancellation).ConfigureAwait(false);
             return new ExpressionBlueprintDto(expressionBlueprint);
         }
     }

@@ -1,9 +1,10 @@
 namespace EngineBay.Blueprints
 {
     using EngineBay.Core;
+    using EngineBay.Persistence;
     using FluentValidation;
 
-    public class CreateDataVariableBlueprint : ICommandHandler<DataVariableBlueprint, DataVariableBlueprintDto>
+    public class CreateDataVariableBlueprint : ICommandHandler<DataVariableBlueprint, ApplicationUser, DataVariableBlueprintDto>
     {
         private readonly BlueprintsWriteDbContext db;
         private readonly IValidator<DataVariableBlueprint> validator;
@@ -15,11 +16,11 @@ namespace EngineBay.Blueprints
         }
 
         /// <inheritdoc/>
-        public async Task<DataVariableBlueprintDto> Handle(DataVariableBlueprint dataVariableBlueprint, CancellationToken cancellation)
+        public async Task<DataVariableBlueprintDto> Handle(DataVariableBlueprint dataVariableBlueprint, ApplicationUser user, CancellationToken cancellation)
         {
             this.validator.ValidateAndThrow(dataVariableBlueprint);
             await this.db.DataVariableBlueprints.AddAsync(dataVariableBlueprint, cancellation).ConfigureAwait(false);
-            await this.db.SaveChangesAsync(cancellation).ConfigureAwait(false);
+            await this.db.SaveChangesAsync(user, cancellation).ConfigureAwait(false);
             return new DataVariableBlueprintDto(dataVariableBlueprint);
         }
     }

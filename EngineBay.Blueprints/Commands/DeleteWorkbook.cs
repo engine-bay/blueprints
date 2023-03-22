@@ -1,10 +1,11 @@
 namespace EngineBay.Blueprints
 {
     using EngineBay.Core;
+    using EngineBay.Persistence;
     using LinqKit;
     using Microsoft.EntityFrameworkCore;
 
-    public class DeleteWorkbook : ICommandHandler<Guid, WorkbookDto>
+    public class DeleteWorkbook : ICommandHandler<Guid, ApplicationUser, WorkbookDto>
     {
         private readonly BlueprintsWriteDbContext db;
 
@@ -14,7 +15,7 @@ namespace EngineBay.Blueprints
         }
 
         /// <inheritdoc/>
-        public async Task<WorkbookDto> Handle(Guid id, CancellationToken cancellation)
+        public async Task<WorkbookDto> Handle(Guid id, ApplicationUser user, CancellationToken cancellation)
         {
             var workbook = await this.db.Workbooks
                 .Include(x => x.Blueprints)
@@ -53,7 +54,7 @@ namespace EngineBay.Blueprints
             }
 
             this.db.Workbooks.Remove(workbook);
-            await this.db.SaveChangesAsync(cancellation).ConfigureAwait(false);
+            await this.db.SaveChangesAsync(user, cancellation).ConfigureAwait(false);
             return new WorkbookDto(workbook);
         }
     }

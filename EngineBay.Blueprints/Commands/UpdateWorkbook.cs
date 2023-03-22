@@ -1,9 +1,10 @@
 namespace EngineBay.Blueprints
 {
     using EngineBay.Core;
+    using EngineBay.Persistence;
     using FluentValidation;
 
-    public class UpdateWorkbook : ICommandHandler<UpdateParameters<Workbook>, WorkbookDto>
+    public class UpdateWorkbook : ICommandHandler<UpdateParameters<Workbook>, ApplicationUser, WorkbookDto>
     {
         private readonly BlueprintsWriteDbContext db;
         private readonly IValidator<Workbook> validator;
@@ -15,7 +16,7 @@ namespace EngineBay.Blueprints
         }
 
         /// <inheritdoc/>
-        public async Task<WorkbookDto> Handle(UpdateParameters<Workbook> updateParameters, CancellationToken cancellation)
+        public async Task<WorkbookDto> Handle(UpdateParameters<Workbook> updateParameters, ApplicationUser user, CancellationToken cancellation)
         {
             if (updateParameters is null)
             {
@@ -41,7 +42,7 @@ namespace EngineBay.Blueprints
 
             workbook.Name = updateWorkbook.Name;
             workbook.Description = updateWorkbook.Description;
-            await this.db.SaveChangesAsync(cancellation).ConfigureAwait(false);
+            await this.db.SaveChangesAsync(user, cancellation).ConfigureAwait(false);
             return new WorkbookDto(workbook);
         }
     }
