@@ -30,11 +30,11 @@ namespace EngineBay.Blueprints
 
             modelBuilder.Entity<DataTableRowBlueprint>().Property(x => x.CreatedById).IsRequired();
 
-            modelBuilder.Entity<DataTableRowBlueprint>().HasOne(x => x.CreatedBy);
+            modelBuilder.Entity<DataTableRowBlueprint>().HasOne(x => x.CreatedBy).WithMany().HasForeignKey(x => x.CreatedById).OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<DataTableRowBlueprint>().Property(x => x.LastUpdatedById).IsRequired();
 
-            modelBuilder.Entity<DataTableRowBlueprint>().HasOne(x => x.LastUpdatedBy);
+            modelBuilder.Entity<DataTableRowBlueprint>().HasOne(x => x.LastUpdatedBy).WithMany().HasForeignKey(x => x.LastUpdatedById).OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<DataTableRowBlueprint>().HasMany(x => x.DataTableCellBlueprints).WithOne(x => x.DataTableRowBlueprint);
         }

@@ -32,11 +32,11 @@ namespace EngineBay.Blueprints
 
             modelBuilder.Entity<InputDataTableBlueprint>().Property(x => x.CreatedById).IsRequired();
 
-            modelBuilder.Entity<InputDataTableBlueprint>().HasOne(x => x.CreatedBy);
+            modelBuilder.Entity<InputDataTableBlueprint>().HasOne(x => x.CreatedBy).WithMany().HasForeignKey(x => x.CreatedById).OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<InputDataTableBlueprint>().Property(x => x.LastUpdatedById).IsRequired();
 
-            modelBuilder.Entity<InputDataTableBlueprint>().HasOne(x => x.LastUpdatedBy);
+            modelBuilder.Entity<InputDataTableBlueprint>().HasOne(x => x.LastUpdatedBy).WithMany().HasForeignKey(x => x.LastUpdatedById).OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<InputDataTableBlueprint>().HasIndex(x => new { x.Name, x.Namespace, x.ExpressionBlueprintId }).IsUnique();
 

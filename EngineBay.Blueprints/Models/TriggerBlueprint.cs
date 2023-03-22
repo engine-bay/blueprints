@@ -38,11 +38,11 @@ namespace EngineBay.Blueprints
 
             modelBuilder.Entity<TriggerBlueprint>().Property(x => x.CreatedById).IsRequired();
 
-            modelBuilder.Entity<TriggerBlueprint>().HasOne(x => x.CreatedBy);
+            modelBuilder.Entity<TriggerBlueprint>().HasOne(x => x.CreatedBy).WithMany().HasForeignKey(x => x.CreatedById).OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<TriggerBlueprint>().Property(x => x.LastUpdatedById).IsRequired();
 
-            modelBuilder.Entity<TriggerBlueprint>().HasOne(x => x.LastUpdatedBy);
+            modelBuilder.Entity<TriggerBlueprint>().HasOne(x => x.LastUpdatedBy).WithMany().HasForeignKey(x => x.LastUpdatedById).OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<TriggerBlueprint>().Property(x => x.Name).IsRequired();
 

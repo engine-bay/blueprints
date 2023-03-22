@@ -30,11 +30,11 @@ namespace EngineBay.Blueprints
 
             modelBuilder.Entity<Workbook>().Property(x => x.CreatedById).IsRequired();
 
-            modelBuilder.Entity<Workbook>().HasOne(x => x.CreatedBy);
+            modelBuilder.Entity<Workbook>().HasOne(x => x.CreatedBy).WithMany().HasForeignKey(x => x.CreatedById).OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Workbook>().Property(x => x.LastUpdatedById).IsRequired();
 
-            modelBuilder.Entity<Workbook>().HasOne(x => x.LastUpdatedBy);
+            modelBuilder.Entity<Workbook>().HasOne(x => x.LastUpdatedBy).WithMany().HasForeignKey(x => x.LastUpdatedById).OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Workbook>().Property(x => x.Name).IsRequired();
 

@@ -40,11 +40,11 @@ namespace EngineBay.Blueprints
 
             modelBuilder.Entity<ExpressionBlueprint>().Property(x => x.CreatedById).IsRequired();
 
-            modelBuilder.Entity<ExpressionBlueprint>().HasOne(x => x.CreatedBy);
+            modelBuilder.Entity<ExpressionBlueprint>().HasOne(x => x.CreatedBy).WithMany().HasForeignKey(x => x.CreatedById).OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<ExpressionBlueprint>().Property(x => x.LastUpdatedById).IsRequired();
 
-            modelBuilder.Entity<ExpressionBlueprint>().HasOne(x => x.LastUpdatedBy);
+            modelBuilder.Entity<ExpressionBlueprint>().HasOne(x => x.LastUpdatedBy).WithMany().HasForeignKey(x => x.LastUpdatedById).OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<ExpressionBlueprint>().Property(x => x.Expression).IsRequired();
 

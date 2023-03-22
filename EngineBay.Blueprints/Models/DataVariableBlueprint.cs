@@ -38,11 +38,11 @@ namespace EngineBay.Blueprints
 
             modelBuilder.Entity<DataVariableBlueprint>().Property(x => x.CreatedById).IsRequired();
 
-            modelBuilder.Entity<DataVariableBlueprint>().HasOne(x => x.CreatedBy);
+            modelBuilder.Entity<DataVariableBlueprint>().HasOne(x => x.CreatedBy).WithMany().HasForeignKey(x => x.CreatedById).OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<DataVariableBlueprint>().Property(x => x.LastUpdatedById).IsRequired();
 
-            modelBuilder.Entity<DataVariableBlueprint>().HasOne(x => x.LastUpdatedBy);
+            modelBuilder.Entity<DataVariableBlueprint>().HasOne(x => x.LastUpdatedBy).WithMany().HasForeignKey(x => x.LastUpdatedById).OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<DataVariableBlueprint>().HasIndex(x => new { x.Name, x.BlueprintId, x.Namespace }).IsUnique();
 
