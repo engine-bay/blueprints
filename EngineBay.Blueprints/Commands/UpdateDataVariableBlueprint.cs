@@ -1,23 +1,31 @@
 namespace EngineBay.Blueprints
 {
+    using System.Security.Claims;
     using EngineBay.Core;
     using EngineBay.Persistence;
     using FluentValidation;
 
-    public class UpdateDataVariableBlueprint : ICommandHandler<UpdateParameters<DataVariableBlueprint>, ApplicationUser, DataVariableBlueprintDto>
+    public class UpdateDataVariableBlueprint : ICommandHandler<UpdateParameters<DataVariableBlueprint>, DataVariableBlueprintDto>
     {
         private readonly BlueprintsWriteDbContext db;
         private readonly IValidator<DataVariableBlueprint> validator;
 
-        public UpdateDataVariableBlueprint(BlueprintsWriteDbContext db, IValidator<DataVariableBlueprint> validator)
+        private readonly GetApplicationUser getApplicationUserQuery;
+
+        private readonly ClaimsPrincipal claimsPrincipal;
+
+        public UpdateDataVariableBlueprint(ClaimsPrincipal claimsPrincipal, GetApplicationUser getApplicationUserQuery, BlueprintsWriteDbContext db, IValidator<DataVariableBlueprint> validator)
         {
+            this.claimsPrincipal = claimsPrincipal;
+            this.getApplicationUserQuery = getApplicationUserQuery;
             this.db = db;
             this.validator = validator;
         }
 
         /// <inheritdoc/>
-        public async Task<DataVariableBlueprintDto> Handle(UpdateParameters<DataVariableBlueprint> updateParameters, ApplicationUser user, CancellationToken cancellation)
+        public async Task<DataVariableBlueprintDto> Handle(UpdateParameters<DataVariableBlueprint> updateParameters, CancellationToken cancellation)
         {
+            var user = await this.getApplicationUserQuery.Handle(this.claimsPrincipal, cancellation).ConfigureAwait(false);
             if (updateParameters is null)
             {
                 throw new ArgumentNullException(nameof(updateParameters));

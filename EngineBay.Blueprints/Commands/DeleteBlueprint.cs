@@ -1,22 +1,30 @@
 namespace EngineBay.Blueprints
 {
+    using System.Security.Claims;
     using EngineBay.Core;
     using EngineBay.Persistence;
     using LinqKit;
     using Microsoft.EntityFrameworkCore;
 
-    public class DeleteBlueprint : ICommandHandler<Guid, ApplicationUser, BlueprintDto>
+    public class DeleteBlueprint : ICommandHandler<Guid, BlueprintDto>
     {
         private readonly BlueprintsWriteDbContext db;
 
-        public DeleteBlueprint(BlueprintsWriteDbContext db)
+        private readonly GetApplicationUser getApplicationUserQuery;
+
+        private readonly ClaimsPrincipal claimsPrincipal;
+
+        public DeleteBlueprint(ClaimsPrincipal claimsPrincipal, GetApplicationUser getApplicationUserQuery, BlueprintsWriteDbContext db)
         {
+            this.claimsPrincipal = claimsPrincipal;
+            this.getApplicationUserQuery = getApplicationUserQuery;
             this.db = db;
         }
 
         /// <inheritdoc/>
-        public async Task<BlueprintDto> Handle(Guid id, ApplicationUser user, CancellationToken cancellation)
+        public async Task<BlueprintDto> Handle(Guid id, CancellationToken cancellation)
         {
+            var user = await this.getApplicationUserQuery.Handle(this.claimsPrincipal, cancellation).ConfigureAwait(false);
             var blueprint = await this.db.Blueprints
                     .Include(blueprint => blueprint.ExpressionBlueprints)
                         .ThenInclude(expressionBlueprint => expressionBlueprint.InputDataTableBlueprints)

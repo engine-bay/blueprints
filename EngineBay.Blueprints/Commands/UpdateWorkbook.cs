@@ -1,23 +1,31 @@
 namespace EngineBay.Blueprints
 {
+    using System.Security.Claims;
     using EngineBay.Core;
     using EngineBay.Persistence;
     using FluentValidation;
 
-    public class UpdateWorkbook : ICommandHandler<UpdateParameters<Workbook>, ApplicationUser, WorkbookDto>
+    public class UpdateWorkbook : ICommandHandler<UpdateParameters<Workbook>, WorkbookDto>
     {
         private readonly BlueprintsWriteDbContext db;
         private readonly IValidator<Workbook> validator;
 
-        public UpdateWorkbook(BlueprintsWriteDbContext db, IValidator<Workbook> validator)
+        private readonly GetApplicationUser getApplicationUserQuery;
+
+        private readonly ClaimsPrincipal claimsPrincipal;
+
+        public UpdateWorkbook(ClaimsPrincipal claimsPrincipal, GetApplicationUser getApplicationUserQuery, BlueprintsWriteDbContext db, IValidator<Workbook> validator)
         {
+            this.claimsPrincipal = claimsPrincipal;
+            this.getApplicationUserQuery = getApplicationUserQuery;
             this.db = db;
             this.validator = validator;
         }
 
         /// <inheritdoc/>
-        public async Task<WorkbookDto> Handle(UpdateParameters<Workbook> updateParameters, ApplicationUser user, CancellationToken cancellation)
+        public async Task<WorkbookDto> Handle(UpdateParameters<Workbook> updateParameters, CancellationToken cancellation)
         {
+            var user = await this.getApplicationUserQuery.Handle(this.claimsPrincipal, cancellation).ConfigureAwait(false);
             if (updateParameters is null)
             {
                 throw new ArgumentNullException(nameof(updateParameters));
