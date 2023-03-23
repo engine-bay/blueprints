@@ -24,7 +24,7 @@ namespace EngineBay.Blueprints.Tests
             {
                 this.BlueprintsDbContext.AddRange(workbooks);
 
-                var applicationUser = new ApplicationUser();
+                var applicationUser = new MockApplicationUser();
 
                 this.BlueprintsDbContext.SaveChanges(applicationUser);
             }
