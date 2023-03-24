@@ -12,19 +12,16 @@ namespace EngineBay.Blueprints
 
         private readonly GetApplicationUser getApplicationUserQuery;
 
-        private readonly ClaimsPrincipal claimsPrincipal;
-
-        public DeleteExpressionBlueprint(ClaimsPrincipal claimsPrincipal, GetApplicationUser getApplicationUserQuery, BlueprintsWriteDbContext db)
+        public DeleteExpressionBlueprint(GetApplicationUser getApplicationUserQuery, BlueprintsWriteDbContext db)
         {
-            this.claimsPrincipal = claimsPrincipal;
             this.getApplicationUserQuery = getApplicationUserQuery;
             this.db = db;
         }
 
         /// <inheritdoc/>
-        public async Task<ExpressionBlueprintDto> Handle(Guid id, CancellationToken cancellation)
+        public async Task<ExpressionBlueprintDto> Handle(Guid id, ClaimsPrincipal claimsPrincipal, CancellationToken cancellation)
         {
-            var user = await this.getApplicationUserQuery.Handle(this.claimsPrincipal, cancellation).ConfigureAwait(false);
+            var user = await this.getApplicationUserQuery.Handle(claimsPrincipal, cancellation).ConfigureAwait(false);
             var expressionBlueprint = await this.db.ExpressionBlueprints
                                     .Include(x => x.InputDataVariableBlueprints)
                                     .Include(x => x.OutputDataVariableBlueprint)

@@ -12,20 +12,17 @@ namespace EngineBay.Blueprints
 
         private readonly GetApplicationUser getApplicationUserQuery;
 
-        private readonly ClaimsPrincipal claimsPrincipal;
-
-        public CreateWorkbook(ClaimsPrincipal claimsPrincipal, GetApplicationUser getApplicationUserQuery, BlueprintsWriteDbContext db, IValidator<Workbook> validator)
+        public CreateWorkbook(GetApplicationUser getApplicationUserQuery, BlueprintsWriteDbContext db, IValidator<Workbook> validator)
         {
-            this.claimsPrincipal = claimsPrincipal;
             this.getApplicationUserQuery = getApplicationUserQuery;
             this.db = db;
             this.validator = validator;
         }
 
         /// <inheritdoc/>
-        public async Task<WorkbookDto> Handle(Workbook workbook, CancellationToken cancellation)
+        public async Task<WorkbookDto> Handle(Workbook workbook, ClaimsPrincipal claimsPrincipal, CancellationToken cancellation)
         {
-            var user = await this.getApplicationUserQuery.Handle(this.claimsPrincipal, cancellation).ConfigureAwait(false);
+            var user = await this.getApplicationUserQuery.Handle(claimsPrincipal, cancellation).ConfigureAwait(false);
             this.validator.ValidateAndThrow(workbook);
             await this.db.Workbooks.AddAsync(workbook, cancellation).ConfigureAwait(false);
             await this.db.SaveChangesAsync(user, cancellation).ConfigureAwait(false);

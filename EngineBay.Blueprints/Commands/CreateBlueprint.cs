@@ -12,20 +12,17 @@ namespace EngineBay.Blueprints
 
         private readonly GetApplicationUser getApplicationUserQuery;
 
-        private readonly ClaimsPrincipal claimsPrincipal;
-
-        public CreateBlueprint(ClaimsPrincipal claimsPrincipal, GetApplicationUser getApplicationUserQuery, BlueprintsWriteDbContext db, IValidator<Blueprint> validator)
+        public CreateBlueprint(GetApplicationUser getApplicationUserQuery, BlueprintsWriteDbContext db, IValidator<Blueprint> validator)
         {
-            this.claimsPrincipal = claimsPrincipal;
             this.getApplicationUserQuery = getApplicationUserQuery;
             this.db = db;
             this.validator = validator;
         }
 
         /// <inheritdoc/>
-        public async Task<BlueprintDto> Handle(Blueprint blueprint, CancellationToken cancellation)
+        public async Task<BlueprintDto> Handle(Blueprint blueprint, ClaimsPrincipal claimsPrincipal, CancellationToken cancellation)
         {
-            var user = await this.getApplicationUserQuery.Handle(this.claimsPrincipal, cancellation).ConfigureAwait(false);
+            var user = await this.getApplicationUserQuery.Handle(claimsPrincipal, cancellation).ConfigureAwait(false);
             this.validator.ValidateAndThrow(blueprint);
             await this.db.Blueprints.AddAsync(blueprint, cancellation).ConfigureAwait(false);
             await this.db.SaveChangesAsync(user, cancellation).ConfigureAwait(false);

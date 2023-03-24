@@ -12,19 +12,16 @@ namespace EngineBay.Blueprints
 
         private readonly GetApplicationUser getApplicationUserQuery;
 
-        private readonly ClaimsPrincipal claimsPrincipal;
-
-        public DeleteWorkbook(ClaimsPrincipal claimsPrincipal, GetApplicationUser getApplicationUserQuery, BlueprintsWriteDbContext db)
+        public DeleteWorkbook(GetApplicationUser getApplicationUserQuery, BlueprintsWriteDbContext db)
         {
-            this.claimsPrincipal = claimsPrincipal;
             this.getApplicationUserQuery = getApplicationUserQuery;
             this.db = db;
         }
 
         /// <inheritdoc/>
-        public async Task<WorkbookDto> Handle(Guid id, CancellationToken cancellation)
+        public async Task<WorkbookDto> Handle(Guid id, ClaimsPrincipal claimsPrincipal, CancellationToken cancellation)
         {
-            var user = await this.getApplicationUserQuery.Handle(this.claimsPrincipal, cancellation).ConfigureAwait(false);
+            var user = await this.getApplicationUserQuery.Handle(claimsPrincipal, cancellation).ConfigureAwait(false);
             var workbook = await this.db.Workbooks
                 .Include(x => x.Blueprints)
                         .ThenInclude(blueprint => blueprint.ExpressionBlueprints)
