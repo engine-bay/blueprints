@@ -1,6 +1,7 @@
 namespace EngineBay.Blueprints
 {
     using System.Security.Claims;
+    using EngineBay.Authentication;
     using EngineBay.Core;
     using EngineBay.Persistence;
     using LinqKit;
