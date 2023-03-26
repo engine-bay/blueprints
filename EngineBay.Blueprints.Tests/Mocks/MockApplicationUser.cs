@@ -6,7 +6,7 @@ namespace EngineBay.Blueprints.Tests
     {
         public MockApplicationUser()
         {
-            this.Name = "mockUser";
+            this.Username = Guid.NewGuid().ToString();
             this.CreatedById = default(Guid);
             this.LastUpdatedById = default(Guid);
         }

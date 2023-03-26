@@ -26,8 +26,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="EngineBay.Persistence" Version="3.1.0" />
-    <PackageReference Include="EngineBay.Authentication" Version="0.10.1" />
+    <PackageReference Include="EngineBay.Persistence" Version="3.2.0" />
+    <PackageReference Include="EngineBay.Authentication" Version="0.11.0" />
     <PackageReference Include="PrivateSetterContractResolver" Version="2.1.0" />
     <PackageReference Include="FluentValidation" Version="11.5.1" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
