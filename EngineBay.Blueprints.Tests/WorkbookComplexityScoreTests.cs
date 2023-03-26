@@ -10,7 +10,7 @@ namespace EngineBay.Blueprints.Tests
     public class WorkbookComplexityScoreTests : BaseBlueprintsCommandTest
     {
         public WorkbookComplexityScoreTests()
-            : base()
+            : base(nameof(WorkbookComplexityScoreTests))
         {
             var settings = new JsonSerializerSettings
             {

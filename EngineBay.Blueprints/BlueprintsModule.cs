@@ -4,7 +4,6 @@ namespace EngineBay.Blueprints
     using EngineBay.Core;
     using EngineBay.Persistence;
     using FluentValidation;
-    using Microsoft.AspNetCore.Identity;
 
     public class BlueprintsModule : IModule
     {
@@ -62,13 +61,9 @@ namespace EngineBay.Blueprints
         public IEndpointRouteBuilder MapEndpoints(IEndpointRouteBuilder endpoints)
         {
             // blueprints
-            endpoints.MapGet("/blueprints", async (QueryBlueprints query, int? skip, int? limit, CancellationToken cancellation) =>
+            endpoints.MapGet("/blueprints", async (QueryBlueprints query, int? skip, int? limit, string? sortBy, SortOrderType? sortOrder, CancellationToken cancellation) =>
             {
-                var paginationParameters = new PaginationParameters
-                {
-                    Skip = skip,
-                    Limit = limit,
-                };
+                var paginationParameters = new PaginationParameters(skip, limit, sortBy, sortOrder);
 
                 var paginatedDtos = await query.Handle(paginationParameters, cancellation).ConfigureAwait(false);
                 return Results.Ok(paginatedDtos);
@@ -104,13 +99,9 @@ namespace EngineBay.Blueprints
             }).RequireAuthorization();
 
             // data-variable-blueprints
-            endpoints.MapGet("/data-variable-blueprints", async (QueryDataVariableBlueprints query, int? skip, int? limit, CancellationToken cancellation) =>
+            endpoints.MapGet("/data-variable-blueprints", async (QueryDataVariableBlueprints query, int? skip, int? limit, string? sortBy, SortOrderType? sortOrder, CancellationToken cancellation) =>
             {
-                var paginationParameters = new PaginationParameters
-                {
-                    Skip = skip,
-                    Limit = limit,
-                };
+                var paginationParameters = new PaginationParameters(skip, limit, sortBy, sortOrder);
 
                 var paginatedDtos = await query.Handle(paginationParameters, cancellation).ConfigureAwait(false);
                 return Results.Ok(paginatedDtos);
@@ -146,13 +137,9 @@ namespace EngineBay.Blueprints
             }).RequireAuthorization();
 
             // expression-blueprints
-            endpoints.MapGet("/expression-blueprints", async (QueryExpressionBlueprints query, int? skip, int? limit, CancellationToken cancellation) =>
+            endpoints.MapGet("/expression-blueprints", async (QueryExpressionBlueprints query, int? skip, int? limit, string? sortBy, SortOrderType? sortOrder, CancellationToken cancellation) =>
             {
-                var paginationParameters = new PaginationParameters
-                {
-                    Skip = skip,
-                    Limit = limit,
-                };
+                var paginationParameters = new PaginationParameters(skip, limit, sortBy, sortOrder);
 
                 var paginatedDtos = await query.Handle(paginationParameters, cancellation).ConfigureAwait(false);
                 return Results.Ok(paginatedDtos);
@@ -188,13 +175,9 @@ namespace EngineBay.Blueprints
             }).RequireAuthorization();
 
             // workbooks
-            endpoints.MapGet("/workbooks", async (QueryWorkbooks query, int? skip, int? limit, CancellationToken cancellation) =>
+            endpoints.MapGet("/workbooks", async (QueryWorkbooks query, int? skip, int? limit, string? sortBy, SortOrderType? sortOrder, CancellationToken cancellation) =>
             {
-                var paginationParameters = new PaginationParameters
-                {
-                    Skip = skip,
-                    Limit = limit,
-                };
+                var paginationParameters = new PaginationParameters(skip, limit, sortBy, sortOrder);
 
                 var paginatedDtos = await query.Handle(paginationParameters, cancellation).ConfigureAwait(false);
                 return Results.Ok(paginatedDtos);

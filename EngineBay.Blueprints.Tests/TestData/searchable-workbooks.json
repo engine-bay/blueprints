@@ -1,0 +1,20 @@
+[
+  {
+    "Id": "ad2e3c13-19ef-41a4-9db0-48055c948d76",
+    "Name": "K-Factor 1 test workbook",
+    "Description": "A stress testing workbook",
+    "Blueprints": []
+  },
+  {
+    "Id": "9ed27db1-4902-4c76-b099-3ad133c50d33",
+    "Name": "K-Factor 2 test workbook",
+    "Description": "A stress testing workbook",
+    "Blueprints": []
+  },
+  {
+    "Id": "549a41de-0a5e-4ce0-b43f-a47ca8e68dcb",
+    "Name": "K-Factor 4 test workbook",
+    "Description": "A stress testing workbook",
+    "Blueprints": []
+  }
+]

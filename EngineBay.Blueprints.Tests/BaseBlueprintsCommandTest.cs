@@ -9,17 +9,17 @@ namespace EngineBay.Blueprints.Tests
     {
         private bool isDisposed;
 
-        protected BaseBlueprintsCommandTest()
+        protected BaseBlueprintsCommandTest(string databaseName)
         {
             var mockProvider = new Mock<IServiceProvider>();
 
             var blueprintsDbContextOptions = new DbContextOptionsBuilder<ModuleWriteDbContext>()
-                .UseInMemoryDatabase(databaseName: "Db")
+                .UseInMemoryDatabase(databaseName)
                 .EnableSensitiveDataLogging()
                 .Options;
 
             this.BlueprintsDbContext = new BlueprintsWriteDbContext(blueprintsDbContextOptions);
-
+            this.BlueprintsDbContext.Database.EnsureDeleted();
             this.BlueprintsDbContext.Database.EnsureCreated();
         }
 

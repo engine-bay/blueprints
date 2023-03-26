@@ -1,11 +1,13 @@
 namespace EngineBay.Blueprints
 {
     using System;
+    using System.Globalization;
+    using System.Linq.Expressions;
     using EngineBay.Core;
     using LinqKit;
     using Microsoft.EntityFrameworkCore;
 
-    public class QueryWorkbooks : IQueryHandler<PaginationParameters, PaginatedDto<WorkbookDto>>
+    public class QueryWorkbooks : PaginatedQuery<Workbook>, IQueryHandler<PaginationParameters, PaginatedDto<WorkbookDto>>
     {
         private readonly BlueprintsQueryDbContext db;
 
@@ -22,12 +24,12 @@ namespace EngineBay.Blueprints
                 throw new ArgumentNullException(nameof(paginationParameters));
             }
 
-            var limit = paginationParameters.Limit.GetValueOrDefault();
-            var skip = limit > 0 ? paginationParameters.Skip.GetValueOrDefault() : 0;
+            var limit = paginationParameters.Limit;
+            var skip = limit > 0 ? paginationParameters.Skip : 0;
 
             var total = await this.db.Workbooks.CountAsync(cancellation).ConfigureAwait(false);
 
-            var workbookDtos = limit > 0 ? await this.db.Workbooks
+            var query = this.db.Workbooks
                 .Include(x => x.Blueprints)
                         .ThenInclude(blueprint => blueprint.ExpressionBlueprints)
                             .ThenInclude(expressionBlueprint => expressionBlueprint.InputDataTableBlueprints)
@@ -56,11 +58,22 @@ namespace EngineBay.Blueprints
                     .ThenInclude(x => x.DataTableBlueprints)
                         .ThenInclude(x => x.DataTableRowBlueprints)
                             .ThenInclude(x => x.DataTableCellBlueprints)
-                .OrderByDescending(x => x.LastUpdatedAt)
-                .Skip(skip)
-                .Take(limit)
+                .AsExpandable();
+
+            Expression<Func<Workbook, string?>> sortByPredicate = paginationParameters.SortBy switch
+            {
+                nameof(Workbook.CreatedAt) => workbook => workbook.CreatedAt.ToString(CultureInfo.InvariantCulture),
+                nameof(Workbook.LastUpdatedAt) => workbook => workbook.LastUpdatedAt.ToString(CultureInfo.InvariantCulture),
+                nameof(Workbook.Name) => workbook => workbook.Name,
+                nameof(Workbook.Description) => workbook => workbook.Description,
+                _ => throw new ArgumentNullException(paginationParameters.SortBy),
+            };
+
+            query = this.Sort(query, sortByPredicate, paginationParameters);
+            query = this.Paginate(query, paginationParameters);
+
+            var workbookDtos = limit > 0 ? await query
                 .Select(workbook => new WorkbookDto(workbook))
-                .AsExpandable()
                 .ToListAsync(cancellation)
                 .ConfigureAwait(false) : new List<WorkbookDto>();
 

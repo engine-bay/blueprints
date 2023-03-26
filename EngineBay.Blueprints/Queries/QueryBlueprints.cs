@@ -21,8 +21,8 @@ namespace EngineBay.Blueprints
                 throw new ArgumentNullException(nameof(paginationParameters));
             }
 
-            var limit = paginationParameters.Limit.GetValueOrDefault();
-            var skip = limit > 0 ? paginationParameters.Skip.GetValueOrDefault() : 0;
+            var limit = paginationParameters.Limit;
+            var skip = limit > 0 ? paginationParameters.Skip : 0;
 
             var total = await this.db.Blueprints.CountAsync(cancellation).ConfigureAwait(false);
 
