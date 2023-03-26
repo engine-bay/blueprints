@@ -237,5 +237,10 @@ namespace EngineBay.Blueprints
 
             return endpoints;
         }
+
+        public WebApplication AddMiddleware(WebApplication app)
+        {
+            return app;
+        }
     }
 }
