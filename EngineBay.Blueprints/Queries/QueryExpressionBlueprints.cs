@@ -1,10 +1,13 @@
 namespace EngineBay.Blueprints
 {
     using System;
+    using System.Globalization;
+    using System.Linq.Expressions;
     using EngineBay.Core;
+    using LinqKit;
     using Microsoft.EntityFrameworkCore;
 
-    public class QueryExpressionBlueprints : IQueryHandler<PaginationParameters, PaginatedDto<ExpressionBlueprintDto>>
+    public class QueryExpressionBlueprints : PaginatedQuery<ExpressionBlueprint>, IQueryHandler<PaginationParameters, PaginatedDto<ExpressionBlueprintDto>>
     {
         private readonly BlueprintsQueryDbContext db;
 
@@ -26,9 +29,28 @@ namespace EngineBay.Blueprints
 
             var total = await this.db.ExpressionBlueprints.CountAsync(cancellation).ConfigureAwait(false);
 
-            var expressionBlueprints = limit > 0 ? await this.db.ExpressionBlueprints.OrderByDescending(x => x.LastUpdatedAt).Skip(skip).Take(limit).ToListAsync(cancellation).ConfigureAwait(false) : new List<ExpressionBlueprint>();
+            var query = this.db.ExpressionBlueprints
+                            .Include(x => x.InputDataTableBlueprints)
+                            .Include(x => x.InputDataVariableBlueprints)
+                            .Include(x => x.OutputDataVariableBlueprint)
+                            .AsExpandable();
 
-            var expressionBlueprintDtos = expressionBlueprints.Select(expressionBlueprint => new ExpressionBlueprintDto(expressionBlueprint)).ToList();
+            Expression<Func<ExpressionBlueprint, string?>> sortByPredicate = paginationParameters.SortBy switch
+            {
+                nameof(ExpressionBlueprint.CreatedAt) => expressionBlueprint => expressionBlueprint.CreatedAt.ToString(CultureInfo.InvariantCulture),
+                nameof(ExpressionBlueprint.LastUpdatedAt) => expressionBlueprint => expressionBlueprint.LastUpdatedAt.ToString(CultureInfo.InvariantCulture),
+                nameof(ExpressionBlueprint.Expression) => expressionBlueprint => expressionBlueprint.Expression,
+                nameof(ExpressionBlueprint.Objective) => expressionBlueprint => expressionBlueprint.Objective,
+                _ => throw new ArgumentNullException(paginationParameters.SortBy),
+            };
+
+            query = this.Sort(query, sortByPredicate, paginationParameters);
+            query = this.Paginate(query, paginationParameters);
+
+            var expressionBlueprintDtos = limit > 0 ? await query
+                .Select(expressionBlueprint => new ExpressionBlueprintDto(expressionBlueprint))
+                .ToListAsync(cancellation)
+                .ConfigureAwait(false) : new List<ExpressionBlueprintDto>();
 
             return new PaginatedDto<ExpressionBlueprintDto>(total, skip, limit, expressionBlueprintDtos);
         }

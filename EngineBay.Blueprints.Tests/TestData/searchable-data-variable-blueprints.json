@@ -1,0 +1,146 @@
+[
+    {
+        "Name": "musical_indigo_mink",
+        "Namespace": "Global",
+        "Description": "A numeric input for blueprint 0",
+        "Type": "float",
+        "DefaultValue": 6.026230599722706
+    },
+    {
+        "Name": "eager_lavender_anaconda",
+        "Namespace": "Global",
+        "Description": "A numeric input for blueprint 0",
+        "Type": "float",
+        "DefaultValue": 4.604429624623525
+    },
+    {
+        "Name": "ill_aquamarine_panther",
+        "Namespace": "Global",
+        "Description": "A numeric input for blueprint 0",
+        "Type": "float",
+        "DefaultValue": -1.2151917169010407
+    },
+    {
+        "Name": "occupational_red_albatross",
+        "Namespace": "Global",
+        "Description": "A numeric input for blueprint 0",
+        "Type": "float",
+        "DefaultValue": 3.6210973967142235
+    },
+    {
+        "Name": "repulsive_copper_snipe",
+        "Namespace": "Global",
+        "Description": "A numeric input for blueprint 0",
+        "Type": "float",
+        "DefaultValue": 0.4007828252622314
+    },
+    {
+        "Name": "enthusiastic_maroon_lark",
+        "Namespace": "Global",
+        "Description": "A numeric input for blueprint 0",
+        "Type": "float",
+        "DefaultValue": -8.456192685271605
+    },
+    {
+        "Name": "youngest_ivory_shrimp",
+        "Namespace": "Global",
+        "Description": "A numeric input for blueprint 0",
+        "Type": "float",
+        "DefaultValue": 4.554102425730406
+    },
+    {
+        "Name": "cognitive_turquoise_coyote",
+        "Namespace": "Global",
+        "Description": "A numeric input for blueprint 0",
+        "Type": "float",
+        "DefaultValue": -2.248356622036942
+    },
+    {
+        "Name": "apparent_maroon_jackal",
+        "Namespace": "Global",
+        "Description": "A numeric value for blueprint 0",
+        "Type": "float"
+    },
+    {
+        "Name": "eerie_coffee_tiger",
+        "Namespace": "Global",
+        "Description": "A numeric value for blueprint 0",
+        "Type": "float"
+    },
+    {
+        "Name": "filthy_white_cod",
+        "Namespace": "Global",
+        "Description": "A numeric value for blueprint 0",
+        "Type": "float"
+    },
+    {
+        "Name": "stale_orange_zebra",
+        "Namespace": "Global",
+        "Description": "A numeric value for blueprint 0",
+        "Type": "float"
+    },
+    {
+        "Name": "delighted_jade_pelican",
+        "Namespace": "Global",
+        "Description": "A numeric value for blueprint 0",
+        "Type": "float"
+    },
+    {
+        "Name": "slippery_gray_sole",
+        "Namespace": "Global",
+        "Description": "A numeric value for blueprint 0",
+        "Type": "float"
+    },
+    {
+        "Name": "working_indigo_canid",
+        "Namespace": "Global",
+        "Description": "A numeric value for blueprint 0",
+        "Type": "float"
+    },
+    {
+        "Name": "high_pink_scorpion",
+        "Namespace": "Global",
+        "Description": "A numeric value for blueprint 0",
+        "Type": "float"
+    },
+    {
+        "Name": "AllNumbersComparedTruthy0",
+        "Namespace": "Global",
+        "Type": "bool"
+    },
+    {
+        "Name": "AllNumbersComparedTruthy1",
+        "Namespace": "Global",
+        "Type": "bool"
+    },
+    {
+        "Name": "AllNumbersComparedTruthy2",
+        "Namespace": "Global",
+        "Type": "bool"
+    },
+    {
+        "Name": "AllNumbersComparedTruthy3",
+        "Namespace": "Global",
+        "Type": "bool"
+    },
+    {
+        "Name": "AllNumbersComparedTruthy4",
+        "Namespace": "Global",
+        "Type": "bool"
+    },
+    {
+        "Name": "AllNumbersComparedTruthy5",
+        "Namespace": "Global",
+        "Type": "bool"
+    },
+    {
+        "Name": "AllNumbersComparedTruthy6",
+        "Namespace": "Global",
+        "Type": "bool"
+    },
+    {
+        "Name": "AllNumbersComparedTruthy7",
+        "Namespace": "Global",
+        "Type": "bool"
+    }
+]

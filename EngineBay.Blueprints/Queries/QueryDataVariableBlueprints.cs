@@ -1,10 +1,13 @@
 namespace EngineBay.Blueprints
 {
     using System;
+    using System.Globalization;
+    using System.Linq.Expressions;
     using EngineBay.Core;
+    using LinqKit;
     using Microsoft.EntityFrameworkCore;
 
-    public class QueryDataVariableBlueprints : IQueryHandler<PaginationParameters, PaginatedDto<DataVariableBlueprintDto>>
+    public class QueryDataVariableBlueprints : PaginatedQuery<DataVariableBlueprint>, IQueryHandler<PaginationParameters, PaginatedDto<DataVariableBlueprintDto>>
     {
         private readonly BlueprintsQueryDbContext db;
 
@@ -26,9 +29,27 @@ namespace EngineBay.Blueprints
 
             var total = await this.db.DataVariableBlueprints.CountAsync(cancellation).ConfigureAwait(false);
 
-            var dataVariableBlueprints = limit > 0 ? await this.db.DataVariableBlueprints.OrderByDescending(x => x.LastUpdatedAt).Skip(skip).Take(limit).ToListAsync(cancellation).ConfigureAwait(false) : new List<DataVariableBlueprint>();
+            var query = this.db.DataVariableBlueprints.AsExpandable();
 
-            var dataVariableBlueprintDtos = dataVariableBlueprints.Select(dataVariableBlueprint => new DataVariableBlueprintDto(dataVariableBlueprint)).ToList();
+            Expression<Func<DataVariableBlueprint, string?>> sortByPredicate = paginationParameters.SortBy switch
+            {
+                nameof(DataVariableBlueprint.CreatedAt) => dataVariableBlueprint => dataVariableBlueprint.CreatedAt.ToString(CultureInfo.InvariantCulture),
+                nameof(DataVariableBlueprint.LastUpdatedAt) => dataVariableBlueprint => dataVariableBlueprint.LastUpdatedAt.ToString(CultureInfo.InvariantCulture),
+                nameof(DataVariableBlueprint.Name) => dataVariableBlueprint => dataVariableBlueprint.Name,
+                nameof(DataVariableBlueprint.Namespace) => dataVariableBlueprint => dataVariableBlueprint.Namespace,
+                nameof(DataVariableBlueprint.Type) => dataVariableBlueprint => dataVariableBlueprint.Type,
+                nameof(DataVariableBlueprint.DefaultValue) => dataVariableBlueprint => dataVariableBlueprint.DefaultValue,
+                nameof(DataVariableBlueprint.Description) => dataVariableBlueprint => dataVariableBlueprint.Description,
+                _ => throw new ArgumentNullException(paginationParameters.SortBy),
+            };
+
+            query = this.Sort(query, sortByPredicate, paginationParameters);
+            query = this.Paginate(query, paginationParameters);
+
+            var dataVariableBlueprintDtos = limit > 0 ? await query
+                .Select(dataVariableBlueprint => new DataVariableBlueprintDto(dataVariableBlueprint))
+                .ToListAsync(cancellation)
+                .ConfigureAwait(false) : new List<DataVariableBlueprintDto>();
 
             return new PaginatedDto<DataVariableBlueprintDto>(total, skip, limit, dataVariableBlueprintDtos);
         }
