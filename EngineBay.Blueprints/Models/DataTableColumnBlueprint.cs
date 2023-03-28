@@ -11,7 +11,7 @@ namespace EngineBay.Blueprints
 
         public string? Type { get; set; }
 
-        public Guid? DataTableBlueprintId { get; set; }
+        public Guid DataTableBlueprintId { get; set; }
 
         public virtual DataTableBlueprint? DataTableBlueprint { get; set; }
 

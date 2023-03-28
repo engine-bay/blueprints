@@ -12,6 +12,7 @@ namespace EngineBay.Blueprints
             }
 
             this.Id = triggerBlueprint.Id;
+            this.BlueprintId = triggerBlueprint.BlueprintId;
             this.Name = triggerBlueprint.Name;
             this.Description = triggerBlueprint.Description;
             this.TriggerExpressionBlueprints = triggerBlueprint.TriggerExpressionBlueprints?.Select(x => new TriggerExpressionBlueprintDto(x)).ToList();
@@ -23,6 +24,8 @@ namespace EngineBay.Blueprints
         }
 
         public Guid Id { get; set; }
+
+        public Guid BlueprintId { get; set; }
 
         public string? Name { get; set; }
 

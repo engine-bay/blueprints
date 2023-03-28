@@ -12,6 +12,7 @@ namespace EngineBay.Blueprints
             }
 
             this.Id = dataTableCellBlueprint.Id;
+            this.DataTableRowBlueprintId = dataTableCellBlueprint.DataTableRowBlueprintId;
             this.Key = dataTableCellBlueprint.Key;
             this.Value = dataTableCellBlueprint.Value;
             this.Name = dataTableCellBlueprint.Name;
@@ -19,6 +20,8 @@ namespace EngineBay.Blueprints
         }
 
         public Guid Id { get; set; }
+
+        public Guid DataTableRowBlueprintId { get; set; }
 
         public string? Key { get; set; }
 

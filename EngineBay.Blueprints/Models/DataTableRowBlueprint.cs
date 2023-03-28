@@ -7,7 +7,7 @@ namespace EngineBay.Blueprints
 
     public class DataTableRowBlueprint : AuditableModel
     {
-        public Guid? DataTableBlueprintId { get; set; }
+        public Guid DataTableBlueprintId { get; set; }
 
         public virtual DataTableBlueprint? DataTableBlueprint { get; set; }
 

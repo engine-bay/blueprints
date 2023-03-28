@@ -15,6 +15,14 @@ namespace EngineBay.Blueprints
                 return Results.Ok(paginatedDtos);
             }).RequireAuthorization();
 
+            endpoints.MapGet("/workbooks/{workbookId}/blueprints/{blueprintId}/data-variable-blueprints", async (QueryFilteredDataVariableBlueprints query, Guid blueprintId, int? skip, int? limit, string? sortBy, SortOrderType? sortOrder, CancellationToken cancellation) =>
+            {
+                var filteredPaginationParameters = new FilteredPaginationParameters<DataVariableBlueprint>(skip, limit, sortBy, sortOrder, x => x.BlueprintId == blueprintId);
+
+                var paginatedDtos = await query.Handle(filteredPaginationParameters, cancellation).ConfigureAwait(false);
+                return Results.Ok(paginatedDtos);
+            }).RequireAuthorization();
+
             endpoints.MapGet("/data-variable-blueprints/{id}", async (GetDataVariableBlueprint query, Guid id, CancellationToken cancellation) =>
             {
                 var dto = await query.Handle(id, cancellation).ConfigureAwait(false);

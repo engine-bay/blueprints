@@ -12,6 +12,7 @@ namespace EngineBay.Blueprints
             }
 
             this.Id = blueprint.Id;
+            this.WorkbookId = blueprint.WorkbookId;
             this.Name = blueprint.Name;
             this.Description = blueprint.Description;
             this.ExpressionBlueprints = blueprint.ExpressionBlueprints?.Select(x => new ExpressionBlueprintDto(x)).ToList();
@@ -21,6 +22,8 @@ namespace EngineBay.Blueprints
         }
 
         public Guid Id { get; set; }
+
+        public Guid WorkbookId { get; set; }
 
         public string? Name { get; set; }
 

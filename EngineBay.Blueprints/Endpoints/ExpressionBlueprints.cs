@@ -8,12 +8,20 @@ namespace EngineBay.Blueprints
         public static void MapEndpoints(IEndpointRouteBuilder endpoints)
         {
             endpoints.MapGet("/expression-blueprints", async (QueryExpressionBlueprints query, int? skip, int? limit, string? sortBy, SortOrderType? sortOrder, CancellationToken cancellation) =>
-           {
-               var paginationParameters = new PaginationParameters(skip, limit, sortBy, sortOrder);
+            {
+                var paginationParameters = new PaginationParameters(skip, limit, sortBy, sortOrder);
 
-               var paginatedDtos = await query.Handle(paginationParameters, cancellation).ConfigureAwait(false);
-               return Results.Ok(paginatedDtos);
-           }).RequireAuthorization();
+                var paginatedDtos = await query.Handle(paginationParameters, cancellation).ConfigureAwait(false);
+                return Results.Ok(paginatedDtos);
+            }).RequireAuthorization();
+
+            endpoints.MapGet("/workbooks/{workbookId}/blueprints/{blueprintId}/expression-blueprints", async (QueryFilteredExpressionBlueprints query, Guid blueprintId, int? skip, int? limit, string? sortBy, SortOrderType? sortOrder, CancellationToken cancellation) =>
+            {
+                var filteredPaginationParameters = new FilteredPaginationParameters<ExpressionBlueprint>(skip, limit, sortBy, sortOrder, x => x.BlueprintId == blueprintId);
+
+                var paginatedDtos = await query.Handle(filteredPaginationParameters, cancellation).ConfigureAwait(false);
+                return Results.Ok(paginatedDtos);
+            }).RequireAuthorization();
 
             endpoints.MapGet("/expression-blueprints/{id}", async (GetExpressionBlueprint query, Guid id, CancellationToken cancellation) =>
             {

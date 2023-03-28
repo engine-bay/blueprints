@@ -12,6 +12,7 @@ namespace EngineBay.Blueprints
             }
 
             this.Id = expressionBlueprint.Id;
+            this.BlueprintId = expressionBlueprint.BlueprintId;
             this.Expression = expressionBlueprint.Expression;
             this.Objective = expressionBlueprint.Objective;
             this.InputDataVariableBlueprints = expressionBlueprint.InputDataVariableBlueprints?.Select(x => new InputDataVariableBlueprintDto(x)).ToList();
@@ -25,6 +26,8 @@ namespace EngineBay.Blueprints
         }
 
         public Guid Id { get; set; }
+
+        public Guid BlueprintId { get; set; }
 
         public string? Expression { get; set; }
 

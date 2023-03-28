@@ -13,7 +13,7 @@ namespace EngineBay.Blueprints
 
         public string? Description { get; set; }
 
-        public Guid? BlueprintId { get; set; }
+        public Guid BlueprintId { get; set; }
 
         public virtual Blueprint? Blueprint { get; set; }
 

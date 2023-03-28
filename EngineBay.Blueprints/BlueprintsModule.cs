@@ -1,6 +1,5 @@
 namespace EngineBay.Blueprints
 {
-    using System.Security.Claims;
     using EngineBay.Core;
     using EngineBay.Persistence;
     using FluentValidation;
@@ -30,8 +29,10 @@ namespace EngineBay.Blueprints
             services.AddTransient<GetBlueprint>();
             services.AddTransient<GetDataVariableBlueprint>();
             services.AddTransient<QueryDataVariableBlueprints>();
+            services.AddTransient<QueryFilteredDataVariableBlueprints>();
             services.AddTransient<GetExpressionBlueprint>();
             services.AddTransient<QueryExpressionBlueprints>();
+            services.AddTransient<QueryFilteredExpressionBlueprints>();
             services.AddTransient<GetWorkbook>();
             services.AddTransient<QueryWorkbooks>();
             services.AddTransient<GetWorkbookComplexityScore>();

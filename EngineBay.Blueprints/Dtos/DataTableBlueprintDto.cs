@@ -12,6 +12,7 @@ namespace EngineBay.Blueprints
             }
 
             this.Id = dataTableBlueprint.Id;
+            this.BlueprintId = dataTableBlueprint.BlueprintId;
             this.Name = dataTableBlueprint.Name;
             this.Namespace = dataTableBlueprint.Namespace;
             this.Description = dataTableBlueprint.Description;
@@ -21,6 +22,8 @@ namespace EngineBay.Blueprints
         }
 
         public Guid Id { get; set; }
+
+        public Guid BlueprintId { get; set; }
 
         public string? Name { get; set; }
 

@@ -12,11 +12,14 @@ namespace EngineBay.Blueprints
             }
 
             this.Id = inputDataTableBlueprint.Id;
+            this.ExpressionBlueprintId = inputDataTableBlueprint.ExpressionBlueprintId;
             this.Name = inputDataTableBlueprint.Name;
             this.Namespace = inputDataTableBlueprint.Namespace;
         }
 
         public Guid Id { get; set; }
+
+        public Guid ExpressionBlueprintId { get; set; }
 
         public string? Name { get; set; }
 

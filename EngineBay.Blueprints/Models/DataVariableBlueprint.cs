@@ -17,7 +17,7 @@ namespace EngineBay.Blueprints
 
         public string? DefaultValue { get; set; }
 
-        public Guid? BlueprintId { get; set; }
+        public Guid BlueprintId { get; set; }
 
         public virtual Blueprint? Blueprint { get; set; }
 

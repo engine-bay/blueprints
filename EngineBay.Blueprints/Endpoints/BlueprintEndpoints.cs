@@ -7,14 +7,21 @@ namespace EngineBay.Blueprints
     {
         public static void MapEndpoints(IEndpointRouteBuilder endpoints)
         {
-            // Direct CRUD
             endpoints.MapGet("/blueprints", async (QueryBlueprints query, int? skip, int? limit, string? sortBy, SortOrderType? sortOrder, CancellationToken cancellation) =>
-                        {
-                            var paginationParameters = new PaginationParameters(skip, limit, sortBy, sortOrder);
+            {
+                var paginationParameters = new PaginationParameters(skip, limit, sortBy, sortOrder);
 
-                            var paginatedDtos = await query.Handle(paginationParameters, cancellation).ConfigureAwait(false);
-                            return Results.Ok(paginatedDtos);
-                        }).RequireAuthorization();
+                var paginatedDtos = await query.Handle(paginationParameters, cancellation).ConfigureAwait(false);
+                return Results.Ok(paginatedDtos);
+            }).RequireAuthorization();
+
+            endpoints.MapGet("/workbooks/{workbookId}/blueprints", async (QueryFilteredBlueprints query, Guid workbookId, int? skip, int? limit, string? sortBy, SortOrderType? sortOrder, CancellationToken cancellation) =>
+            {
+                var filteredPaginationParameters = new FilteredPaginationParameters<Blueprint>(skip, limit, sortBy, sortOrder, x => x.WorkbookId == workbookId);
+
+                var paginatedDtos = await query.Handle(filteredPaginationParameters, cancellation).ConfigureAwait(false);
+                return Results.Ok(paginatedDtos);
+            }).RequireAuthorization();
 
             endpoints.MapGet("/blueprints/{id}", async (GetBlueprint query, Guid id, CancellationToken cancellation) =>
             {
@@ -43,15 +50,6 @@ namespace EngineBay.Blueprints
             {
                 var dto = await command.Handle(id, claimsPrincipal, cancellation).ConfigureAwait(false);
                 return Results.Ok(dto);
-            }).RequireAuthorization();
-
-            // Filtered Queries
-            endpoints.MapGet("/workbooks/{workbookId}/blueprints", async (QueryFilteredBlueprints query, Guid workbookId, int? skip, int? limit, string? sortBy, SortOrderType? sortOrder, CancellationToken cancellation) =>
-            {
-                var filteredPaginationParameters = new FilteredPaginationParameters<Blueprint>(skip, limit, sortBy, sortOrder, x => x.WorkbookId == workbookId);
-
-                var paginatedDtos = await query.Handle(filteredPaginationParameters, cancellation).ConfigureAwait(false);
-                return Results.Ok(paginatedDtos);
             }).RequireAuthorization();
         }
     }
