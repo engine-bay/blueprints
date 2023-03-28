@@ -1,6 +1,8 @@
 namespace EngineBay.Blueprints
 {
     using EngineBay.Core;
+    using LinqKit;
+    using Microsoft.EntityFrameworkCore;
 
     public class GetBlueprint : IQueryHandler<Guid, BlueprintDto>
     {
@@ -14,14 +16,31 @@ namespace EngineBay.Blueprints
         /// <inheritdoc/>
         public async Task<BlueprintDto> Handle(Guid id, CancellationToken cancellation)
         {
-            var blueprint = await this.db.Blueprints.FindAsync(new object[] { id }, cancellation).ConfigureAwait(false);
-
-            if (blueprint is null)
-            {
-                throw new ArgumentException(nameof(blueprint));
-            }
-
-            return new BlueprintDto(blueprint);
+            return await this.db.Blueprints
+                       .Include(blueprint => blueprint.ExpressionBlueprints)
+                           .ThenInclude(expressionBlueprint => expressionBlueprint.InputDataTableBlueprints)
+                       .Include(x => x.ExpressionBlueprints)
+                           .ThenInclude(x => x.InputDataVariableBlueprints)
+                       .Include(x => x.ExpressionBlueprints)
+                           .ThenInclude(x => x.OutputDataVariableBlueprint)
+                       .Include(x => x.DataVariableBlueprints)
+                       .Include(x => x.TriggerBlueprints)
+                           .ThenInclude(x => x.TriggerExpressionBlueprints)
+                               .ThenInclude(x => x.InputDataVariableBlueprint)
+                       .Include(x => x.TriggerBlueprints)
+                           .ThenInclude(x => x.OutputDataVariableBlueprint)
+                           .Include(x => x.DataTableBlueprints)
+                               .ThenInclude(x => x.InputDataVariableBlueprints)
+                           .Include(x => x.DataTableBlueprints)
+                               .ThenInclude(x => x.DataTableColumnBlueprints)
+                       .Include(x => x.DataTableBlueprints)
+                           .ThenInclude(x => x.DataTableRowBlueprints)
+                               .ThenInclude(x => x.DataTableCellBlueprints)
+                        .Where(x => x.Id == id)
+                        .Select(blueprint => new BlueprintDto(blueprint))
+                        .AsExpandable()
+                        .FirstAsync(cancellation)
+                        .ConfigureAwait(false);
         }
     }
 }
