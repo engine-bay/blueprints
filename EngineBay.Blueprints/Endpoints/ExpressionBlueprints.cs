@@ -13,7 +13,8 @@ namespace EngineBay.Blueprints
 
                 var paginatedDtos = await query.Handle(paginationParameters, cancellation).ConfigureAwait(false);
                 return Results.Ok(paginatedDtos);
-            }).RequireAuthorization();
+            }).RequireAuthorization()
+            .WithGroupName(ApiGroupNameConstants.ExpressionBlueprints);
 
             endpoints.MapGet("/workbooks/{workbookId}/blueprints/{blueprintId}/expression-blueprints", async (QueryFilteredExpressionBlueprints query, Guid blueprintId, int? skip, int? limit, string? sortBy, SortOrderType? sortOrder, CancellationToken cancellation) =>
             {
@@ -21,19 +22,22 @@ namespace EngineBay.Blueprints
 
                 var paginatedDtos = await query.Handle(filteredPaginationParameters, cancellation).ConfigureAwait(false);
                 return Results.Ok(paginatedDtos);
-            }).RequireAuthorization();
+            }).RequireAuthorization()
+            .WithGroupName(ApiGroupNameConstants.ExpressionBlueprints);
 
             endpoints.MapGet("/expression-blueprints/{id}", async (GetExpressionBlueprint query, Guid id, CancellationToken cancellation) =>
             {
                 var dto = await query.Handle(id, cancellation).ConfigureAwait(false);
                 return Results.Ok(dto);
-            }).RequireAuthorization();
+            }).RequireAuthorization()
+            .WithGroupName(ApiGroupNameConstants.ExpressionBlueprints);
 
             endpoints.MapPost("/expression-blueprints", async (CreateExpressionBlueprint command, ExpressionBlueprint expressionBlueprint, ClaimsPrincipal claimsPrincipal, CancellationToken cancellation) =>
             {
                 var dto = await command.Handle(expressionBlueprint, claimsPrincipal, cancellation).ConfigureAwait(false);
                 return Results.Created($"/expression-blueprints/{expressionBlueprint.Id}", dto);
-            }).RequireAuthorization();
+            }).RequireAuthorization()
+            .WithGroupName(ApiGroupNameConstants.ExpressionBlueprints);
 
             endpoints.MapPut("/expression-blueprints/{id}", async (UpdateExpressionBlueprint command, ExpressionBlueprint updateExpressionBlueprint, Guid id, ClaimsPrincipal claimsPrincipal, CancellationToken cancellation) =>
             {
@@ -44,13 +48,15 @@ namespace EngineBay.Blueprints
                 };
                 var dto = await command.Handle(updateParameters, claimsPrincipal, cancellation).ConfigureAwait(false);
                 return Results.Ok(dto);
-            }).RequireAuthorization();
+            }).RequireAuthorization()
+            .WithGroupName(ApiGroupNameConstants.ExpressionBlueprints);
 
             endpoints.MapDelete("/expression-blueprints/{id}", async (DeleteExpressionBlueprint command, Guid id, ClaimsPrincipal claimsPrincipal, CancellationToken cancellation) =>
             {
                 var dto = await command.Handle(id, claimsPrincipal, cancellation).ConfigureAwait(false);
                 return Results.Ok(dto);
-            }).RequireAuthorization();
+            }).RequireAuthorization()
+            .WithGroupName(ApiGroupNameConstants.ExpressionBlueprints);
         }
     }
 }
