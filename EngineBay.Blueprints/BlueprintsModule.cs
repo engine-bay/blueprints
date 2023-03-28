@@ -26,6 +26,7 @@ namespace EngineBay.Blueprints
 
             // Register queries
             services.AddTransient<QueryBlueprints>();
+            services.AddTransient<QueryFilteredBlueprints>();
             services.AddTransient<GetBlueprint>();
             services.AddTransient<GetDataVariableBlueprint>();
             services.AddTransient<QueryDataVariableBlueprints>();

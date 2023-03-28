@@ -30,7 +30,7 @@ namespace EngineBay.Blueprints
 
             if (filterPredicate is null)
             {
-                throw new ArgumentException("filterPredicate was null");
+                throw new ArgumentException(nameof(filterPredicate));
             }
 
             var total = await this.db.Blueprints.Where(filterPredicate).CountAsync(cancellation).ConfigureAwait(false);
