@@ -3,40 +3,39 @@ namespace EngineBay.Blueprints
     using System.Security.Claims;
     using EngineBay.Authentication;
     using EngineBay.Core;
-    using EngineBay.Persistence;
     using LinqKit;
     using Microsoft.EntityFrameworkCore;
 
-    public class DeleteExpressionBlueprint : ICommandHandler<Guid, ExpressionBlueprintDto>
+    public class DeleteTriggerBlueprint : ICommandHandler<Guid, TriggerBlueprintDto>
     {
         private readonly BlueprintsWriteDbContext db;
 
         private readonly GetApplicationUser getApplicationUserQuery;
 
-        public DeleteExpressionBlueprint(GetApplicationUser getApplicationUserQuery, BlueprintsWriteDbContext db)
+        public DeleteTriggerBlueprint(GetApplicationUser getApplicationUserQuery, BlueprintsWriteDbContext db)
         {
             this.getApplicationUserQuery = getApplicationUserQuery;
             this.db = db;
         }
 
         /// <inheritdoc/>
-        public async Task<ExpressionBlueprintDto> Handle(Guid id, ClaimsPrincipal claimsPrincipal, CancellationToken cancellation)
+        public async Task<TriggerBlueprintDto> Handle(Guid id, ClaimsPrincipal claimsPrincipal, CancellationToken cancellation)
         {
             var user = await this.getApplicationUserQuery.Handle(claimsPrincipal, cancellation).ConfigureAwait(false);
-            var expressionBlueprint = await this.db.ExpressionBlueprints
+            var triggerBlueprint = await this.db.TriggerBlueprints
                                     .Where(blueprint => blueprint.Id == id)
                                     .AsExpandable()
                                     .FirstAsync(cancellation)
                                     .ConfigureAwait(false);
 
-            if (expressionBlueprint is null)
+            if (triggerBlueprint is null)
             {
-                throw new ArgumentException(nameof(expressionBlueprint));
+                throw new ArgumentException(nameof(triggerBlueprint));
             }
 
-            this.db.ExpressionBlueprints.Remove(expressionBlueprint);
+            this.db.TriggerBlueprints.Remove(triggerBlueprint);
             await this.db.SaveChangesAsync(user, cancellation).ConfigureAwait(false);
-            return new ExpressionBlueprintDto(expressionBlueprint);
+            return new TriggerBlueprintDto(triggerBlueprint);
         }
     }
 }

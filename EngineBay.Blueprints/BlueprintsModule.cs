@@ -34,6 +34,9 @@ namespace EngineBay.Blueprints
             services.AddTransient<CreateDataTableCellBlueprint>();
             services.AddTransient<DeleteDataTableCellBlueprint>();
             services.AddTransient<UpdateDataTableCellBlueprint>();
+            services.AddTransient<CreateTriggerBlueprint>();
+            services.AddTransient<DeleteTriggerBlueprint>();
+            services.AddTransient<UpdateTriggerBlueprint>();
             services.AddTransient<CreateWorkbook>();
             services.AddTransient<DeleteWorkbook>();
             services.AddTransient<UpdateWorkbook>();
@@ -66,6 +69,9 @@ namespace EngineBay.Blueprints
             services.AddTransient<QueryFilteredDataTableCellBlueprints>();
             services.AddTransient<GetDataTableCellBlueprint>();
             services.AddTransient<QueryDataTableCellBlueprints>();
+            services.AddTransient<QueryTriggerBlueprints>();
+            services.AddTransient<QueryFilteredTriggerBlueprints>();
+            services.AddTransient<GetTriggerBlueprint>();
 
             // Register validators
             services.AddTransient<IValidator<Workbook>, WorkbookValidator>();

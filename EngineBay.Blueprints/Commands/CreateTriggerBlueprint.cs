@@ -5,14 +5,14 @@ namespace EngineBay.Blueprints
     using EngineBay.Core;
     using FluentValidation;
 
-    public class CreateBlueprint : ICommandHandler<Blueprint, BlueprintDto>
+    public class CreateTriggerBlueprint : ICommandHandler<TriggerBlueprint, TriggerBlueprintDto>
     {
         private readonly BlueprintsWriteDbContext db;
-        private readonly IValidator<Blueprint> validator;
+        private readonly IValidator<TriggerBlueprint> validator;
 
         private readonly GetApplicationUser getApplicationUserQuery;
 
-        public CreateBlueprint(GetApplicationUser getApplicationUserQuery, BlueprintsWriteDbContext db, IValidator<Blueprint> validator)
+        public CreateTriggerBlueprint(GetApplicationUser getApplicationUserQuery, BlueprintsWriteDbContext db, IValidator<TriggerBlueprint> validator)
         {
             this.getApplicationUserQuery = getApplicationUserQuery;
             this.db = db;
@@ -20,13 +20,13 @@ namespace EngineBay.Blueprints
         }
 
         /// <inheritdoc/>
-        public async Task<BlueprintDto> Handle(Blueprint blueprint, ClaimsPrincipal claimsPrincipal, CancellationToken cancellation)
+        public async Task<TriggerBlueprintDto> Handle(TriggerBlueprint triggerBlueprint, ClaimsPrincipal claimsPrincipal, CancellationToken cancellation)
         {
             var user = await this.getApplicationUserQuery.Handle(claimsPrincipal, cancellation).ConfigureAwait(false);
-            this.validator.ValidateAndThrow(blueprint);
-            await this.db.Blueprints.AddAsync(blueprint, cancellation).ConfigureAwait(false);
+            this.validator.ValidateAndThrow(triggerBlueprint);
+            await this.db.TriggerBlueprints.AddAsync(triggerBlueprint, cancellation).ConfigureAwait(false);
             await this.db.SaveChangesAsync(user, cancellation).ConfigureAwait(false);
-            return new BlueprintDto(blueprint);
+            return new TriggerBlueprintDto(triggerBlueprint);
         }
     }
 }

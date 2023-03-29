@@ -19,5 +19,7 @@ namespace EngineBay.Blueprints
         public const string DataTableCellBlueprints = "Data table cell blueprints";
 
         public const string ExpressionBlueprints = "Expression blueprints";
+
+        public const string TriggerBlueprints = "Trigger blueprints";
     }
 }
