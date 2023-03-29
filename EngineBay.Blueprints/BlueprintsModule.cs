@@ -28,6 +28,12 @@ namespace EngineBay.Blueprints
             services.AddTransient<CreateDataTableColumnBlueprint>();
             services.AddTransient<DeleteDataTableColumnBlueprint>();
             services.AddTransient<UpdateDataTableColumnBlueprint>();
+            services.AddTransient<CreateDataTableRowBlueprint>();
+            services.AddTransient<DeleteDataTableRowBlueprint>();
+            services.AddTransient<UpdateDataTableRowBlueprint>();
+            services.AddTransient<CreateDataTableCellBlueprint>();
+            services.AddTransient<DeleteDataTableCellBlueprint>();
+            services.AddTransient<UpdateDataTableCellBlueprint>();
             services.AddTransient<CreateWorkbook>();
             services.AddTransient<DeleteWorkbook>();
             services.AddTransient<UpdateWorkbook>();
@@ -54,6 +60,12 @@ namespace EngineBay.Blueprints
             services.AddTransient<QueryFilteredDataTableColumnBlueprints>();
             services.AddTransient<GetDataTableColumnBlueprint>();
             services.AddTransient<QueryDataTableColumnBlueprints>();
+            services.AddTransient<QueryFilteredDataTableRowBlueprints>();
+            services.AddTransient<GetDataTableRowBlueprint>();
+            services.AddTransient<QueryDataTableRowBlueprints>();
+            services.AddTransient<QueryFilteredDataTableCellBlueprints>();
+            services.AddTransient<GetDataTableCellBlueprint>();
+            services.AddTransient<QueryDataTableCellBlueprints>();
 
             // Register validators
             services.AddTransient<IValidator<Workbook>, WorkbookValidator>();
@@ -88,6 +100,7 @@ namespace EngineBay.Blueprints
             InputDataVariableBlueprintEndpoints.MapEndpoints(endpoints);
             DataTableColumnBlueprintEndpoints.MapEndpoints(endpoints);
             DataTableRowBlueprintEndpoints.MapEndpoints(endpoints);
+            DataTableCellBlueprintEndpoints.MapEndpoints(endpoints);
 
             return endpoints;
         }
