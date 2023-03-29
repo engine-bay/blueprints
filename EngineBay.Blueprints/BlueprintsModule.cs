@@ -65,6 +65,7 @@ namespace EngineBay.Blueprints
             services.AddTransient<GetWorkbookComplexityScore>();
             services.AddTransient<GetInputDataVariableBlueprint>();
             services.AddTransient<QueryInputDataVariableBlueprints>();
+            services.AddTransient<QueryFilteredInputDataVariableBlueprints>();
             services.AddTransient<QueryFilteredDataVariableBlueprints>();
             services.AddTransient<QueryFilteredDataTableColumnBlueprints>();
             services.AddTransient<GetDataTableColumnBlueprint>();
