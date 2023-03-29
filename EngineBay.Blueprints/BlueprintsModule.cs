@@ -87,6 +87,7 @@ namespace EngineBay.Blueprints
             WorkbookEndpoints.MapEndpoints(endpoints);
             InputDataVariableBlueprintEndpoints.MapEndpoints(endpoints);
             DataTableColumnBlueprintEndpoints.MapEndpoints(endpoints);
+            DataTableRowBlueprintEndpoints.MapEndpoints(endpoints);
 
             return endpoints;
         }
