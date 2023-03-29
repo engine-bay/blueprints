@@ -25,13 +25,13 @@ namespace EngineBay.Blueprints
 
         public Guid Id { get; set; }
 
-        public Guid TriggerBlueprintId { get; set; }
+        public Guid? TriggerBlueprintId { get; set; }
 
         public string? Expression { get; set; }
 
         public string? Objective { get; set; }
 
-        public Guid InputDataVariableBlueprintId { get; set; }
+        public Guid? InputDataVariableBlueprintId { get; set; }
 
         public InputDataVariableBlueprintDto? InputDataVariableBlueprint { get; set; }
     }

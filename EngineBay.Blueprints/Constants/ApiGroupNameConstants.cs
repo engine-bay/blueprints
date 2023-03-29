@@ -8,6 +8,8 @@ namespace EngineBay.Blueprints
 
         public const string DataVariableBlueprints = "Data variable blueprints";
 
+        public const string InputDataVariableBlueprints = "Input data variable blueprints";
+
         public const string DataTableBlueprints = "Data table blueprints";
 
         public const string ExpressionBlueprints = "Expression blueprints";

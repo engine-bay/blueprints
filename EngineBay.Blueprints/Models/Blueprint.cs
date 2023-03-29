@@ -19,7 +19,7 @@ namespace EngineBay.Blueprints
 
         public virtual ICollection<TriggerBlueprint>? TriggerBlueprints { get; set; }
 
-        public Guid WorkbookId { get; set; }
+        public Guid? WorkbookId { get; set; }
 
         public virtual Workbook? Workbook { get; set; }
 

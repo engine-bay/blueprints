@@ -13,11 +13,11 @@ namespace EngineBay.Blueprints
 
         public virtual ICollection<TriggerExpressionBlueprint>? TriggerExpressionBlueprints { get; set; }
 
-        public Guid OutputDataVariableBlueprintId { get; set; }
+        public Guid? OutputDataVariableBlueprintId { get; set; }
 
         public virtual OutputDataVariableBlueprint? OutputDataVariableBlueprint { get; set; }
 
-        public Guid BlueprintId { get; set; }
+        public Guid? BlueprintId { get; set; }
 
         public virtual Blueprint? Blueprint { get; set; }
 

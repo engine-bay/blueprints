@@ -27,7 +27,7 @@ namespace EngineBay.Blueprints
 
         public Guid Id { get; set; }
 
-        public Guid BlueprintId { get; set; }
+        public Guid? BlueprintId { get; set; }
 
         public string? Expression { get; set; }
 
@@ -37,7 +37,7 @@ namespace EngineBay.Blueprints
 
         public IEnumerable<InputDataTableBlueprintDto>? InputDataTableBlueprints { get; set; }
 
-        public Guid OutputDataVariableId { get; set; }
+        public Guid? OutputDataVariableId { get; set; }
 
         public OutputDataVariableBlueprintDto? OutputDataVariableBlueprint { get; set; }
     }

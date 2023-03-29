@@ -11,7 +11,7 @@ namespace EngineBay.Blueprints
 
         public string? Namespace { get; set; }
 
-        public Guid ExpressionBlueprintId { get; set; }
+        public Guid? ExpressionBlueprintId { get; set; }
 
         public virtual ExpressionBlueprint? ExpressionBlueprint { get; set; }
 

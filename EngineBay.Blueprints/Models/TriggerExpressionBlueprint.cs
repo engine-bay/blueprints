@@ -11,11 +11,11 @@ namespace EngineBay.Blueprints
 
         public string? Objective { get; set; }
 
-        public Guid TriggerBlueprintId { get; set; }
+        public Guid? TriggerBlueprintId { get; set; }
 
         public virtual TriggerBlueprint? TriggerBlueprint { get; set; }
 
-        public Guid InputDataVariableBlueprintId { get; set; }
+        public Guid? InputDataVariableBlueprintId { get; set; }
 
         public virtual InputDataVariableBlueprint? InputDataVariableBlueprint { get; set; }
 

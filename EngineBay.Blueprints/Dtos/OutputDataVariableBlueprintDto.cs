@@ -20,7 +20,7 @@ namespace EngineBay.Blueprints
 
         public Guid Id { get; set; }
 
-        public Guid ExpressionBlueprintId { get; set; }
+        public Guid? ExpressionBlueprintId { get; set; }
 
         public string? Name { get; set; }
 

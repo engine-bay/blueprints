@@ -11,7 +11,7 @@ namespace EngineBay.Blueprints
 
         public string? Objective { get; set; }
 
-        public Guid BlueprintId { get; set; }
+        public Guid? BlueprintId { get; set; }
 
         public virtual Blueprint? Blueprint { get; set; }
 
@@ -19,7 +19,7 @@ namespace EngineBay.Blueprints
 
         public virtual ICollection<InputDataTableBlueprint>? InputDataTableBlueprints { get; set; }
 
-        public Guid OutputDataVariableBlueprintId { get; set; }
+        public Guid? OutputDataVariableBlueprintId { get; set; }
 
         public virtual OutputDataVariableBlueprint? OutputDataVariableBlueprint { get; set; }
 

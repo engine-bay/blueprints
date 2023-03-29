@@ -23,7 +23,7 @@ namespace EngineBay.Blueprints
 
         public Guid Id { get; set; }
 
-        public Guid WorkbookId { get; set; }
+        public Guid? WorkbookId { get; set; }
 
         public string? Name { get; set; }
 

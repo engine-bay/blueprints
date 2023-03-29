@@ -22,6 +22,9 @@ namespace EngineBay.Blueprints
             services.AddTransient<CreateDataTableBlueprint>();
             services.AddTransient<DeleteDataTableBlueprint>();
             services.AddTransient<UpdateDataTableBlueprint>();
+            services.AddTransient<CreateInputDataVariableBlueprint>();
+            services.AddTransient<DeleteInputDataVariableBlueprint>();
+            services.AddTransient<UpdateInputDataVariableBlueprint>();
             services.AddTransient<CreateWorkbook>();
             services.AddTransient<DeleteWorkbook>();
             services.AddTransient<UpdateWorkbook>();
@@ -42,6 +45,9 @@ namespace EngineBay.Blueprints
             services.AddTransient<GetWorkbook>();
             services.AddTransient<QueryWorkbooks>();
             services.AddTransient<GetWorkbookComplexityScore>();
+            services.AddTransient<GetInputDataVariableBlueprint>();
+            services.AddTransient<QueryInputDataVariableBlueprints>();
+            services.AddTransient<QueryFilteredDataVariableBlueprints>();
 
             // Register validators
             services.AddTransient<IValidator<Workbook>, WorkbookValidator>();
@@ -70,8 +76,10 @@ namespace EngineBay.Blueprints
         {
             BlueprintEndpoints.MapEndpoints(endpoints);
             DataVariableBlueprintEndpoints.MapEndpoints(endpoints);
+            DataTableBlueprintEndpoints.MapEndpoints(endpoints);
             ExpressionBlueprints.MapEndpoints(endpoints);
             WorkbookEndpoints.MapEndpoints(endpoints);
+            InputDataVariableBlueprintEndpoints.MapEndpoints(endpoints);
 
             return endpoints;
         }
