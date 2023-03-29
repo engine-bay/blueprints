@@ -19,6 +19,9 @@ namespace EngineBay.Blueprints
             services.AddTransient<CreateExpressionBlueprint>();
             services.AddTransient<DeleteExpressionBlueprint>();
             services.AddTransient<UpdateExpressionBlueprint>();
+            services.AddTransient<CreateDataTableBlueprint>();
+            services.AddTransient<DeleteDataTableBlueprint>();
+            services.AddTransient<UpdateDataTableBlueprint>();
             services.AddTransient<CreateWorkbook>();
             services.AddTransient<DeleteWorkbook>();
             services.AddTransient<UpdateWorkbook>();
@@ -33,6 +36,9 @@ namespace EngineBay.Blueprints
             services.AddTransient<GetExpressionBlueprint>();
             services.AddTransient<QueryExpressionBlueprints>();
             services.AddTransient<QueryFilteredExpressionBlueprints>();
+            services.AddTransient<GetDataTableBlueprint>();
+            services.AddTransient<QueryDataTableBlueprints>();
+            services.AddTransient<QueryFilteredDataTableBlueprints>();
             services.AddTransient<GetWorkbook>();
             services.AddTransient<QueryWorkbooks>();
             services.AddTransient<GetWorkbookComplexityScore>();
