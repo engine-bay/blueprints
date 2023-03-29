@@ -17,6 +17,10 @@ namespace EngineBay.Blueprints
 
         public virtual ExpressionBlueprint? ExpressionBlueprint { get; set; }
 
+        public Guid? TriggerBlueprintId { get; set; }
+
+        public virtual TriggerBlueprint? TriggerBlueprint { get; set; }
+
         public static new void CreateDataAnnotations(ModelBuilder modelBuilder)
         {
             if (modelBuilder is null)
@@ -40,7 +44,7 @@ namespace EngineBay.Blueprints
 
             modelBuilder.Entity<OutputDataVariableBlueprint>().HasOne(x => x.LastUpdatedBy).WithMany().HasForeignKey(x => x.LastUpdatedById).OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<OutputDataVariableBlueprint>().HasIndex(x => new { x.Name, x.ExpressionBlueprintId, x.Namespace }).IsUnique();
+            modelBuilder.Entity<OutputDataVariableBlueprint>().HasIndex(x => new { x.Name, x.ExpressionBlueprintId, x.TriggerBlueprintId, x.Namespace }).IsUnique();
 
             modelBuilder.Entity<OutputDataVariableBlueprint>().Property(x => x.Name).IsRequired();
 
@@ -49,6 +53,8 @@ namespace EngineBay.Blueprints
             modelBuilder.Entity<OutputDataVariableBlueprint>().Property(x => x.Type).IsRequired();
 
             modelBuilder.Entity<OutputDataVariableBlueprint>().HasOne(x => x.ExpressionBlueprint);
+
+            modelBuilder.Entity<OutputDataVariableBlueprint>().HasOne(x => x.TriggerBlueprint);
         }
     }
 }

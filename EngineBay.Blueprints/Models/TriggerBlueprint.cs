@@ -50,7 +50,7 @@ namespace EngineBay.Blueprints
 
             modelBuilder.Entity<TriggerBlueprint>().HasOne(x => x.Blueprint);
 
-            modelBuilder.Entity<TriggerBlueprint>().HasOne(x => x.OutputDataVariableBlueprint);
+            modelBuilder.Entity<TriggerBlueprint>().HasOne(x => x.OutputDataVariableBlueprint).WithOne(x => x.TriggerBlueprint).HasForeignKey<OutputDataVariableBlueprint>(x => x.TriggerBlueprintId).OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<TriggerBlueprint>().HasMany(x => x.TriggerExpressionBlueprints).WithOne(x => x.TriggerBlueprint).HasForeignKey(x => x.TriggerBlueprintId).OnDelete(DeleteBehavior.NoAction);
         }

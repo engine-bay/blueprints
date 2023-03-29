@@ -25,6 +25,9 @@ namespace EngineBay.Blueprints
             services.AddTransient<CreateInputDataVariableBlueprint>();
             services.AddTransient<DeleteInputDataVariableBlueprint>();
             services.AddTransient<UpdateInputDataVariableBlueprint>();
+            services.AddTransient<CreateOutputDataVariableBlueprint>();
+            services.AddTransient<DeleteOutputDataVariableBlueprint>();
+            services.AddTransient<UpdateOutputDataVariableBlueprint>();
             services.AddTransient<CreateDataTableColumnBlueprint>();
             services.AddTransient<DeleteDataTableColumnBlueprint>();
             services.AddTransient<UpdateDataTableColumnBlueprint>();
@@ -37,6 +40,9 @@ namespace EngineBay.Blueprints
             services.AddTransient<CreateTriggerBlueprint>();
             services.AddTransient<DeleteTriggerBlueprint>();
             services.AddTransient<UpdateTriggerBlueprint>();
+            services.AddTransient<CreateTriggerExpressionBlueprint>();
+            services.AddTransient<DeleteTriggerExpressionBlueprint>();
+            services.AddTransient<UpdateTriggerExpressionBlueprint>();
             services.AddTransient<CreateWorkbook>();
             services.AddTransient<DeleteWorkbook>();
             services.AddTransient<UpdateWorkbook>();
@@ -72,6 +78,12 @@ namespace EngineBay.Blueprints
             services.AddTransient<QueryTriggerBlueprints>();
             services.AddTransient<QueryFilteredTriggerBlueprints>();
             services.AddTransient<GetTriggerBlueprint>();
+            services.AddTransient<QueryTriggerExpressionBlueprints>();
+            services.AddTransient<QueryFilteredTriggerExpressionBlueprints>();
+            services.AddTransient<GetTriggerExpressionBlueprint>();
+            services.AddTransient<QueryOutputDataVariableBlueprints>();
+            services.AddTransient<QueryFilteredOutputDataVariableBlueprints>();
+            services.AddTransient<GetOutputDataVariableBlueprint>();
 
             // Register validators
             services.AddTransient<IValidator<Workbook>, WorkbookValidator>();
@@ -104,9 +116,12 @@ namespace EngineBay.Blueprints
             ExpressionBlueprints.MapEndpoints(endpoints);
             WorkbookEndpoints.MapEndpoints(endpoints);
             InputDataVariableBlueprintEndpoints.MapEndpoints(endpoints);
+            OutputDataVariableBlueprintEndpoints.MapEndpoints(endpoints);
             DataTableColumnBlueprintEndpoints.MapEndpoints(endpoints);
             DataTableRowBlueprintEndpoints.MapEndpoints(endpoints);
             DataTableCellBlueprintEndpoints.MapEndpoints(endpoints);
+            TriggerBlueprints.MapEndpoints(endpoints);
+            TriggerExpressionBlueprints.MapEndpoints(endpoints);
 
             return endpoints;
         }

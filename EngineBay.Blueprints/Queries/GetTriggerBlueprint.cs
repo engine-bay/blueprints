@@ -18,6 +18,7 @@ namespace EngineBay.Blueprints
         {
             return await this.db.TriggerBlueprints
                             .Include(x => x.TriggerExpressionBlueprints)
+                                .ThenInclude(x => x.InputDataVariableBlueprint)
                             .Include(x => x.OutputDataVariableBlueprint)
                             .Where(triggerBlueprint => triggerBlueprint.Id == id)
                             .Select(triggerBlueprint => new TriggerBlueprintDto(triggerBlueprint))

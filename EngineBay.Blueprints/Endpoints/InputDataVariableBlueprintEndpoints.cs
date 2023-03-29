@@ -34,6 +34,15 @@ namespace EngineBay.Blueprints
             }).RequireAuthorization()
             .WithGroupName(ApiGroupNameConstants.InputDataVariableBlueprints);
 
+            endpoints.MapGet("/workbooks/{workbookId}/blueprints/{blueprintId}/trigger-blueprints/{triggerBlueprintId}/trigger-expression-blueprints/{triggerExpressionBlueprintId}/input-data-variable-blueprints", async (QueryFilteredInputDataVariableBlueprints query, Guid triggerExpressionBlueprintId, int? skip, int? limit, string? sortBy, SortOrderType? sortOrder, CancellationToken cancellation) =>
+           {
+               var filteredPaginationParameters = new FilteredPaginationParameters<InputDataVariableBlueprint>(skip, limit, sortBy, sortOrder, x => x.TriggerExpressionBlueprintId == triggerExpressionBlueprintId);
+
+               var paginatedDtos = await query.Handle(filteredPaginationParameters, cancellation).ConfigureAwait(false);
+               return Results.Ok(paginatedDtos);
+           }).RequireAuthorization()
+           .WithGroupName(ApiGroupNameConstants.InputDataVariableBlueprints);
+
             endpoints.MapGet("/input-data-variable-blueprints/{id}", async (GetInputDataVariableBlueprint query, Guid id, CancellationToken cancellation) =>
             {
                 var dto = await query.Handle(id, cancellation).ConfigureAwait(false);

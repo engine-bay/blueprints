@@ -31,6 +31,7 @@ namespace EngineBay.Blueprints
 
             var query = this.db.TriggerBlueprints
                             .Include(x => x.TriggerExpressionBlueprints)
+                                .ThenInclude(x => x.InputDataVariableBlueprint)
                             .Include(x => x.OutputDataVariableBlueprint)
                             .AsExpandable();
 

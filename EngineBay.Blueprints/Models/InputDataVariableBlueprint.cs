@@ -21,6 +21,10 @@ namespace EngineBay.Blueprints
 
         public virtual DataTableBlueprint? DataTableBlueprint { get; set; }
 
+        public Guid? TriggerExpressionBlueprintId { get; set; }
+
+        public virtual TriggerExpressionBlueprint? TriggerExpressionBlueprint { get; set; }
+
         public static new void CreateDataAnnotations(ModelBuilder modelBuilder)
         {
             if (modelBuilder is null)
@@ -53,6 +57,8 @@ namespace EngineBay.Blueprints
             modelBuilder.Entity<InputDataVariableBlueprint>().HasOne(x => x.ExpressionBlueprint);
 
             modelBuilder.Entity<InputDataVariableBlueprint>().HasOne(x => x.DataTableBlueprint);
+
+            modelBuilder.Entity<InputDataVariableBlueprint>().HasOne(x => x.TriggerExpressionBlueprint);
         }
     }
 }

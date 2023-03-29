@@ -46,7 +46,7 @@ namespace EngineBay.Blueprints
 
             modelBuilder.Entity<TriggerExpressionBlueprint>().HasIndex(x => new { x.Expression, x.TriggerBlueprintId, x.InputDataVariableBlueprintId }).IsUnique();
 
-            modelBuilder.Entity<TriggerExpressionBlueprint>().HasOne(x => x.InputDataVariableBlueprint);
+            modelBuilder.Entity<TriggerExpressionBlueprint>().HasOne(x => x.InputDataVariableBlueprint).WithOne(x => x.TriggerExpressionBlueprint).HasForeignKey<InputDataVariableBlueprint>(x => x.TriggerExpressionBlueprintId).OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<TriggerExpressionBlueprint>().HasOne(x => x.TriggerBlueprint);
         }

@@ -10,6 +10,8 @@ namespace EngineBay.Blueprints
 
         public const string InputDataVariableBlueprints = "Input data variable blueprints";
 
+        public const string OutputDataVariableBlueprints = "Output data variable blueprints";
+
         public const string DataTableBlueprints = "Data table blueprints";
 
         public const string DataTableColumnBlueprints = "Data table column blueprints";
@@ -21,5 +23,7 @@ namespace EngineBay.Blueprints
         public const string ExpressionBlueprints = "Expression blueprints";
 
         public const string TriggerBlueprints = "Trigger blueprints";
+
+        public const string TriggerExpressionBlueprints = "Trigger expression blueprints";
     }
 }

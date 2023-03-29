@@ -14,6 +14,7 @@ namespace EngineBay.Blueprints
             this.Id = inputDataVariableBlueprint.Id;
             this.ExpressionBlueprintId = inputDataVariableBlueprint.ExpressionBlueprintId;
             this.DataTableBlueprintId = inputDataVariableBlueprint.DataTableBlueprintId;
+            this.TriggerExpressionBlueprintId = inputDataVariableBlueprint.TriggerExpressionBlueprintId;
             this.Name = inputDataVariableBlueprint.Name;
             this.Namespace = inputDataVariableBlueprint.Namespace;
             this.Type = inputDataVariableBlueprint.Type;
@@ -24,6 +25,8 @@ namespace EngineBay.Blueprints
         public Guid? ExpressionBlueprintId { get; set; }
 
         public Guid? DataTableBlueprintId { get; set; }
+
+        public Guid? TriggerExpressionBlueprintId { get; set; }
 
         public string? Name { get; set; }
 
