@@ -29,7 +29,12 @@ namespace EngineBay.Blueprints
 
             var total = await this.db.DataTableBlueprints.CountAsync(cancellation).ConfigureAwait(false);
 
-            var query = this.db.DataTableBlueprints.AsExpandable();
+            var query = this.db.DataTableBlueprints
+                            .Include(x => x.InputDataVariableBlueprints)
+                            .Include(x => x.DataTableColumnBlueprints)
+                            .Include(x => x.DataTableRowBlueprints)
+                                .ThenInclude(x => x.DataTableCellBlueprints)
+                            .AsExpandable();
 
             Expression<Func<DataTableBlueprint, string?>> sortByPredicate = paginationParameters.SortBy switch
             {
