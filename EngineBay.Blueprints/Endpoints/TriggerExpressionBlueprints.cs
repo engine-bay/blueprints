@@ -14,7 +14,11 @@ namespace EngineBay.Blueprints
                 var paginatedDtos = await query.Handle(paginationParameters, cancellation).ConfigureAwait(false);
                 return Results.Ok(paginatedDtos);
             }).RequireAuthorization()
-            .WithGroupName(ApiGroupNameConstants.TriggerExpressionBlueprints);
+            .WithGroupName(ApiGroupNameConstants.TriggerExpressionBlueprints)
+            .WithTags(new string[]
+            {
+                ApiGroupNameConstants.TriggerExpressionBlueprints,
+            });
 
             endpoints.MapGet("/workbooks/{workbookId}/blueprints/{blueprintId}/trigger-blueprints/{triggerBlueprintId}/trigger-expression-blueprints", async (QueryFilteredTriggerExpressionBlueprints query, Guid triggerBlueprintId, int? skip, int? limit, string? sortBy, SortOrderType? sortOrder, CancellationToken cancellation) =>
             {
@@ -23,21 +27,33 @@ namespace EngineBay.Blueprints
                 var paginatedDtos = await query.Handle(filteredPaginationParameters, cancellation).ConfigureAwait(false);
                 return Results.Ok(paginatedDtos);
             }).RequireAuthorization()
-            .WithGroupName(ApiGroupNameConstants.TriggerExpressionBlueprints);
+            .WithGroupName(ApiGroupNameConstants.TriggerExpressionBlueprints)
+            .WithTags(new string[]
+            {
+                ApiGroupNameConstants.TriggerExpressionBlueprints,
+            });
 
             endpoints.MapGet("/trigger-expression-blueprints/{id}", async (GetTriggerExpressionBlueprint query, Guid id, CancellationToken cancellation) =>
             {
                 var dto = await query.Handle(id, cancellation).ConfigureAwait(false);
                 return Results.Ok(dto);
             }).RequireAuthorization()
-            .WithGroupName(ApiGroupNameConstants.TriggerExpressionBlueprints);
+            .WithGroupName(ApiGroupNameConstants.TriggerExpressionBlueprints)
+            .WithTags(new string[]
+            {
+                ApiGroupNameConstants.TriggerExpressionBlueprints,
+            });
 
             endpoints.MapPost("/trigger-expression-blueprints", async (CreateTriggerExpressionBlueprint command, TriggerExpressionBlueprint triggerExpressionBlueprint, ClaimsPrincipal claimsPrincipal, CancellationToken cancellation) =>
             {
                 var dto = await command.Handle(triggerExpressionBlueprint, claimsPrincipal, cancellation).ConfigureAwait(false);
                 return Results.Created($"/trigger-expression-blueprints/{triggerExpressionBlueprint.Id}", dto);
             }).RequireAuthorization()
-            .WithGroupName(ApiGroupNameConstants.TriggerExpressionBlueprints);
+            .WithGroupName(ApiGroupNameConstants.TriggerExpressionBlueprints)
+            .WithTags(new string[]
+            {
+                ApiGroupNameConstants.TriggerExpressionBlueprints,
+            });
 
             endpoints.MapPut("/trigger-expression-blueprints/{id}", async (UpdateTriggerExpressionBlueprint command, TriggerExpressionBlueprint updateTriggerExpressionBlueprint, Guid id, ClaimsPrincipal claimsPrincipal, CancellationToken cancellation) =>
             {
@@ -49,14 +65,22 @@ namespace EngineBay.Blueprints
                 var dto = await command.Handle(updateParameters, claimsPrincipal, cancellation).ConfigureAwait(false);
                 return Results.Ok(dto);
             }).RequireAuthorization()
-            .WithGroupName(ApiGroupNameConstants.TriggerExpressionBlueprints);
+            .WithGroupName(ApiGroupNameConstants.TriggerExpressionBlueprints)
+            .WithTags(new string[]
+            {
+                ApiGroupNameConstants.TriggerExpressionBlueprints,
+            });
 
             endpoints.MapDelete("/trigger-expression-blueprints/{id}", async (DeleteTriggerExpressionBlueprint command, Guid id, ClaimsPrincipal claimsPrincipal, CancellationToken cancellation) =>
             {
                 var dto = await command.Handle(id, claimsPrincipal, cancellation).ConfigureAwait(false);
                 return Results.Ok(dto);
             }).RequireAuthorization()
-            .WithGroupName(ApiGroupNameConstants.TriggerExpressionBlueprints);
+            .WithGroupName(ApiGroupNameConstants.TriggerExpressionBlueprints)
+            .WithTags(new string[]
+            {
+                ApiGroupNameConstants.TriggerExpressionBlueprints,
+            });
         }
     }
 }

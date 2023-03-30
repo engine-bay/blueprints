@@ -14,7 +14,11 @@ namespace EngineBay.Blueprints
                 var paginatedDtos = await query.Handle(paginationParameters, cancellation).ConfigureAwait(false);
                 return Results.Ok(paginatedDtos);
             }).RequireAuthorization()
-            .WithGroupName(ApiGroupNameConstants.DataTableBlueprints);
+            .WithGroupName(ApiGroupNameConstants.DataTableBlueprints)
+            .WithTags(new string[]
+            {
+                ApiGroupNameConstants.DataTableBlueprints,
+            });
 
             endpoints.MapGet("/workbooks/{workbookId}/blueprints/{blueprintId}/data-table-blueprints", async (QueryFilteredDataTableBlueprints query, Guid blueprintId, int? skip, int? limit, string? sortBy, SortOrderType? sortOrder, CancellationToken cancellation) =>
             {
@@ -23,21 +27,33 @@ namespace EngineBay.Blueprints
                 var paginatedDtos = await query.Handle(filteredPaginationParameters, cancellation).ConfigureAwait(false);
                 return Results.Ok(paginatedDtos);
             }).RequireAuthorization()
-            .WithGroupName(ApiGroupNameConstants.DataTableBlueprints);
+            .WithGroupName(ApiGroupNameConstants.DataTableBlueprints)
+            .WithTags(new string[]
+            {
+                ApiGroupNameConstants.DataTableBlueprints,
+            });
 
             endpoints.MapGet("/data-table-blueprints/{id}", async (GetDataTableBlueprint query, Guid id, CancellationToken cancellation) =>
             {
                 var dto = await query.Handle(id, cancellation).ConfigureAwait(false);
                 return Results.Ok(dto);
             }).RequireAuthorization()
-            .WithGroupName(ApiGroupNameConstants.DataTableBlueprints);
+            .WithGroupName(ApiGroupNameConstants.DataTableBlueprints)
+            .WithTags(new string[]
+            {
+                ApiGroupNameConstants.DataTableBlueprints,
+            });
 
             endpoints.MapPost("/data-table-blueprints", async (CreateDataTableBlueprint command, DataTableBlueprint dataTableBlueprint, ClaimsPrincipal claimsPrincipal, CancellationToken cancellation) =>
             {
                 var dto = await command.Handle(dataTableBlueprint, claimsPrincipal, cancellation).ConfigureAwait(false);
                 return Results.Created($"/data-table-blueprints/{dataTableBlueprint.Id}", dto);
             }).RequireAuthorization()
-            .WithGroupName(ApiGroupNameConstants.DataTableBlueprints);
+            .WithGroupName(ApiGroupNameConstants.DataTableBlueprints)
+            .WithTags(new string[]
+            {
+                ApiGroupNameConstants.DataTableBlueprints,
+            });
 
             endpoints.MapPut("/data-table-blueprints/{id}", async (UpdateDataTableBlueprint command, DataTableBlueprint updateDataTableBlueprint, Guid id, ClaimsPrincipal claimsPrincipal, CancellationToken cancellation) =>
             {
@@ -49,14 +65,22 @@ namespace EngineBay.Blueprints
                 var dto = await command.Handle(updateParameters, claimsPrincipal, cancellation).ConfigureAwait(false);
                 return Results.Ok(dto);
             }).RequireAuthorization()
-            .WithGroupName(ApiGroupNameConstants.DataTableBlueprints);
+            .WithGroupName(ApiGroupNameConstants.DataTableBlueprints)
+            .WithTags(new string[]
+            {
+                ApiGroupNameConstants.DataTableBlueprints,
+            });
 
             endpoints.MapDelete("/data-table-blueprints/{id}", async (DeleteBlueprint command, Guid id, ClaimsPrincipal claimsPrincipal, CancellationToken cancellation) =>
             {
                 var dto = await command.Handle(id, claimsPrincipal, cancellation).ConfigureAwait(false);
                 return Results.Ok(dto);
             }).RequireAuthorization()
-            .WithGroupName(ApiGroupNameConstants.DataTableBlueprints);
+            .WithGroupName(ApiGroupNameConstants.DataTableBlueprints)
+            .WithTags(new string[]
+            {
+                ApiGroupNameConstants.DataTableBlueprints,
+            });
         }
     }
 }

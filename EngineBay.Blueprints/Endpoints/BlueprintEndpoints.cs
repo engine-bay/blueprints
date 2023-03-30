@@ -19,10 +19,7 @@ namespace EngineBay.Blueprints
             .WithTags(new string[]
             {
                 ApiGroupNameConstants.Blueprints,
-            })
-            .WithDisplayName("Hello display name")
-            .WithSummary("Hello summary")
-            .WithDescription("Hello description");
+            });
 
             endpoints.MapGet("/workbooks/{workbookId}/blueprints", async (QueryFilteredBlueprints query, Guid workbookId, int? skip, int? limit, string? sortBy, SortOrderType? sortOrder, CancellationToken cancellation) =>
             {
