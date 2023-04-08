@@ -30,10 +30,9 @@ jobs:
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: 7.0.x
-    - run: dotnet tool install -g dotnet-reportgenerator-globaltool
-    - run: dotnet tool install dotnet-coverage
+    - run: dotnet tool restore
     - run: dotnet coverage collect dotnet test --output ./output --output-format cobertura
-    - run: reportgenerator -reports:./output.cobertura.xml -targetdir:"." -reporttypes:Clover -assemblyfilters:"-FluentValidation;-Humanizer;-OidcClient"
+    - run: dotnet reportgenerator -reports:./output.cobertura.xml -targetdir:"." -reporttypes:Clover -assemblyfilters:"-FluentValidation;-Humanizer;-OidcClient"
     - uses: paambaati/codeclimate-action@v3.2.0
       env:
         CC_TEST_REPORTER_ID: 5e2b4945c7cb3ba2365a7a2c3246af2caf2b02287e24044c5af054fe597a3a2e
