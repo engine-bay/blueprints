@@ -17,6 +17,7 @@
     <RepositoryType>git</RepositoryType>
     <TargetType>library</TargetType>
     <IsPackable>true</IsPackable>
+    <OutputType>Library</OutputType>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -28,7 +29,7 @@
 
   <ItemGroup>
     <PackageReference Include="EngineBay.Persistence" Version="3.4.1" />
-    <PackageReference Include="EngineBay.Authentication" Version="0.11.8" />
+    <PackageReference Include="EngineBay.Authentication" Version="0.11.10" />
     <PackageReference Include="PrivateSetterContractResolver" Version="2.1.0" />
     <PackageReference Include="FluentValidation" Version="11.5.2" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
