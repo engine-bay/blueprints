@@ -2,12 +2,13 @@ namespace EngineBay.Blueprints
 {
     using System.Security.Claims;
     using EngineBay.Core;
+    using Microsoft.AspNetCore.Mvc;
 
     public static class DataVariableBlueprintEndpoints
     {
         public static void MapEndpoints(IEndpointRouteBuilder endpoints)
         {
-            endpoints.MapGet("/data-variable-blueprints", async (QueryDataVariableBlueprints query, FilterParameters? filter, int? skip, int? limit, string? sortBy, SortOrderType? sortOrder, CancellationToken cancellation) =>
+            endpoints.MapGet("/data-variable-blueprints", async (QueryDataVariableBlueprints query, [FromQuery] FilterParameters? filter, int? skip, int? limit, string? sortBy, SortOrderType? sortOrder, CancellationToken cancellation) =>
             {
                 var paginationParameters = new PaginationParameters(skip, limit, sortBy, sortOrder);
                 var filteredPaginationParameters = new FilteredPaginationParameters<DataVariableBlueprint>(paginationParameters, filter);

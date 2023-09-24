@@ -2,12 +2,13 @@ namespace EngineBay.Blueprints
 {
     using System.Security.Claims;
     using EngineBay.Core;
+    using Microsoft.AspNetCore.Mvc;
 
     public static class TriggerExpressionBlueprints
     {
         public static void MapEndpoints(IEndpointRouteBuilder endpoints)
         {
-            endpoints.MapGet("/trigger-expression-blueprints", async (QueryTriggerExpressionBlueprints query, FilterParameters? filter, int? skip, int? limit, string? sortBy, SortOrderType? sortOrder, CancellationToken cancellation) =>
+            endpoints.MapGet("/trigger-expression-blueprints", async (QueryTriggerExpressionBlueprints query, [FromQuery] FilterParameters? filter, int? skip, int? limit, string? sortBy, SortOrderType? sortOrder, CancellationToken cancellation) =>
             {
                 var paginationParameters = new PaginationParameters(skip, limit, sortBy, sortOrder);
                 var filteredPaginationParameters = new FilteredPaginationParameters<TriggerExpressionBlueprint>(paginationParameters, filter);
