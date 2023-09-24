@@ -7,7 +7,7 @@ namespace EngineBay.Blueprints
     using LinqKit;
     using Microsoft.EntityFrameworkCore;
 
-    public class QueryWorkbooks : PaginatedQuery<Workbook>, IQueryHandler<PaginationParameters, PaginatedDto<WorkbookDto>>
+    public class QueryWorkbooks : PaginatedQuery<Workbook>, IQueryHandler<FilteredPaginationParameters<Workbook>, PaginatedDto<WorkbookDto>>
     {
         private readonly BlueprintsQueryDbContext db;
 
@@ -17,17 +17,18 @@ namespace EngineBay.Blueprints
         }
 
         /// <inheritdoc/>
-        public async Task<PaginatedDto<WorkbookDto>> Handle(PaginationParameters paginationParameters, CancellationToken cancellation)
+        public async Task<PaginatedDto<WorkbookDto>> Handle(FilteredPaginationParameters<Workbook> filteredPaginationParameters, CancellationToken cancellation)
         {
-            if (paginationParameters is null)
+            if (filteredPaginationParameters is null)
             {
-                throw new ArgumentNullException(nameof(paginationParameters));
+                throw new ArgumentNullException(nameof(filteredPaginationParameters));
             }
 
-            var limit = paginationParameters.Limit;
-            var skip = limit > 0 ? paginationParameters.Skip : 0;
+            var limit = filteredPaginationParameters.Limit;
+            var skip = limit > 0 ? filteredPaginationParameters.Skip : 0;
+            var filterPredicate = filteredPaginationParameters.FilterPredicate is null ? x => true : filteredPaginationParameters.FilterPredicate;
 
-            var total = await this.db.Workbooks.CountAsync(cancellation).ConfigureAwait(false);
+            var total = await this.db.Workbooks.Where(filterPredicate).CountAsync(cancellation).ConfigureAwait(false);
 
             var query = this.db.Workbooks
                 .Include(x => x.Blueprints)
@@ -58,19 +59,20 @@ namespace EngineBay.Blueprints
                     .ThenInclude(x => x.DataTableBlueprints)
                         .ThenInclude(x => x.DataTableRowBlueprints)
                             .ThenInclude(x => x.DataTableCellBlueprints)
+                .Where(filterPredicate)
                 .AsExpandable();
 
-            Expression<Func<Workbook, string?>> sortByPredicate = paginationParameters.SortBy switch
+            Expression<Func<Workbook, string?>> sortByPredicate = filteredPaginationParameters.SortBy switch
             {
                 nameof(Workbook.CreatedAt) => workbook => workbook.CreatedAt.ToString(CultureInfo.InvariantCulture),
                 nameof(Workbook.LastUpdatedAt) => workbook => workbook.LastUpdatedAt.ToString(CultureInfo.InvariantCulture),
                 nameof(Workbook.Name) => workbook => workbook.Name,
                 nameof(Workbook.Description) => workbook => workbook.Description,
-                _ => throw new ArgumentNullException(paginationParameters.SortBy),
+                _ => throw new ArgumentNullException(filteredPaginationParameters.SortBy),
             };
 
-            query = this.Sort(query, sortByPredicate, paginationParameters);
-            query = this.Paginate(query, paginationParameters);
+            query = this.Sort(query, sortByPredicate, filteredPaginationParameters);
+            query = this.Paginate(query, filteredPaginationParameters);
 
             var workbookDtos = limit > 0 ? await query
                 .Select(workbook => new WorkbookDto(workbook))

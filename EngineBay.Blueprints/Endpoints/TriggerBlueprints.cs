@@ -7,27 +7,27 @@ namespace EngineBay.Blueprints
     {
         public static void MapEndpoints(IEndpointRouteBuilder endpoints)
         {
-            endpoints.MapGet("/trigger-blueprints", async (QueryTriggerBlueprints query, int? skip, int? limit, string? sortBy, SortOrderType? sortOrder, CancellationToken cancellation) =>
+            endpoints.MapGet("/trigger-blueprints", async (QueryTriggerBlueprints query, FilterParameters? filter, int? skip, int? limit, string? sortBy, SortOrderType? sortOrder, CancellationToken cancellation) =>
             {
                 var paginationParameters = new PaginationParameters(skip, limit, sortBy, sortOrder);
+                var filteredPaginationParameters = new FilteredPaginationParameters<TriggerBlueprint>(paginationParameters, filter);
 
-                var paginatedDtos = await query.Handle(paginationParameters, cancellation).ConfigureAwait(false);
+                var paginatedDtos = await query.Handle(filteredPaginationParameters, cancellation).ConfigureAwait(false);
                 return Results.Ok(paginatedDtos);
             }).RequireAuthorization()
-            .WithGroupName(ApiGroupNameConstants.TriggerBlueprints)
             .WithTags(new string[]
             {
                 ApiGroupNameConstants.TriggerBlueprints,
             });
 
-            endpoints.MapGet("/workbooks/{workbookId}/blueprints/{blueprintId}/trigger-blueprints", async (QueryFilteredTriggerBlueprints query, Guid blueprintId, int? skip, int? limit, string? sortBy, SortOrderType? sortOrder, CancellationToken cancellation) =>
+            endpoints.MapGet("/workbooks/{workbookId}/blueprints/{blueprintId}/trigger-blueprints", async (QueryTriggerBlueprints query, Guid blueprintId, int? skip, int? limit, string? sortBy, SortOrderType? sortOrder, CancellationToken cancellation) =>
             {
-                var filteredPaginationParameters = new FilteredPaginationParameters<TriggerBlueprint>(skip, limit, sortBy, sortOrder, x => x.BlueprintId == blueprintId);
+                var paginationParameters = new PaginationParameters(skip, limit, sortBy, sortOrder);
+                var filteredPaginationParameters = new FilteredPaginationParameters<TriggerBlueprint>(paginationParameters, x => x.BlueprintId == blueprintId);
 
                 var paginatedDtos = await query.Handle(filteredPaginationParameters, cancellation).ConfigureAwait(false);
                 return Results.Ok(paginatedDtos);
             }).RequireAuthorization()
-            .WithGroupName(ApiGroupNameConstants.TriggerBlueprints)
             .WithTags(new string[]
             {
                 ApiGroupNameConstants.TriggerBlueprints,
@@ -38,7 +38,6 @@ namespace EngineBay.Blueprints
                 var dto = await query.Handle(id, cancellation).ConfigureAwait(false);
                 return Results.Ok(dto);
             }).RequireAuthorization()
-            .WithGroupName(ApiGroupNameConstants.TriggerBlueprints)
             .WithTags(new string[]
             {
                 ApiGroupNameConstants.TriggerBlueprints,
@@ -49,7 +48,6 @@ namespace EngineBay.Blueprints
                 var dto = await command.Handle(triggerBlueprint, claimsPrincipal, cancellation).ConfigureAwait(false);
                 return Results.Created($"/trigger-blueprints/{triggerBlueprint.Id}", dto);
             }).RequireAuthorization()
-            .WithGroupName(ApiGroupNameConstants.TriggerBlueprints)
             .WithTags(new string[]
             {
                 ApiGroupNameConstants.TriggerBlueprints,
@@ -65,7 +63,6 @@ namespace EngineBay.Blueprints
                 var dto = await command.Handle(updateParameters, claimsPrincipal, cancellation).ConfigureAwait(false);
                 return Results.Ok(dto);
             }).RequireAuthorization()
-            .WithGroupName(ApiGroupNameConstants.TriggerBlueprints)
             .WithTags(new string[]
             {
                 ApiGroupNameConstants.TriggerBlueprints,
@@ -76,7 +73,6 @@ namespace EngineBay.Blueprints
                 var dto = await command.Handle(id, claimsPrincipal, cancellation).ConfigureAwait(false);
                 return Results.Ok(dto);
             }).RequireAuthorization()
-            .WithGroupName(ApiGroupNameConstants.TriggerBlueprints)
             .WithTags(new string[]
             {
                 ApiGroupNameConstants.TriggerBlueprints,

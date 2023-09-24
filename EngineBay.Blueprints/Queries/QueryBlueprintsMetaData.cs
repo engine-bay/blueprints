@@ -7,17 +7,17 @@ namespace EngineBay.Blueprints
     using LinqKit;
     using Microsoft.EntityFrameworkCore;
 
-    public class QueryBlueprints : PaginatedQuery<Blueprint>, IQueryHandler<FilteredPaginationParameters<Blueprint>, PaginatedDto<BlueprintDto>>
+    public class QueryBlueprintsMetaData : PaginatedQuery<Blueprint>, IQueryHandler<FilteredPaginationParameters<Blueprint>, PaginatedDto<BlueprintMetaDataDto>>
     {
         private readonly BlueprintsQueryDbContext db;
 
-        public QueryBlueprints(BlueprintsQueryDbContext db)
+        public QueryBlueprintsMetaData(BlueprintsQueryDbContext db)
         {
             this.db = db;
         }
 
         /// <inheritdoc/>
-        public async Task<PaginatedDto<BlueprintDto>> Handle(FilteredPaginationParameters<Blueprint> filteredPaginationParameters, CancellationToken cancellation)
+        public async Task<PaginatedDto<BlueprintMetaDataDto>> Handle(FilteredPaginationParameters<Blueprint> filteredPaginationParameters, CancellationToken cancellation)
         {
             if (filteredPaginationParameters is null)
             {
@@ -31,25 +31,6 @@ namespace EngineBay.Blueprints
             var total = await this.db.Blueprints.Where(filterPredicate).CountAsync(cancellation).ConfigureAwait(false);
 
             var query = this.db.Blueprints
-                       .Include(blueprint => blueprint.ExpressionBlueprints)
-                           .ThenInclude(expressionBlueprint => expressionBlueprint.InputDataTableBlueprints)
-                       .Include(x => x.ExpressionBlueprints)
-                           .ThenInclude(x => x.InputDataVariableBlueprints)
-                       .Include(x => x.ExpressionBlueprints)
-                           .ThenInclude(x => x.OutputDataVariableBlueprint)
-                       .Include(x => x.DataVariableBlueprints)
-                       .Include(x => x.TriggerBlueprints)
-                           .ThenInclude(x => x.TriggerExpressionBlueprints)
-                               .ThenInclude(x => x.InputDataVariableBlueprint)
-                       .Include(x => x.TriggerBlueprints)
-                           .ThenInclude(x => x.OutputDataVariableBlueprint)
-                           .Include(x => x.DataTableBlueprints)
-                               .ThenInclude(x => x.InputDataVariableBlueprints)
-                           .Include(x => x.DataTableBlueprints)
-                               .ThenInclude(x => x.DataTableColumnBlueprints)
-                       .Include(x => x.DataTableBlueprints)
-                           .ThenInclude(x => x.DataTableRowBlueprints)
-                               .ThenInclude(x => x.DataTableCellBlueprints)
                         .Where(filterPredicate)
                        .AsExpandable();
 
@@ -66,11 +47,11 @@ namespace EngineBay.Blueprints
             query = this.Paginate(query, filteredPaginationParameters);
 
             var blueprintDtos = limit > 0 ? await query
-                 .Select(blueprint => new BlueprintDto(blueprint))
+                 .Select(blueprint => new BlueprintMetaDataDto(blueprint))
                  .ToListAsync(cancellation)
-                 .ConfigureAwait(false) : new List<BlueprintDto>();
+                 .ConfigureAwait(false) : new List<BlueprintMetaDataDto>();
 
-            return new PaginatedDto<BlueprintDto>(total, skip, limit, blueprintDtos);
+            return new PaginatedDto<BlueprintMetaDataDto>(total, skip, limit, blueprintDtos);
         }
     }
 }

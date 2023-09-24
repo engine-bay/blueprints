@@ -1,6 +1,5 @@
 namespace EngineBay.Blueprints
 {
-    using System.Net.Mime;
     using System.Security.Claims;
     using EngineBay.Core;
 
@@ -8,27 +7,27 @@ namespace EngineBay.Blueprints
     {
         public static void MapEndpoints(IEndpointRouteBuilder endpoints)
         {
-            endpoints.MapGet("/blueprints", async (QueryBlueprints query, int? skip, int? limit, string? sortBy, SortOrderType? sortOrder, CancellationToken cancellation) =>
+            endpoints.MapGet("/blueprints", async (QueryBlueprints query, FilterParameters? filter, int? skip, int? limit, string? sortBy, SortOrderType? sortOrder, CancellationToken cancellation) =>
             {
                 var paginationParameters = new PaginationParameters(skip, limit, sortBy, sortOrder);
+                var filteredPaginationParameters = new FilteredPaginationParameters<Blueprint>(paginationParameters, filter);
 
-                var paginatedDtos = await query.Handle(paginationParameters, cancellation).ConfigureAwait(false);
+                var paginatedDtos = await query.Handle(filteredPaginationParameters, cancellation).ConfigureAwait(false);
                 return Results.Ok(paginatedDtos);
             }).RequireAuthorization()
-            .WithGroupName(ApiGroupNameConstants.Blueprints)
             .WithTags(new string[]
             {
                 ApiGroupNameConstants.Blueprints,
             });
 
-            endpoints.MapGet("/workbooks/{workbookId}/blueprints", async (QueryFilteredBlueprints query, Guid workbookId, int? skip, int? limit, string? sortBy, SortOrderType? sortOrder, CancellationToken cancellation) =>
+            endpoints.MapGet("/workbooks/{workbookId}/blueprints", async (QueryBlueprints query, Guid workbookId, int? skip, int? limit, string? sortBy, SortOrderType? sortOrder, CancellationToken cancellation) =>
             {
-                var filteredPaginationParameters = new FilteredPaginationParameters<Blueprint>(skip, limit, sortBy, sortOrder, x => x.WorkbookId == workbookId);
+                var paginationParameters = new PaginationParameters(skip, limit, sortBy, sortOrder);
+                var filteredPaginationParameters = new FilteredPaginationParameters<Blueprint>(paginationParameters, x => x.WorkbookId == workbookId);
 
                 var paginatedDtos = await query.Handle(filteredPaginationParameters, cancellation).ConfigureAwait(false);
                 return Results.Ok(paginatedDtos);
             }).RequireAuthorization()
-            .WithGroupName(ApiGroupNameConstants.Blueprints)
             .WithTags(new string[]
             {
                 ApiGroupNameConstants.Blueprints,
@@ -39,7 +38,6 @@ namespace EngineBay.Blueprints
                 var dto = await query.Handle(id, cancellation).ConfigureAwait(false);
                 return Results.Ok(dto);
             }).RequireAuthorization()
-            .WithGroupName(ApiGroupNameConstants.Blueprints)
             .WithTags(new string[]
             {
                 ApiGroupNameConstants.Blueprints,
@@ -50,7 +48,6 @@ namespace EngineBay.Blueprints
                 var dto = await command.Handle(blueprint, claimsPrincipal, cancellation).ConfigureAwait(false);
                 return Results.Created($"/blueprints/{blueprint.Id}", dto);
             }).RequireAuthorization()
-            .WithGroupName(ApiGroupNameConstants.Blueprints)
             .WithTags(new string[]
             {
                 ApiGroupNameConstants.Blueprints,
@@ -66,7 +63,6 @@ namespace EngineBay.Blueprints
                 var dto = await command.Handle(updateParameters, claimsPrincipal, cancellation).ConfigureAwait(false);
                 return Results.Ok(dto);
             }).RequireAuthorization()
-            .WithGroupName(ApiGroupNameConstants.Blueprints)
             .WithTags(new string[]
             {
                 ApiGroupNameConstants.Blueprints,
@@ -77,7 +73,6 @@ namespace EngineBay.Blueprints
                 var dto = await command.Handle(id, claimsPrincipal, cancellation).ConfigureAwait(false);
                 return Results.Ok(dto);
             }).RequireAuthorization()
-            .WithGroupName(ApiGroupNameConstants.Blueprints)
             .WithTags(new string[]
             {
                 ApiGroupNameConstants.Blueprints,

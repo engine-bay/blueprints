@@ -7,7 +7,7 @@ namespace EngineBay.Blueprints
     using LinqKit;
     using Microsoft.EntityFrameworkCore;
 
-    public class QueryTriggerBlueprints : PaginatedQuery<TriggerBlueprint>, IQueryHandler<PaginationParameters, PaginatedDto<TriggerBlueprintDto>>
+    public class QueryTriggerBlueprints : PaginatedQuery<TriggerBlueprint>, IQueryHandler<FilteredPaginationParameters<TriggerBlueprint>, PaginatedDto<TriggerBlueprintDto>>
     {
         private readonly BlueprintsQueryDbContext db;
 
@@ -17,35 +17,37 @@ namespace EngineBay.Blueprints
         }
 
         /// <inheritdoc/>
-        public async Task<PaginatedDto<TriggerBlueprintDto>> Handle(PaginationParameters paginationParameters, CancellationToken cancellation)
+        public async Task<PaginatedDto<TriggerBlueprintDto>> Handle(FilteredPaginationParameters<TriggerBlueprint> filteredPaginationParameters, CancellationToken cancellation)
         {
-            if (paginationParameters is null)
+            if (filteredPaginationParameters is null)
             {
-                throw new ArgumentNullException(nameof(paginationParameters));
+                throw new ArgumentNullException(nameof(filteredPaginationParameters));
             }
 
-            var limit = paginationParameters.Limit;
-            var skip = limit > 0 ? paginationParameters.Skip : 0;
+            var limit = filteredPaginationParameters.Limit;
+            var skip = limit > 0 ? filteredPaginationParameters.Skip : 0;
+            var filterPredicate = filteredPaginationParameters.FilterPredicate is null ? x => true : filteredPaginationParameters.FilterPredicate;
 
-            var total = await this.db.TriggerBlueprints.CountAsync(cancellation).ConfigureAwait(false);
+            var total = await this.db.TriggerBlueprints.Where(filterPredicate).CountAsync(cancellation).ConfigureAwait(false);
 
             var query = this.db.TriggerBlueprints
                             .Include(x => x.TriggerExpressionBlueprints)
                                 .ThenInclude(x => x.InputDataVariableBlueprint)
                             .Include(x => x.OutputDataVariableBlueprint)
+                            .Where(filterPredicate)
                             .AsExpandable();
 
-            Expression<Func<TriggerBlueprint, string?>> sortByPredicate = paginationParameters.SortBy switch
+            Expression<Func<TriggerBlueprint, string?>> sortByPredicate = filteredPaginationParameters.SortBy switch
             {
                 nameof(TriggerBlueprint.CreatedAt) => triggerBlueprint => triggerBlueprint.CreatedAt.ToString(CultureInfo.InvariantCulture),
                 nameof(TriggerBlueprint.LastUpdatedAt) => triggerBlueprint => triggerBlueprint.LastUpdatedAt.ToString(CultureInfo.InvariantCulture),
                 nameof(TriggerBlueprint.Name) => triggerBlueprint => triggerBlueprint.Name,
                 nameof(TriggerBlueprint.Description) => triggerBlueprint => triggerBlueprint.Description,
-                _ => throw new ArgumentNullException(paginationParameters.SortBy),
+                _ => throw new ArgumentNullException(filteredPaginationParameters.SortBy),
             };
 
-            query = this.Sort(query, sortByPredicate, paginationParameters);
-            query = this.Paginate(query, paginationParameters);
+            query = this.Sort(query, sortByPredicate, filteredPaginationParameters);
+            query = this.Paginate(query, filteredPaginationParameters);
 
             var triggerBlueprintDtos = limit > 0 ? await query
                 .Select(triggerBlueprint => new TriggerBlueprintDto(triggerBlueprint))

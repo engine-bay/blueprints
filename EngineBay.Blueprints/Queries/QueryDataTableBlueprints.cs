@@ -7,7 +7,7 @@ namespace EngineBay.Blueprints
     using LinqKit;
     using Microsoft.EntityFrameworkCore;
 
-    public class QueryDataTableBlueprints : PaginatedQuery<DataTableBlueprint>, IQueryHandler<PaginationParameters, PaginatedDto<DataTableBlueprintDto>>
+    public class QueryDataTableBlueprints : PaginatedQuery<DataTableBlueprint>, IQueryHandler<FilteredPaginationParameters<DataTableBlueprint>, PaginatedDto<DataTableBlueprintDto>>
     {
         private readonly BlueprintsQueryDbContext db;
 
@@ -17,37 +17,38 @@ namespace EngineBay.Blueprints
         }
 
         /// <inheritdoc/>
-        public async Task<PaginatedDto<DataTableBlueprintDto>> Handle(PaginationParameters paginationParameters, CancellationToken cancellation)
+        public async Task<PaginatedDto<DataTableBlueprintDto>> Handle(FilteredPaginationParameters<DataTableBlueprint> filteredPaginationParameters, CancellationToken cancellation)
         {
-            if (paginationParameters is null)
+            if (filteredPaginationParameters is null)
             {
-                throw new ArgumentNullException(nameof(paginationParameters));
+                throw new ArgumentNullException(nameof(filteredPaginationParameters));
             }
 
-            var limit = paginationParameters.Limit;
-            var skip = limit > 0 ? paginationParameters.Skip : 0;
+            var limit = filteredPaginationParameters.Limit;
+            var skip = limit > 0 ? filteredPaginationParameters.Skip : 0;
+            var filterPredicate = filteredPaginationParameters.FilterPredicate is null ? x => true : filteredPaginationParameters.FilterPredicate;
 
-            var total = await this.db.DataTableBlueprints.CountAsync(cancellation).ConfigureAwait(false);
+            var total = await this.db.DataTableBlueprints.Where(filterPredicate).CountAsync(cancellation).ConfigureAwait(false);
 
-            var query = this.db.DataTableBlueprints
-                            .Include(x => x.InputDataVariableBlueprints)
-                            .Include(x => x.DataTableColumnBlueprints)
-                            .Include(x => x.DataTableRowBlueprints)
-                                .ThenInclude(x => x.DataTableCellBlueprints)
-                            .AsExpandable();
+            var query = this.db.DataTableBlueprints.Where(filterPredicate)
+                                                    .Include(x => x.InputDataVariableBlueprints)
+                                                    .Include(x => x.DataTableColumnBlueprints)
+                                                    .Include(x => x.DataTableRowBlueprints)
+                                                        .ThenInclude(x => x.DataTableCellBlueprints)
+                                                    .AsExpandable();
 
-            Expression<Func<DataTableBlueprint, string?>> sortByPredicate = paginationParameters.SortBy switch
+            Expression<Func<DataTableBlueprint, string?>> sortByPredicate = filteredPaginationParameters.SortBy switch
             {
                 nameof(DataTableBlueprint.CreatedAt) => dataTableBlueprint => dataTableBlueprint.CreatedAt.ToString(CultureInfo.InvariantCulture),
                 nameof(DataTableBlueprint.LastUpdatedAt) => dataTableBlueprint => dataTableBlueprint.LastUpdatedAt.ToString(CultureInfo.InvariantCulture),
                 nameof(DataTableBlueprint.Name) => dataTableBlueprint => dataTableBlueprint.Name,
                 nameof(DataTableBlueprint.Namespace) => dataTableBlueprint => dataTableBlueprint.Namespace,
                 nameof(DataTableBlueprint.Description) => dataTableBlueprint => dataTableBlueprint.Description,
-                _ => throw new ArgumentNullException(paginationParameters.SortBy),
+                _ => throw new ArgumentNullException(filteredPaginationParameters.SortBy),
             };
 
-            query = this.Sort(query, sortByPredicate, paginationParameters);
-            query = this.Paginate(query, paginationParameters);
+            query = this.Sort(query, sortByPredicate, filteredPaginationParameters);
+            query = this.Paginate(query, filteredPaginationParameters);
 
             var dataTableBlueprintDtos = limit > 0 ? await query
                 .Select(dataTableBlueprint => new DataTableBlueprintDto(dataTableBlueprint))

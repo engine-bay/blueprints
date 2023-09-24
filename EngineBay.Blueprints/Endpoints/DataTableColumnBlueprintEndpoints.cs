@@ -7,27 +7,27 @@ namespace EngineBay.Blueprints
     {
         public static void MapEndpoints(IEndpointRouteBuilder endpoints)
         {
-            endpoints.MapGet("/data-table-column-blueprints", async (QueryDataTableColumnBlueprints query, int? skip, int? limit, string? sortBy, SortOrderType? sortOrder, CancellationToken cancellation) =>
+            endpoints.MapGet("/data-table-column-blueprints", async (QueryDataTableColumnBlueprints query, FilterParameters? filter, int? skip, int? limit, string? sortBy, SortOrderType? sortOrder, CancellationToken cancellation) =>
             {
                 var paginationParameters = new PaginationParameters(skip, limit, sortBy, sortOrder);
+                var filteredPaginationParameters = new FilteredPaginationParameters<DataTableColumnBlueprint>(paginationParameters, filter);
 
-                var paginatedDtos = await query.Handle(paginationParameters, cancellation).ConfigureAwait(false);
+                var paginatedDtos = await query.Handle(filteredPaginationParameters, cancellation).ConfigureAwait(false);
                 return Results.Ok(paginatedDtos);
             }).RequireAuthorization()
-            .WithGroupName(ApiGroupNameConstants.DataTableColumnBlueprints)
             .WithTags(new string[]
             {
                 ApiGroupNameConstants.DataTableColumnBlueprints,
             });
 
-            endpoints.MapGet("/workbooks/{workbookId}/blueprints/{blueprintId}/data-table-blueprints/{dataTableBlueprintId}/data-table-column-blueprints", async (QueryFilteredDataTableColumnBlueprints query, Guid dataTableBlueprintId, int? skip, int? limit, string? sortBy, SortOrderType? sortOrder, CancellationToken cancellation) =>
+            endpoints.MapGet("/workbooks/{workbookId}/blueprints/{blueprintId}/data-table-blueprints/{dataTableBlueprintId}/data-table-column-blueprints", async (QueryDataTableColumnBlueprints query, Guid dataTableBlueprintId, int? skip, int? limit, string? sortBy, SortOrderType? sortOrder, CancellationToken cancellation) =>
             {
-                var filteredPaginationParameters = new FilteredPaginationParameters<DataTableColumnBlueprint>(skip, limit, sortBy, sortOrder, x => x.DataTableBlueprintId == dataTableBlueprintId);
+                var paginationParameters = new PaginationParameters(skip, limit, sortBy, sortOrder);
+                var filteredPaginationParameters = new FilteredPaginationParameters<DataTableColumnBlueprint>(paginationParameters, x => x.DataTableBlueprintId == dataTableBlueprintId);
 
                 var paginatedDtos = await query.Handle(filteredPaginationParameters, cancellation).ConfigureAwait(false);
                 return Results.Ok(paginatedDtos);
             }).RequireAuthorization()
-            .WithGroupName(ApiGroupNameConstants.DataTableColumnBlueprints)
             .WithTags(new string[]
             {
                 ApiGroupNameConstants.DataTableColumnBlueprints,
@@ -38,7 +38,6 @@ namespace EngineBay.Blueprints
                 var dto = await query.Handle(id, cancellation).ConfigureAwait(false);
                 return Results.Ok(dto);
             }).RequireAuthorization()
-            .WithGroupName(ApiGroupNameConstants.DataTableColumnBlueprints)
             .WithTags(new string[]
             {
                 ApiGroupNameConstants.DataTableColumnBlueprints,
@@ -49,7 +48,6 @@ namespace EngineBay.Blueprints
                 var dto = await command.Handle(dataTableColumnBlueprint, claimsPrincipal, cancellation).ConfigureAwait(false);
                 return Results.Created($"/data-table-column-blueprints/{dataTableColumnBlueprint.Id}", dto);
             }).RequireAuthorization()
-            .WithGroupName(ApiGroupNameConstants.DataTableColumnBlueprints)
             .WithTags(new string[]
             {
                 ApiGroupNameConstants.DataTableColumnBlueprints,
@@ -65,7 +63,6 @@ namespace EngineBay.Blueprints
                 var dto = await command.Handle(updateParameters, claimsPrincipal, cancellation).ConfigureAwait(false);
                 return Results.Ok(dto);
             }).RequireAuthorization()
-            .WithGroupName(ApiGroupNameConstants.DataTableColumnBlueprints)
             .WithTags(new string[]
             {
                 ApiGroupNameConstants.DataTableColumnBlueprints,
@@ -76,7 +73,6 @@ namespace EngineBay.Blueprints
                 var dto = await command.Handle(id, claimsPrincipal, cancellation).ConfigureAwait(false);
                 return Results.Ok(dto);
             }).RequireAuthorization()
-            .WithGroupName(ApiGroupNameConstants.DataTableColumnBlueprints)
             .WithTags(new string[]
             {
                 ApiGroupNameConstants.DataTableColumnBlueprints,

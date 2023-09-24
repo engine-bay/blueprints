@@ -7,14 +7,14 @@ namespace EngineBay.Blueprints
     {
         public static void MapEndpoints(IEndpointRouteBuilder endpoints)
         {
-            endpoints.MapGet("/workbooks", async (QueryWorkbooks query, int? skip, int? limit, string? sortBy, SortOrderType? sortOrder, CancellationToken cancellation) =>
+            endpoints.MapGet("/workbooks", async (QueryWorkbooks query, FilterParameters? filter, int? skip, int? limit, string? sortBy, SortOrderType? sortOrder, CancellationToken cancellation) =>
            {
                var paginationParameters = new PaginationParameters(skip, limit, sortBy, sortOrder);
+               var filteredPaginationParameters = new FilteredPaginationParameters<Workbook>(paginationParameters, filter);
 
-               var paginatedDtos = await query.Handle(paginationParameters, cancellation).ConfigureAwait(false);
+               var paginatedDtos = await query.Handle(filteredPaginationParameters, cancellation).ConfigureAwait(false);
                return Results.Ok(paginatedDtos);
            }).RequireAuthorization()
-            .WithGroupName(ApiGroupNameConstants.Workbooks)
             .WithTags(new string[]
             {
                 ApiGroupNameConstants.Workbooks,
@@ -25,7 +25,6 @@ namespace EngineBay.Blueprints
                 var dto = await query.Handle(id, cancellation).ConfigureAwait(false);
                 return Results.Ok(dto);
             }).RequireAuthorization()
-            .WithGroupName(ApiGroupNameConstants.Workbooks)
             .WithTags(new string[]
             {
                 ApiGroupNameConstants.Workbooks,
@@ -36,7 +35,6 @@ namespace EngineBay.Blueprints
                 var dto = await query.Handle(id, cancellation).ConfigureAwait(false);
                 return Results.Ok(dto);
             }).RequireAuthorization()
-            .WithGroupName(ApiGroupNameConstants.Workbooks)
             .WithTags(new string[]
             {
                 ApiGroupNameConstants.Workbooks,
@@ -47,7 +45,6 @@ namespace EngineBay.Blueprints
                 var dto = await command.Handle(workbook, claimsPrincipal, cancellation).ConfigureAwait(false);
                 return Results.Created($"/workbooks/{workbook.Id}", dto);
             }).RequireAuthorization()
-            .WithGroupName(ApiGroupNameConstants.Workbooks)
             .WithTags(new string[]
             {
                 ApiGroupNameConstants.Workbooks,
@@ -63,7 +60,6 @@ namespace EngineBay.Blueprints
                 var dto = await command.Handle(updateParameters, claimsPrincipal, cancellation).ConfigureAwait(false);
                 return Results.Ok(dto);
             }).RequireAuthorization()
-            .WithGroupName(ApiGroupNameConstants.Workbooks)
             .WithTags(new string[]
             {
                 ApiGroupNameConstants.Workbooks,
@@ -74,7 +70,6 @@ namespace EngineBay.Blueprints
                 var dto = await command.Handle(id, claimsPrincipal, cancellation).ConfigureAwait(false);
                 return Results.Ok(dto);
             }).RequireAuthorization()
-            .WithGroupName(ApiGroupNameConstants.Workbooks)
             .WithTags(new string[]
             {
                 ApiGroupNameConstants.Workbooks,

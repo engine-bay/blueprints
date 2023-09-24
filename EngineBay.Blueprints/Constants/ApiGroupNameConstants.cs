@@ -6,6 +6,8 @@ namespace EngineBay.Blueprints
 
         public const string Workbooks = "Workbooks";
 
+        public const string MetaData = "Meta Data";
+
         public const string DataVariableBlueprints = "Data variable blueprints";
 
         public const string InputDataVariableBlueprints = "Input data variable blueprints";

@@ -7,53 +7,53 @@ namespace EngineBay.Blueprints
     {
         public static void MapEndpoints(IEndpointRouteBuilder endpoints)
         {
-            endpoints.MapGet("/input-data-variable-blueprints", async (QueryInputDataVariableBlueprints query, int? skip, int? limit, string? sortBy, SortOrderType? sortOrder, CancellationToken cancellation) =>
+            endpoints.MapGet("/input-data-variable-blueprints", async (QueryInputDataVariableBlueprints query, FilterParameters? filter, int? skip, int? limit, string? sortBy, SortOrderType? sortOrder, CancellationToken cancellation) =>
             {
                 var paginationParameters = new PaginationParameters(skip, limit, sortBy, sortOrder);
-
-                var paginatedDtos = await query.Handle(paginationParameters, cancellation).ConfigureAwait(false);
-                return Results.Ok(paginatedDtos);
-            }).RequireAuthorization()
-            .WithGroupName(ApiGroupNameConstants.InputDataVariableBlueprints)
-            .WithTags(new string[]
-            {
-                ApiGroupNameConstants.InputDataVariableBlueprints,
-            });
-
-            endpoints.MapGet("/workbooks/{workbookId}/blueprints/{blueprintId}/expression-blueprints/{expressionBlueprintId}/input-data-variable-blueprints", async (QueryFilteredInputDataVariableBlueprints query, Guid expressionBlueprintId, int? skip, int? limit, string? sortBy, SortOrderType? sortOrder, CancellationToken cancellation) =>
-            {
-                var filteredPaginationParameters = new FilteredPaginationParameters<InputDataVariableBlueprint>(skip, limit, sortBy, sortOrder, x => x.ExpressionBlueprintId == expressionBlueprintId);
+                var filteredPaginationParameters = new FilteredPaginationParameters<InputDataVariableBlueprint>(paginationParameters, filter);
 
                 var paginatedDtos = await query.Handle(filteredPaginationParameters, cancellation).ConfigureAwait(false);
                 return Results.Ok(paginatedDtos);
             }).RequireAuthorization()
-            .WithGroupName(ApiGroupNameConstants.InputDataVariableBlueprints)
             .WithTags(new string[]
             {
                 ApiGroupNameConstants.InputDataVariableBlueprints,
             });
 
-            endpoints.MapGet("/workbooks/{workbookId}/blueprints/{blueprintId}/data-table-blueprints/{dataTableBlueprintId}/input-data-variable-blueprints", async (QueryFilteredInputDataVariableBlueprints query, Guid dataTableBlueprintId, int? skip, int? limit, string? sortBy, SortOrderType? sortOrder, CancellationToken cancellation) =>
+            endpoints.MapGet("/workbooks/{workbookId}/blueprints/{blueprintId}/expression-blueprints/{expressionBlueprintId}/input-data-variable-blueprints", async (QueryInputDataVariableBlueprints query, Guid expressionBlueprintId, int? skip, int? limit, string? sortBy, SortOrderType? sortOrder, CancellationToken cancellation) =>
             {
-                var filteredPaginationParameters = new FilteredPaginationParameters<InputDataVariableBlueprint>(skip, limit, sortBy, sortOrder, x => x.DataTableBlueprintId == dataTableBlueprintId);
+                var paginationParameters = new PaginationParameters(skip, limit, sortBy, sortOrder);
+                var filteredPaginationParameters = new FilteredPaginationParameters<InputDataVariableBlueprint>(paginationParameters, x => x.ExpressionBlueprintId == expressionBlueprintId);
 
                 var paginatedDtos = await query.Handle(filteredPaginationParameters, cancellation).ConfigureAwait(false);
                 return Results.Ok(paginatedDtos);
             }).RequireAuthorization()
-            .WithGroupName(ApiGroupNameConstants.InputDataVariableBlueprints)
             .WithTags(new string[]
             {
                 ApiGroupNameConstants.InputDataVariableBlueprints,
             });
 
-            endpoints.MapGet("/workbooks/{workbookId}/blueprints/{blueprintId}/trigger-blueprints/{triggerBlueprintId}/trigger-expression-blueprints/{triggerExpressionBlueprintId}/input-data-variable-blueprints", async (QueryFilteredInputDataVariableBlueprints query, Guid triggerExpressionBlueprintId, int? skip, int? limit, string? sortBy, SortOrderType? sortOrder, CancellationToken cancellation) =>
+            endpoints.MapGet("/workbooks/{workbookId}/blueprints/{blueprintId}/data-table-blueprints/{dataTableBlueprintId}/input-data-variable-blueprints", async (QueryInputDataVariableBlueprints query, Guid dataTableBlueprintId, int? skip, int? limit, string? sortBy, SortOrderType? sortOrder, CancellationToken cancellation) =>
+            {
+                var paginationParameters = new PaginationParameters(skip, limit, sortBy, sortOrder);
+                var filteredPaginationParameters = new FilteredPaginationParameters<InputDataVariableBlueprint>(paginationParameters, x => x.DataTableBlueprintId == dataTableBlueprintId);
+
+                var paginatedDtos = await query.Handle(filteredPaginationParameters, cancellation).ConfigureAwait(false);
+                return Results.Ok(paginatedDtos);
+            }).RequireAuthorization()
+            .WithTags(new string[]
+            {
+                ApiGroupNameConstants.InputDataVariableBlueprints,
+            });
+
+            endpoints.MapGet("/workbooks/{workbookId}/blueprints/{blueprintId}/trigger-blueprints/{triggerBlueprintId}/trigger-expression-blueprints/{triggerExpressionBlueprintId}/input-data-variable-blueprints", async (QueryInputDataVariableBlueprints query, Guid triggerExpressionBlueprintId, int? skip, int? limit, string? sortBy, SortOrderType? sortOrder, CancellationToken cancellation) =>
            {
-               var filteredPaginationParameters = new FilteredPaginationParameters<InputDataVariableBlueprint>(skip, limit, sortBy, sortOrder, x => x.TriggerExpressionBlueprintId == triggerExpressionBlueprintId);
+               var paginationParameters = new PaginationParameters(skip, limit, sortBy, sortOrder);
+               var filteredPaginationParameters = new FilteredPaginationParameters<InputDataVariableBlueprint>(paginationParameters, x => x.TriggerExpressionBlueprintId == triggerExpressionBlueprintId);
 
                var paginatedDtos = await query.Handle(filteredPaginationParameters, cancellation).ConfigureAwait(false);
                return Results.Ok(paginatedDtos);
            }).RequireAuthorization()
-           .WithGroupName(ApiGroupNameConstants.InputDataVariableBlueprints)
            .WithTags(new string[]
             {
                 ApiGroupNameConstants.InputDataVariableBlueprints,
@@ -64,7 +64,6 @@ namespace EngineBay.Blueprints
                 var dto = await query.Handle(id, cancellation).ConfigureAwait(false);
                 return Results.Ok(dto);
             }).RequireAuthorization()
-            .WithGroupName(ApiGroupNameConstants.InputDataVariableBlueprints)
             .WithTags(new string[]
             {
                 ApiGroupNameConstants.InputDataVariableBlueprints,
@@ -75,7 +74,6 @@ namespace EngineBay.Blueprints
                 var dto = await command.Handle(inputDataVariableBlueprint, claimsPrincipal, cancellation).ConfigureAwait(false);
                 return Results.Created($"/data-variable-blueprints/{inputDataVariableBlueprint.Id}", dto);
             }).RequireAuthorization()
-            .WithGroupName(ApiGroupNameConstants.InputDataVariableBlueprints)
             .WithTags(new string[]
             {
                 ApiGroupNameConstants.InputDataVariableBlueprints,
@@ -91,7 +89,6 @@ namespace EngineBay.Blueprints
                 var dto = await command.Handle(updateParameters, claimsPrincipal, cancellation).ConfigureAwait(false);
                 return Results.Ok(dto);
             }).RequireAuthorization()
-            .WithGroupName(ApiGroupNameConstants.InputDataVariableBlueprints)
             .WithTags(new string[]
             {
                 ApiGroupNameConstants.InputDataVariableBlueprints,
@@ -102,7 +99,6 @@ namespace EngineBay.Blueprints
                 var dto = await command.Handle(id, claimsPrincipal, cancellation).ConfigureAwait(false);
                 return Results.Ok(dto);
             }).RequireAuthorization()
-            .WithGroupName(ApiGroupNameConstants.InputDataVariableBlueprints)
             .WithTags(new string[]
             {
                 ApiGroupNameConstants.InputDataVariableBlueprints,

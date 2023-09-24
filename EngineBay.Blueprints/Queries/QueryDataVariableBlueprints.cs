@@ -7,7 +7,7 @@ namespace EngineBay.Blueprints
     using LinqKit;
     using Microsoft.EntityFrameworkCore;
 
-    public class QueryDataVariableBlueprints : PaginatedQuery<DataVariableBlueprint>, IQueryHandler<PaginationParameters, PaginatedDto<DataVariableBlueprintDto>>
+    public class QueryDataVariableBlueprints : PaginatedQuery<DataVariableBlueprint>, IQueryHandler<FilteredPaginationParameters<DataVariableBlueprint>, PaginatedDto<DataVariableBlueprintDto>>
     {
         private readonly BlueprintsQueryDbContext db;
 
@@ -17,21 +17,22 @@ namespace EngineBay.Blueprints
         }
 
         /// <inheritdoc/>
-        public async Task<PaginatedDto<DataVariableBlueprintDto>> Handle(PaginationParameters paginationParameters, CancellationToken cancellation)
+        public async Task<PaginatedDto<DataVariableBlueprintDto>> Handle(FilteredPaginationParameters<DataVariableBlueprint> filteredPaginationParameters, CancellationToken cancellation)
         {
-            if (paginationParameters is null)
+            if (filteredPaginationParameters is null)
             {
-                throw new ArgumentNullException(nameof(paginationParameters));
+                throw new ArgumentNullException(nameof(filteredPaginationParameters));
             }
 
-            var limit = paginationParameters.Limit;
-            var skip = limit > 0 ? paginationParameters.Skip : 0;
+            var limit = filteredPaginationParameters.Limit;
+            var skip = limit > 0 ? filteredPaginationParameters.Skip : 0;
+            var filterPredicate = filteredPaginationParameters.FilterPredicate is null ? x => true : filteredPaginationParameters.FilterPredicate;
 
-            var total = await this.db.DataVariableBlueprints.CountAsync(cancellation).ConfigureAwait(false);
+            var total = await this.db.DataVariableBlueprints.Where(filterPredicate).CountAsync(cancellation).ConfigureAwait(false);
 
-            var query = this.db.DataVariableBlueprints.AsExpandable();
+            var query = this.db.DataVariableBlueprints.Where(filterPredicate).AsExpandable();
 
-            Expression<Func<DataVariableBlueprint, string?>> sortByPredicate = paginationParameters.SortBy switch
+            Expression<Func<DataVariableBlueprint, string?>> sortByPredicate = filteredPaginationParameters.SortBy switch
             {
                 nameof(DataVariableBlueprint.CreatedAt) => dataVariableBlueprint => dataVariableBlueprint.CreatedAt.ToString(CultureInfo.InvariantCulture),
                 nameof(DataVariableBlueprint.LastUpdatedAt) => dataVariableBlueprint => dataVariableBlueprint.LastUpdatedAt.ToString(CultureInfo.InvariantCulture),
@@ -40,11 +41,11 @@ namespace EngineBay.Blueprints
                 nameof(DataVariableBlueprint.Type) => dataVariableBlueprint => dataVariableBlueprint.Type,
                 nameof(DataVariableBlueprint.DefaultValue) => dataVariableBlueprint => dataVariableBlueprint.DefaultValue,
                 nameof(DataVariableBlueprint.Description) => dataVariableBlueprint => dataVariableBlueprint.Description,
-                _ => throw new ArgumentNullException(paginationParameters.SortBy),
+                _ => throw new ArgumentNullException(filteredPaginationParameters.SortBy),
             };
 
-            query = this.Sort(query, sortByPredicate, paginationParameters);
-            query = this.Paginate(query, paginationParameters);
+            query = this.Sort(query, sortByPredicate, filteredPaginationParameters);
+            query = this.Paginate(query, filteredPaginationParameters);
 
             var dataVariableBlueprintDtos = limit > 0 ? await query
                 .Select(dataVariableBlueprint => new DataVariableBlueprintDto(dataVariableBlueprint))
