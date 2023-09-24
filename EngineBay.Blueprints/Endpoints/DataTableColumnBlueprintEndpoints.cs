@@ -2,7 +2,6 @@ namespace EngineBay.Blueprints
 {
     using System.Security.Claims;
     using EngineBay.Core;
-    using Microsoft.AspNetCore.Mvc;
 
     public static class DataTableColumnBlueprintEndpoints
     {

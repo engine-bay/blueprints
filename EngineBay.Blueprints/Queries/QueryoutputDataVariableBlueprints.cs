@@ -37,6 +37,7 @@ namespace EngineBay.Blueprints
 
             Expression<Func<OutputDataVariableBlueprint, string?>> sortByPredicate = filteredPaginationParameters.SortBy switch
             {
+                string sortBy when sortBy.Equals(nameof(OutputDataVariableBlueprint.Id), StringComparison.OrdinalIgnoreCase) => entity => entity.Id.ToString(),
                 string sortBy when sortBy.Equals(nameof(OutputDataVariableBlueprint.CreatedAt), StringComparison.OrdinalIgnoreCase) => entity => entity.CreatedAt.ToString(CultureInfo.InvariantCulture),
                 string sortBy when sortBy.Equals(nameof(OutputDataVariableBlueprint.LastUpdatedAt), StringComparison.OrdinalIgnoreCase) => entity => entity.LastUpdatedAt.ToString(CultureInfo.InvariantCulture),
                 string sortBy when sortBy.Equals(nameof(OutputDataVariableBlueprint.Name), StringComparison.OrdinalIgnoreCase) => entity => entity.Name,

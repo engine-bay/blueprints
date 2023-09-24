@@ -1,23 +1,22 @@
 namespace EngineBay.Blueprints
 {
     using System;
+    using EngineBay.Core;
 
-    public class InputDataTableBlueprintDto
+    public class InputDataTableBlueprintDto : BaseDto
     {
         public InputDataTableBlueprintDto(InputDataTableBlueprint inputDataTableBlueprint)
+            : base(inputDataTableBlueprint)
         {
             if (inputDataTableBlueprint is null)
             {
                 throw new ArgumentNullException(nameof(inputDataTableBlueprint));
             }
 
-            this.Id = inputDataTableBlueprint.Id;
             this.ExpressionBlueprintId = inputDataTableBlueprint.ExpressionBlueprintId;
             this.Name = inputDataTableBlueprint.Name;
             this.Namespace = inputDataTableBlueprint.Namespace;
         }
-
-        public Guid Id { get; set; }
 
         public Guid? ExpressionBlueprintId { get; set; }
 

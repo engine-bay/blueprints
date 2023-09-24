@@ -1,23 +1,22 @@
 namespace EngineBay.Blueprints
 {
     using System;
+    using EngineBay.Core;
 
-    public class BlueprintMetaDataDto
+    public class BlueprintMetaDataDto : BaseDto
     {
         public BlueprintMetaDataDto(Blueprint blueprint)
+            : base(blueprint)
         {
             if (blueprint is null)
             {
                 throw new ArgumentNullException(nameof(blueprint));
             }
 
-            this.Id = blueprint.Id;
             this.WorkbookId = blueprint.WorkbookId;
             this.Name = blueprint.Name;
             this.Description = blueprint.Description;
         }
-
-        public Guid Id { get; set; }
 
         public Guid? WorkbookId { get; set; }
 

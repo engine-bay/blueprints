@@ -2,14 +2,37 @@ namespace EngineBay.Blueprints
 {
     using System;
     using EngineBay.Persistence;
+    using Ganss.Xss;
     using Humanizer;
     using Microsoft.EntityFrameworkCore;
 
     public class TriggerExpressionBlueprint : AuditableModel
     {
+        private HtmlSanitizer sanitizer = new HtmlSanitizer();
+
+        private string? objective;
+
         public string? Expression { get; set; }
 
-        public string? Objective { get; set; }
+        public string? Objective
+        {
+            get
+            {
+                return this.objective;
+            }
+
+            set
+            {
+                if (string.IsNullOrEmpty(value))
+                {
+                    this.objective = null;
+                }
+                else
+                {
+                    this.objective = this.sanitizer.Sanitize(value);
+                }
+            }
+        }
 
         public Guid? TriggerBlueprintId { get; set; }
 

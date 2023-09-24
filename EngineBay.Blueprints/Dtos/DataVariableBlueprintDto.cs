@@ -1,17 +1,18 @@
 namespace EngineBay.Blueprints
 {
     using System;
+    using EngineBay.Core;
 
-    public class DataVariableBlueprintDto
+    public class DataVariableBlueprintDto : BaseDto
     {
         public DataVariableBlueprintDto(DataVariableBlueprint dataVariableBlueprint)
+            : base(dataVariableBlueprint)
         {
             if (dataVariableBlueprint is null)
             {
                 throw new ArgumentNullException(nameof(dataVariableBlueprint));
             }
 
-            this.Id = dataVariableBlueprint.Id;
             this.BlueprintId = dataVariableBlueprint.BlueprintId;
             this.Name = dataVariableBlueprint.Name;
             this.Description = dataVariableBlueprint.Description;
@@ -19,8 +20,6 @@ namespace EngineBay.Blueprints
             this.Namespace = dataVariableBlueprint.Namespace;
             this.DefaultValue = dataVariableBlueprint.DefaultValue;
         }
-
-        public Guid Id { get; set; }
 
         public Guid? BlueprintId { get; set; }
 
