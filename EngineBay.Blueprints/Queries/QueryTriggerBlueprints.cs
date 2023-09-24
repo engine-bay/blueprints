@@ -28,21 +28,25 @@ namespace EngineBay.Blueprints
             var skip = limit > 0 ? filteredPaginationParameters.Skip : 0;
             var filterPredicate = filteredPaginationParameters.FilterPredicate is null ? x => true : filteredPaginationParameters.FilterPredicate;
 
-            var total = await this.db.TriggerBlueprints.Where(filterPredicate).CountAsync(cancellation).ConfigureAwait(false);
+            var search = filteredPaginationParameters.Search;
+            Expression<Func<TriggerBlueprint, bool>>? searchPredicate = entity => entity.Name != null && EF.Functions.Like(entity.Name, $"%{search}%");
+
+            var total = await this.db.TriggerBlueprints.Where(filterPredicate).Where(searchPredicate).CountAsync(cancellation).ConfigureAwait(false);
 
             var query = this.db.TriggerBlueprints
                             .Include(x => x.TriggerExpressionBlueprints)
                                 .ThenInclude(x => x.InputDataVariableBlueprint)
                             .Include(x => x.OutputDataVariableBlueprint)
                             .Where(filterPredicate)
+                            .Where(searchPredicate)
                             .AsExpandable();
 
             Expression<Func<TriggerBlueprint, string?>> sortByPredicate = filteredPaginationParameters.SortBy switch
             {
-                nameof(TriggerBlueprint.CreatedAt) => triggerBlueprint => triggerBlueprint.CreatedAt.ToString(CultureInfo.InvariantCulture),
-                nameof(TriggerBlueprint.LastUpdatedAt) => triggerBlueprint => triggerBlueprint.LastUpdatedAt.ToString(CultureInfo.InvariantCulture),
-                nameof(TriggerBlueprint.Name) => triggerBlueprint => triggerBlueprint.Name,
-                nameof(TriggerBlueprint.Description) => triggerBlueprint => triggerBlueprint.Description,
+                string sortBy when sortBy.Equals(nameof(TriggerBlueprint.CreatedAt), StringComparison.OrdinalIgnoreCase) => entity => entity.CreatedAt.ToString(CultureInfo.InvariantCulture),
+                string sortBy when sortBy.Equals(nameof(TriggerBlueprint.LastUpdatedAt), StringComparison.OrdinalIgnoreCase) => entity => entity.LastUpdatedAt.ToString(CultureInfo.InvariantCulture),
+                string sortBy when sortBy.Equals(nameof(TriggerBlueprint.Name), StringComparison.OrdinalIgnoreCase) => entity => entity.Name,
+                string sortBy when sortBy.Equals(nameof(TriggerBlueprint.Description), StringComparison.OrdinalIgnoreCase) => entity => entity.Description,
                 _ => throw new ArgumentNullException(filteredPaginationParameters.SortBy),
             };
 

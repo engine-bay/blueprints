@@ -8,10 +8,10 @@ namespace EngineBay.Blueprints
     {
         public static void MapEndpoints(IEndpointRouteBuilder endpoints)
         {
-            endpoints.MapGet("/expression-blueprints", async (QueryExpressionBlueprints query, FilterParameters? filter, int? skip, int? limit, string? sortBy, SortOrderType? sortOrder, CancellationToken cancellation) =>
+            endpoints.MapGet("/expression-blueprints", async (QueryExpressionBlueprints query, FilterParameters? filter, string? search, int? skip, int? limit, string? sortBy, SortOrderType? sortOrder, CancellationToken cancellation) =>
             {
-                var paginationParameters = new PaginationParameters(skip, limit, sortBy, sortOrder);
-                var filteredPaginationParameters = new FilteredPaginationParameters<ExpressionBlueprint>(paginationParameters, filter);
+                var searchParameters = new SearchParameters(search, skip, limit, sortBy, sortOrder);
+                var filteredPaginationParameters = new FilteredPaginationParameters<ExpressionBlueprint>(searchParameters, filter);
 
                 var paginatedDtos = await query.Handle(filteredPaginationParameters, cancellation).ConfigureAwait(false);
                 return Results.Ok(paginatedDtos);
@@ -21,10 +21,10 @@ namespace EngineBay.Blueprints
                 ApiGroupNameConstants.ExpressionBlueprints,
             });
 
-            endpoints.MapGet("/workbooks/{workbookId}/blueprints/{blueprintId}/expression-blueprints", async (QueryExpressionBlueprints query, Guid blueprintId, int? skip, int? limit, string? sortBy, SortOrderType? sortOrder, CancellationToken cancellation) =>
+            endpoints.MapGet("/workbooks/{workbookId}/blueprints/{blueprintId}/expression-blueprints", async (QueryExpressionBlueprints query, Guid blueprintId, string? search, int? skip, int? limit, string? sortBy, SortOrderType? sortOrder, CancellationToken cancellation) =>
             {
-                var paginationParameters = new PaginationParameters(skip, limit, sortBy, sortOrder);
-                var filteredPaginationParameters = new FilteredPaginationParameters<ExpressionBlueprint>(paginationParameters, x => x.BlueprintId == blueprintId);
+                var searchParameters = new SearchParameters(search, skip, limit, sortBy, sortOrder);
+                var filteredPaginationParameters = new FilteredPaginationParameters<ExpressionBlueprint>(searchParameters, x => x.BlueprintId == blueprintId);
 
                 var paginatedDtos = await query.Handle(filteredPaginationParameters, cancellation).ConfigureAwait(false);
                 return Results.Ok(paginatedDtos);

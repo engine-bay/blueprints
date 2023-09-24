@@ -8,10 +8,10 @@ namespace EngineBay.Blueprints
     {
         public static void MapEndpoints(IEndpointRouteBuilder endpoints)
         {
-            endpoints.MapGet("/workbooks", async (QueryWorkbooks query, FilterParameters? filter, int? skip, int? limit, string? sortBy, SortOrderType? sortOrder, CancellationToken cancellation) =>
+            endpoints.MapGet("/workbooks", async (QueryWorkbooks query, FilterParameters? filter, string? search, int? skip, int? limit, string? sortBy, SortOrderType? sortOrder, CancellationToken cancellation) =>
            {
-               var paginationParameters = new PaginationParameters(skip, limit, sortBy, sortOrder);
-               var filteredPaginationParameters = new FilteredPaginationParameters<Workbook>(paginationParameters, filter);
+               var searchParameters = new SearchParameters(search, skip, limit, sortBy, sortOrder);
+               var filteredPaginationParameters = new FilteredPaginationParameters<Workbook>(searchParameters, filter);
 
                var paginatedDtos = await query.Handle(filteredPaginationParameters, cancellation).ConfigureAwait(false);
                return Results.Ok(paginatedDtos);

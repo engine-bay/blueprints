@@ -28,18 +28,22 @@ namespace EngineBay.Blueprints
             var skip = limit > 0 ? filteredPaginationParameters.Skip : 0;
             var filterPredicate = filteredPaginationParameters.FilterPredicate is null ? x => true : filteredPaginationParameters.FilterPredicate;
 
-            var total = await this.db.Workbooks.Where(filterPredicate).CountAsync(cancellation).ConfigureAwait(false);
+            var search = filteredPaginationParameters.Search;
+            Expression<Func<Workbook, bool>>? searchPredicate = entity => entity.Name != null && EF.Functions.Like(entity.Name, $"%{search}%");
+
+            var total = await this.db.Workbooks.Where(filterPredicate).Where(searchPredicate).CountAsync(cancellation).ConfigureAwait(false);
 
             var query = this.db.Workbooks
                 .Where(filterPredicate)
+                .Where(searchPredicate)
                 .AsExpandable();
 
             Expression<Func<Workbook, string?>> sortByPredicate = filteredPaginationParameters.SortBy switch
             {
-                nameof(Workbook.CreatedAt) => workbook => workbook.CreatedAt.ToString(CultureInfo.InvariantCulture),
-                nameof(Workbook.LastUpdatedAt) => workbook => workbook.LastUpdatedAt.ToString(CultureInfo.InvariantCulture),
-                nameof(Workbook.Name) => workbook => workbook.Name,
-                nameof(Workbook.Description) => workbook => workbook.Description,
+                string sortBy when sortBy.Equals(nameof(Workbook.CreatedAt), StringComparison.OrdinalIgnoreCase) => entity => entity.CreatedAt.ToString(CultureInfo.InvariantCulture),
+                string sortBy when sortBy.Equals(nameof(Workbook.LastUpdatedAt), StringComparison.OrdinalIgnoreCase) => entity => entity.LastUpdatedAt.ToString(CultureInfo.InvariantCulture),
+                string sortBy when sortBy.Equals(nameof(Workbook.Name), StringComparison.OrdinalIgnoreCase) => entity => entity.Name,
+                string sortBy when sortBy.Equals(nameof(Workbook.Description), StringComparison.OrdinalIgnoreCase) => entity => entity.Description,
                 _ => throw new ArgumentNullException(filteredPaginationParameters.SortBy),
             };
 

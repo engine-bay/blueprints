@@ -163,5 +163,22 @@ namespace EngineBay.Blueprints.Tests
             var first = dto.Data.First();
             Assert.Equal("K-Factor 1 test workbook", first.Name);
         }
+
+        [Fact]
+        public async Task WorkbooksCanBeSearched()
+        {
+            var query = new QueryWorkbooks(this.BlueprintsDbContext);
+
+            var filteredPaginationParameters = new FilteredPaginationParameters<Workbook>()
+            {
+                Search = "2 test",
+            };
+
+            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None).ConfigureAwait(false);
+
+            var first = dto.Data.First();
+            Assert.Equal("K-Factor 2 test workbook", first.Name);
+            Assert.Equal(1, dto.Total);
+        }
     }
 }

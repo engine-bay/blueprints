@@ -8,10 +8,10 @@ namespace EngineBay.Blueprints
     {
         public static void MapEndpoints(IEndpointRouteBuilder endpoints)
         {
-            endpoints.MapGet("/trigger-expression-blueprints", async (QueryTriggerExpressionBlueprints query, FilterParameters? filter, int? skip, int? limit, string? sortBy, SortOrderType? sortOrder, CancellationToken cancellation) =>
+            endpoints.MapGet("/trigger-expression-blueprints", async (QueryTriggerExpressionBlueprints query, FilterParameters? filter, string? search, int? skip, int? limit, string? sortBy, SortOrderType? sortOrder, CancellationToken cancellation) =>
             {
-                var paginationParameters = new PaginationParameters(skip, limit, sortBy, sortOrder);
-                var filteredPaginationParameters = new FilteredPaginationParameters<TriggerExpressionBlueprint>(paginationParameters, filter);
+                var searchParameters = new SearchParameters(search, skip, limit, sortBy, sortOrder);
+                var filteredPaginationParameters = new FilteredPaginationParameters<TriggerExpressionBlueprint>(searchParameters, filter);
 
                 var paginatedDtos = await query.Handle(filteredPaginationParameters, cancellation).ConfigureAwait(false);
                 return Results.Ok(paginatedDtos);
@@ -21,10 +21,10 @@ namespace EngineBay.Blueprints
                 ApiGroupNameConstants.TriggerExpressionBlueprints,
             });
 
-            endpoints.MapGet("/workbooks/{workbookId}/blueprints/{blueprintId}/trigger-blueprints/{triggerBlueprintId}/trigger-expression-blueprints", async (QueryTriggerExpressionBlueprints query, Guid triggerBlueprintId, int? skip, int? limit, string? sortBy, SortOrderType? sortOrder, CancellationToken cancellation) =>
+            endpoints.MapGet("/workbooks/{workbookId}/blueprints/{blueprintId}/trigger-blueprints/{triggerBlueprintId}/trigger-expression-blueprints", async (QueryTriggerExpressionBlueprints query, Guid triggerBlueprintId, string? search, int? skip, int? limit, string? sortBy, SortOrderType? sortOrder, CancellationToken cancellation) =>
             {
-                var paginationParameters = new PaginationParameters(skip, limit, sortBy, sortOrder);
-                var filteredPaginationParameters = new FilteredPaginationParameters<TriggerExpressionBlueprint>(paginationParameters, x => x.TriggerBlueprintId == triggerBlueprintId);
+                var searchParameters = new SearchParameters(search, skip, limit, sortBy, sortOrder);
+                var filteredPaginationParameters = new FilteredPaginationParameters<TriggerExpressionBlueprint>(searchParameters, x => x.TriggerBlueprintId == triggerBlueprintId);
 
                 var paginatedDtos = await query.Handle(filteredPaginationParameters, cancellation).ConfigureAwait(false);
                 return Results.Ok(paginatedDtos);

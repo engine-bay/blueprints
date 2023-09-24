@@ -163,5 +163,22 @@ namespace EngineBay.Blueprints.Tests
             var first = dto.Data.First();
             Assert.Equal("Blueprint 0", first.Name);
         }
+
+        [Fact]
+        public async Task BlueprintsCanBeSearched()
+        {
+            var query = new QueryBlueprints(this.BlueprintsDbContext);
+
+            var filteredPaginationParameters = new FilteredPaginationParameters<Blueprint>()
+            {
+                Search = "1",
+            };
+
+            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None).ConfigureAwait(false);
+
+            var first = dto.Data.First();
+            Assert.Equal("Blueprint 1", first.Name);
+            Assert.Equal(1, dto.Total);
+        }
     }
 }

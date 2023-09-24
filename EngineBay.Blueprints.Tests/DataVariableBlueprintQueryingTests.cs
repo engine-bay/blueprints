@@ -163,5 +163,22 @@ namespace EngineBay.Blueprints.Tests
             var first = dto.Data.First();
             Assert.Equal("musical_indigo_mink", first.Name);
         }
+
+        [Fact]
+        public async Task WorkbooksCanBeSearched()
+        {
+            var query = new QueryDataVariableBlueprints(this.BlueprintsDbContext);
+
+            var filteredPaginationParameters = new FilteredPaginationParameters<DataVariableBlueprint>()
+            {
+                Search = "anaconda",
+            };
+
+            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None).ConfigureAwait(false);
+
+            var first = dto.Data.First();
+            Assert.Equal("eager_lavender_anaconda", first.Name);
+            Assert.Equal(1, dto.Total);
+        }
     }
 }

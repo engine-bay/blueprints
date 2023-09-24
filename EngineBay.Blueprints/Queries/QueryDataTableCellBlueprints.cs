@@ -28,18 +28,21 @@ namespace EngineBay.Blueprints
             var skip = limit > 0 ? filteredPaginationParameters.Skip : 0;
             var filterPredicate = filteredPaginationParameters.FilterPredicate is null ? x => true : filteredPaginationParameters.FilterPredicate;
 
-            var total = await this.db.DataTableCellBlueprints.Where(filterPredicate).CountAsync(cancellation).ConfigureAwait(false);
+            var search = filteredPaginationParameters.Search;
+            Expression<Func<DataTableCellBlueprint, bool>>? searchPredicate = entity => entity.Name != null && EF.Functions.Like(entity.Name, $"%{search}%");
 
-            var query = this.db.DataTableCellBlueprints.Where(filterPredicate).AsExpandable();
+            var total = await this.db.DataTableCellBlueprints.Where(filterPredicate).Where(searchPredicate).CountAsync(cancellation).ConfigureAwait(false);
+
+            var query = this.db.DataTableCellBlueprints.Where(filterPredicate).Where(searchPredicate).AsExpandable();
 
             Expression<Func<DataTableCellBlueprint, string?>> sortByPredicate = filteredPaginationParameters.SortBy switch
             {
-                nameof(DataTableCellBlueprint.CreatedAt) => dataTableCellBlueprint => dataTableCellBlueprint.CreatedAt.ToString(CultureInfo.InvariantCulture),
-                nameof(DataTableCellBlueprint.LastUpdatedAt) => dataTableCellBlueprint => dataTableCellBlueprint.LastUpdatedAt.ToString(CultureInfo.InvariantCulture),
-                nameof(DataTableCellBlueprint.Name) => dataTableCellBlueprint => dataTableCellBlueprint.Name,
-                nameof(DataTableCellBlueprint.Namespace) => dataTableCellBlueprint => dataTableCellBlueprint.Namespace,
-                nameof(DataTableCellBlueprint.Key) => dataTableCellBlueprint => dataTableCellBlueprint.Key,
-                nameof(DataTableCellBlueprint.Value) => dataTableCellBlueprint => dataTableCellBlueprint.Value,
+                string sortBy when sortBy.Equals(nameof(DataTableCellBlueprint.CreatedAt), StringComparison.OrdinalIgnoreCase) => entity => entity.CreatedAt.ToString(CultureInfo.InvariantCulture),
+                string sortBy when sortBy.Equals(nameof(DataTableCellBlueprint.LastUpdatedAt), StringComparison.OrdinalIgnoreCase) => entity => entity.LastUpdatedAt.ToString(CultureInfo.InvariantCulture),
+                string sortBy when sortBy.Equals(nameof(DataTableCellBlueprint.Name), StringComparison.OrdinalIgnoreCase) => entity => entity.Name,
+                string sortBy when sortBy.Equals(nameof(DataTableCellBlueprint.Namespace), StringComparison.OrdinalIgnoreCase) => entity => entity.Namespace,
+                string sortBy when sortBy.Equals(nameof(DataTableCellBlueprint.Key), StringComparison.OrdinalIgnoreCase) => entity => entity.Key,
+                string sortBy when sortBy.Equals(nameof(DataTableCellBlueprint.Value), StringComparison.OrdinalIgnoreCase) => entity => entity.Value,
                 _ => throw new ArgumentNullException(filteredPaginationParameters.SortBy),
             };
 

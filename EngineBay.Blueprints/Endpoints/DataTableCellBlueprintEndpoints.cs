@@ -8,10 +8,10 @@ namespace EngineBay.Blueprints
     {
         public static void MapEndpoints(IEndpointRouteBuilder endpoints)
         {
-            endpoints.MapGet("/data-table-cell-blueprints", async (QueryDataTableCellBlueprints query, FilterParameters? filter, int? skip, int? limit, string? sortBy, SortOrderType? sortOrder, CancellationToken cancellation) =>
+            endpoints.MapGet("/data-table-cell-blueprints", async (QueryDataTableCellBlueprints query, FilterParameters? filter, string? search, int? skip, int? limit, string? sortBy, SortOrderType? sortOrder, CancellationToken cancellation) =>
             {
-                var paginationParameters = new PaginationParameters(skip, limit, sortBy, sortOrder);
-                var filteredPaginationParameters = new FilteredPaginationParameters<DataTableCellBlueprint>(paginationParameters, filter);
+                var searchParameters = new SearchParameters(search, skip, limit, sortBy, sortOrder);
+                var filteredPaginationParameters = new FilteredPaginationParameters<DataTableCellBlueprint>(searchParameters, filter);
 
                 var paginatedDtos = await query.Handle(filteredPaginationParameters, cancellation).ConfigureAwait(false);
                 return Results.Ok(paginatedDtos);
@@ -21,10 +21,10 @@ namespace EngineBay.Blueprints
                 ApiGroupNameConstants.DataTableCellBlueprints,
             });
 
-            endpoints.MapGet("/workbooks/{workbookId}/blueprints/{blueprintId}/data-table-blueprints/{dataTableBlueprintId}/data-table-row-blueprints/{dataTableRowBlueprintId}/data-table-cell-blueprints", async (QueryDataTableCellBlueprints query, Guid dataTableRowBlueprintId, int? skip, int? limit, string? sortBy, SortOrderType? sortOrder, CancellationToken cancellation) =>
+            endpoints.MapGet("/workbooks/{workbookId}/blueprints/{blueprintId}/data-table-blueprints/{dataTableBlueprintId}/data-table-row-blueprints/{dataTableRowBlueprintId}/data-table-cell-blueprints", async (QueryDataTableCellBlueprints query, Guid dataTableRowBlueprintId, string? search, int? skip, int? limit, string? sortBy, SortOrderType? sortOrder, CancellationToken cancellation) =>
             {
-                var paginationParameters = new PaginationParameters(skip, limit, sortBy, sortOrder);
-                var filteredPaginationParameters = new FilteredPaginationParameters<DataTableCellBlueprint>(paginationParameters, x => x.DataTableRowBlueprintId == dataTableRowBlueprintId);
+                var searchParameters = new SearchParameters(search, skip, limit, sortBy, sortOrder);
+                var filteredPaginationParameters = new FilteredPaginationParameters<DataTableCellBlueprint>(searchParameters, x => x.DataTableRowBlueprintId == dataTableRowBlueprintId);
 
                 var paginatedDtos = await query.Handle(filteredPaginationParameters, cancellation).ConfigureAwait(false);
                 return Results.Ok(paginatedDtos);

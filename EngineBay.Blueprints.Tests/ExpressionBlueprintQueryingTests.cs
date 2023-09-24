@@ -163,5 +163,22 @@ namespace EngineBay.Blueprints.Tests
             var first = dto.Data.First();
             Assert.Equal("cognitive_turquoise_coyote - youngest_ivory_shrimp * enthusiastic_maroon_lark / musical_indigo_mink / ill_aquamarine_panther - youngest_ivory_shrimp - enthusiastic_maroon_lark - musical_indigo_mink", first.Expression);
         }
+
+        [Fact]
+        public async Task ExpressionBlueprintsCanBeSearched()
+        {
+            var query = new QueryExpressionBlueprints(this.BlueprintsDbContext);
+
+            var filteredPaginationParameters = new FilteredPaginationParameters<ExpressionBlueprint>()
+            {
+                Search = "sneaky snakes",
+            };
+
+            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None).ConfigureAwait(false);
+
+            var first = dto.Data.First();
+            Assert.Equal("An expression for blueprint 0 and sneaky snakes", first.Objective);
+            Assert.Equal(1, dto.Total);
+        }
     }
 }

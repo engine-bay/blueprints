@@ -28,21 +28,25 @@ namespace EngineBay.Blueprints
             var skip = limit > 0 ? filteredPaginationParameters.Skip : 0;
             var filterPredicate = filteredPaginationParameters.FilterPredicate is null ? x => true : filteredPaginationParameters.FilterPredicate;
 
-            var total = await this.db.ExpressionBlueprints.Where(filterPredicate).CountAsync(cancellation).ConfigureAwait(false);
+            var search = filteredPaginationParameters.Search;
+            Expression<Func<ExpressionBlueprint, bool>>? searchPredicate = entity => entity.Objective != null && EF.Functions.Like(entity.Objective, $"%{search}%");
+
+            var total = await this.db.ExpressionBlueprints.Where(filterPredicate).Where(searchPredicate).CountAsync(cancellation).ConfigureAwait(false);
 
             var query = this.db.ExpressionBlueprints
                             .Include(x => x.InputDataTableBlueprints)
                             .Include(x => x.InputDataVariableBlueprints)
                             .Include(x => x.OutputDataVariableBlueprint)
                             .Where(filterPredicate)
+                            .Where(searchPredicate)
                             .AsExpandable();
 
             Expression<Func<ExpressionBlueprint, string?>> sortByPredicate = filteredPaginationParameters.SortBy switch
             {
-                nameof(ExpressionBlueprint.CreatedAt) => expressionBlueprint => expressionBlueprint.CreatedAt.ToString(CultureInfo.InvariantCulture),
-                nameof(ExpressionBlueprint.LastUpdatedAt) => expressionBlueprint => expressionBlueprint.LastUpdatedAt.ToString(CultureInfo.InvariantCulture),
-                nameof(ExpressionBlueprint.Expression) => expressionBlueprint => expressionBlueprint.Expression,
-                nameof(ExpressionBlueprint.Objective) => expressionBlueprint => expressionBlueprint.Objective,
+                string sortBy when sortBy.Equals(nameof(ExpressionBlueprint.CreatedAt), StringComparison.OrdinalIgnoreCase) => entity => entity.CreatedAt.ToString(CultureInfo.InvariantCulture),
+                string sortBy when sortBy.Equals(nameof(ExpressionBlueprint.LastUpdatedAt), StringComparison.OrdinalIgnoreCase) => entity => entity.LastUpdatedAt.ToString(CultureInfo.InvariantCulture),
+                string sortBy when sortBy.Equals(nameof(ExpressionBlueprint.Expression), StringComparison.OrdinalIgnoreCase) => entity => entity.Expression,
+                string sortBy when sortBy.Equals(nameof(ExpressionBlueprint.Objective), StringComparison.OrdinalIgnoreCase) => entity => entity.Objective,
                 _ => throw new ArgumentNullException(filteredPaginationParameters.SortBy),
             };
 
