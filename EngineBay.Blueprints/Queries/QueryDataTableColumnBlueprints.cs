@@ -34,17 +34,19 @@ namespace EngineBay.Blueprints
             var total = await this.db.DataTableColumnBlueprints.Where(filterPredicate).Where(searchPredicate).CountAsync(cancellation).ConfigureAwait(false);
 
             var query = this.db.DataTableColumnBlueprints.Where(filterPredicate).Where(searchPredicate).AsExpandable();
+#pragma warning disable CA1305
 
+            // DateTime Tostrings cannot CultureInfo.InvariantCulture because SQL does not know how to interpret this
             Expression<Func<DataTableColumnBlueprint, string?>> sortByPredicate = filteredPaginationParameters.SortBy switch
             {
                 string sortBy when sortBy.Equals(nameof(DataTableColumnBlueprint.Id), StringComparison.OrdinalIgnoreCase) => entity => entity.Id.ToString(),
-                string sortBy when sortBy.Equals(nameof(DataTableColumnBlueprint.CreatedAt), StringComparison.OrdinalIgnoreCase) => entity => entity.CreatedAt.ToString(CultureInfo.InvariantCulture),
-                string sortBy when sortBy.Equals(nameof(DataTableColumnBlueprint.LastUpdatedAt), StringComparison.OrdinalIgnoreCase) => entity => entity.LastUpdatedAt.ToString(CultureInfo.InvariantCulture),
+                string sortBy when sortBy.Equals(nameof(DataTableColumnBlueprint.CreatedAt), StringComparison.OrdinalIgnoreCase) => entity => entity.CreatedAt.ToString(),
+                string sortBy when sortBy.Equals(nameof(DataTableColumnBlueprint.LastUpdatedAt), StringComparison.OrdinalIgnoreCase) => entity => entity.LastUpdatedAt.ToString(),
                 string sortBy when sortBy.Equals(nameof(DataTableColumnBlueprint.Name), StringComparison.OrdinalIgnoreCase) => entity => entity.Name,
                 string sortBy when sortBy.Equals(nameof(DataTableColumnBlueprint.Type), StringComparison.OrdinalIgnoreCase) => entity => entity.Type,
                 _ => throw new ArgumentNullException(filteredPaginationParameters.SortBy),
             };
-
+#pragma warning restore CA130
             query = this.Sort(query, sortByPredicate, filteredPaginationParameters);
             query = this.Paginate(query, filteredPaginationParameters);
 

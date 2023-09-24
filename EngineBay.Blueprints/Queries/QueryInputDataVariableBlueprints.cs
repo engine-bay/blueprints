@@ -34,18 +34,20 @@ namespace EngineBay.Blueprints
             var total = await this.db.InputDataVariableBlueprints.Where(filterPredicate).Where(searchPredicate).CountAsync(cancellation).ConfigureAwait(false);
 
             var query = this.db.InputDataVariableBlueprints.Where(filterPredicate).Where(searchPredicate).AsExpandable();
+#pragma warning disable CA1305
 
+            // DateTime Tostrings cannot CultureInfo.InvariantCulture because SQL does not know how to interpret this
             Expression<Func<InputDataVariableBlueprint, string?>> sortByPredicate = filteredPaginationParameters.SortBy switch
             {
                 string sortBy when sortBy.Equals(nameof(InputDataVariableBlueprint.Id), StringComparison.OrdinalIgnoreCase) => entity => entity.Id.ToString(),
-                string sortBy when sortBy.Equals(nameof(InputDataVariableBlueprint.CreatedAt), StringComparison.OrdinalIgnoreCase) => entity => entity.CreatedAt.ToString(CultureInfo.InvariantCulture),
-                string sortBy when sortBy.Equals(nameof(InputDataVariableBlueprint.LastUpdatedAt), StringComparison.OrdinalIgnoreCase) => entity => entity.LastUpdatedAt.ToString(CultureInfo.InvariantCulture),
+                string sortBy when sortBy.Equals(nameof(InputDataVariableBlueprint.CreatedAt), StringComparison.OrdinalIgnoreCase) => entity => entity.CreatedAt.ToString(),
+                string sortBy when sortBy.Equals(nameof(InputDataVariableBlueprint.LastUpdatedAt), StringComparison.OrdinalIgnoreCase) => entity => entity.LastUpdatedAt.ToString(),
                 string sortBy when sortBy.Equals(nameof(InputDataVariableBlueprint.Name), StringComparison.OrdinalIgnoreCase) => entity => entity.Name,
                 string sortBy when sortBy.Equals(nameof(InputDataVariableBlueprint.Namespace), StringComparison.OrdinalIgnoreCase) => entity => entity.Namespace,
                 string sortBy when sortBy.Equals(nameof(InputDataVariableBlueprint.Type), StringComparison.OrdinalIgnoreCase) => entity => entity.Type,
                 _ => throw new ArgumentNullException(filteredPaginationParameters.SortBy),
             };
-
+#pragma warning restore CA1305
             query = this.Sort(query, sortByPredicate, filteredPaginationParameters);
             query = this.Paginate(query, filteredPaginationParameters);
 

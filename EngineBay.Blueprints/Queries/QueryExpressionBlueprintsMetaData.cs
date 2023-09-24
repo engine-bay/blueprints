@@ -1,23 +1,22 @@
 namespace EngineBay.Blueprints
 {
     using System;
-    using System.Globalization;
     using System.Linq.Expressions;
     using EngineBay.Core;
     using LinqKit;
     using Microsoft.EntityFrameworkCore;
 
-    public class QueryExpressionBlueprints : PaginatedQuery<ExpressionBlueprint>, IQueryHandler<FilteredPaginationParameters<ExpressionBlueprint>, PaginatedDto<ExpressionBlueprintDto>>
+    public class QueryExpressionBlueprintsMetaData : PaginatedQuery<ExpressionBlueprint>, IQueryHandler<FilteredPaginationParameters<ExpressionBlueprint>, PaginatedDto<ExpressionBlueprintMetaDataDto>>
     {
         private readonly BlueprintsQueryDbContext db;
 
-        public QueryExpressionBlueprints(BlueprintsQueryDbContext db)
+        public QueryExpressionBlueprintsMetaData(BlueprintsQueryDbContext db)
         {
             this.db = db;
         }
 
         /// <inheritdoc/>
-        public async Task<PaginatedDto<ExpressionBlueprintDto>> Handle(FilteredPaginationParameters<ExpressionBlueprint> filteredPaginationParameters, CancellationToken cancellation)
+        public async Task<PaginatedDto<ExpressionBlueprintMetaDataDto>> Handle(FilteredPaginationParameters<ExpressionBlueprint> filteredPaginationParameters, CancellationToken cancellation)
         {
             if (filteredPaginationParameters is null)
             {
@@ -34,9 +33,6 @@ namespace EngineBay.Blueprints
             var total = await this.db.ExpressionBlueprints.Where(filterPredicate).Where(searchPredicate).CountAsync(cancellation).ConfigureAwait(false);
 
             var query = this.db.ExpressionBlueprints
-                            .Include(x => x.InputDataTableBlueprints)
-                            .Include(x => x.InputDataVariableBlueprints)
-                            .Include(x => x.OutputDataVariableBlueprint)
                             .Where(filterPredicate)
                             .Where(searchPredicate)
                             .AsExpandable();
@@ -57,11 +53,11 @@ namespace EngineBay.Blueprints
             query = this.Paginate(query, filteredPaginationParameters);
 
             var expressionBlueprintDtos = limit > 0 ? await query
-                .Select(expressionBlueprint => new ExpressionBlueprintDto(expressionBlueprint))
+                .Select(expressionBlueprint => new ExpressionBlueprintMetaDataDto(expressionBlueprint))
                 .ToListAsync(cancellation)
-                .ConfigureAwait(false) : new List<ExpressionBlueprintDto>();
+                .ConfigureAwait(false) : new List<ExpressionBlueprintMetaDataDto>();
 
-            return new PaginatedDto<ExpressionBlueprintDto>(total, skip, limit, expressionBlueprintDtos);
+            return new PaginatedDto<ExpressionBlueprintMetaDataDto>(total, skip, limit, expressionBlueprintDtos);
         }
     }
 }

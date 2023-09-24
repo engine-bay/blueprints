@@ -1,9 +1,8 @@
 namespace EngineBay.Blueprints
 {
     using System;
-    using EngineBay.Core;
 
-    public class ExpressionBlueprintDto : BaseDto
+    public class ExpressionBlueprintDto : ExpressionBlueprintMetaDataDto
     {
         public ExpressionBlueprintDto(ExpressionBlueprint expressionBlueprint)
             : base(expressionBlueprint)
@@ -13,12 +12,8 @@ namespace EngineBay.Blueprints
                 throw new ArgumentNullException(nameof(expressionBlueprint));
             }
 
-            this.BlueprintId = expressionBlueprint.BlueprintId;
-            this.Expression = expressionBlueprint.Expression;
-            this.Objective = expressionBlueprint.Objective;
             this.InputDataVariableBlueprints = expressionBlueprint.InputDataVariableBlueprints?.Select(x => new InputDataVariableBlueprintDto(x)).ToList();
             this.InputDataTableBlueprints = expressionBlueprint.InputDataTableBlueprints?.Select(x => new InputDataTableBlueprintDto(x)).ToList();
-            this.OutputDataVariableId = expressionBlueprint.OutputDataVariableBlueprintId;
 
             if (expressionBlueprint.OutputDataVariableBlueprint is not null)
             {
@@ -26,17 +21,9 @@ namespace EngineBay.Blueprints
             }
         }
 
-        public Guid? BlueprintId { get; set; }
-
-        public string? Expression { get; set; }
-
-        public string? Objective { get; set; }
-
         public IEnumerable<InputDataVariableBlueprintDto>? InputDataVariableBlueprints { get; set; }
 
         public IEnumerable<InputDataTableBlueprintDto>? InputDataTableBlueprints { get; set; }
-
-        public Guid? OutputDataVariableId { get; set; }
 
         public OutputDataVariableBlueprintDto? OutputDataVariableBlueprint { get; set; }
     }

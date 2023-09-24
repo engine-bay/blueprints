@@ -55,7 +55,9 @@ namespace EngineBay.Blueprints
             services.AddTransient<GetDataVariableBlueprint>();
             services.AddTransient<QueryDataVariableBlueprints>();
             services.AddTransient<GetExpressionBlueprint>();
+            services.AddTransient<GetExpressionBlueprintMetaData>();
             services.AddTransient<QueryExpressionBlueprints>();
+            services.AddTransient<QueryExpressionBlueprintsMetaData>();
             services.AddTransient<GetDataTableBlueprint>();
             services.AddTransient<QueryDataTableBlueprints>();
             services.AddTransient<GetWorkbook>();
@@ -108,6 +110,7 @@ namespace EngineBay.Blueprints
             DataVariableBlueprintEndpoints.MapEndpoints(endpoints);
             DataTableBlueprintEndpoints.MapEndpoints(endpoints);
             ExpressionBlueprints.MapEndpoints(endpoints);
+            ExpressionBlueprintsMetaDataEndpoints.MapEndpoints(endpoints);
             WorkbookEndpoints.MapEndpoints(endpoints);
             WorkbookMetaDataEndpoints.MapEndpoints(endpoints);
             InputDataVariableBlueprintEndpoints.MapEndpoints(endpoints);

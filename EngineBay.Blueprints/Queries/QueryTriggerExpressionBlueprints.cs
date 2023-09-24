@@ -38,17 +38,19 @@ namespace EngineBay.Blueprints
                             .Where(filterPredicate)
                             .Where(searchPredicate)
                             .AsExpandable();
+#pragma warning disable CA1305
 
+            // DateTime Tostrings cannot CultureInfo.InvariantCulture because SQL does not know how to interpret this
             Expression<Func<TriggerExpressionBlueprint, string?>> sortByPredicate = filteredPaginationParameters.SortBy switch
             {
                 string sortBy when sortBy.Equals(nameof(TriggerExpressionBlueprint.Id), StringComparison.OrdinalIgnoreCase) => entity => entity.Id.ToString(),
-                string sortBy when sortBy.Equals(nameof(TriggerExpressionBlueprint.CreatedAt), StringComparison.OrdinalIgnoreCase) => entity => entity.CreatedAt.ToString(CultureInfo.InvariantCulture),
-                string sortBy when sortBy.Equals(nameof(TriggerExpressionBlueprint.LastUpdatedAt), StringComparison.OrdinalIgnoreCase) => entity => entity.LastUpdatedAt.ToString(CultureInfo.InvariantCulture),
+                string sortBy when sortBy.Equals(nameof(TriggerExpressionBlueprint.CreatedAt), StringComparison.OrdinalIgnoreCase) => entity => entity.CreatedAt.ToString(),
+                string sortBy when sortBy.Equals(nameof(TriggerExpressionBlueprint.LastUpdatedAt), StringComparison.OrdinalIgnoreCase) => entity => entity.LastUpdatedAt.ToString(),
                 string sortBy when sortBy.Equals(nameof(TriggerExpressionBlueprint.Expression), StringComparison.OrdinalIgnoreCase) => entity => entity.Expression,
                 string sortBy when sortBy.Equals(nameof(TriggerExpressionBlueprint.Objective), StringComparison.OrdinalIgnoreCase) => entity => entity.Objective,
                 _ => throw new ArgumentNullException(filteredPaginationParameters.SortBy),
             };
-
+#pragma warning restore CA1305
             query = this.Sort(query, sortByPredicate, filteredPaginationParameters);
             query = this.Paginate(query, filteredPaginationParameters);
 
