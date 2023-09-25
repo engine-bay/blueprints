@@ -1,6 +1,5 @@
 namespace EngineBay.Blueprints
 {
-    using System.Net.Mime;
     using System.Security.Claims;
     using EngineBay.Core;
 
@@ -16,10 +15,7 @@ namespace EngineBay.Blueprints
                 return Results.Ok(paginatedDtos);
             }).RequireAuthorization()
             .WithGroupName(ApiGroupNameConstants.Blueprints)
-            .WithTags(new string[]
-            {
-                ApiGroupNameConstants.Blueprints,
-            });
+            .WithTags(ApiGroupNameConstants.Blueprints);
 
             endpoints.MapGet("/workbooks/{workbookId}/blueprints", async (QueryFilteredBlueprints query, Guid workbookId, int? skip, int? limit, string? sortBy, SortOrderType? sortOrder, CancellationToken cancellation) =>
             {
@@ -29,10 +25,7 @@ namespace EngineBay.Blueprints
                 return Results.Ok(paginatedDtos);
             }).RequireAuthorization()
             .WithGroupName(ApiGroupNameConstants.Blueprints)
-            .WithTags(new string[]
-            {
-                ApiGroupNameConstants.Blueprints,
-            });
+            .WithTags(ApiGroupNameConstants.Blueprints);
 
             endpoints.MapGet("/blueprints/{id}", async (GetBlueprint query, Guid id, CancellationToken cancellation) =>
             {
@@ -40,10 +33,7 @@ namespace EngineBay.Blueprints
                 return Results.Ok(dto);
             }).RequireAuthorization()
             .WithGroupName(ApiGroupNameConstants.Blueprints)
-            .WithTags(new string[]
-            {
-                ApiGroupNameConstants.Blueprints,
-            });
+            .WithTags(ApiGroupNameConstants.Blueprints);
 
             endpoints.MapPost("/blueprints", async (CreateBlueprint command, Blueprint blueprint, ClaimsPrincipal claimsPrincipal, CancellationToken cancellation) =>
             {
@@ -51,10 +41,7 @@ namespace EngineBay.Blueprints
                 return Results.Created($"/blueprints/{blueprint.Id}", dto);
             }).RequireAuthorization()
             .WithGroupName(ApiGroupNameConstants.Blueprints)
-            .WithTags(new string[]
-            {
-                ApiGroupNameConstants.Blueprints,
-            });
+            .WithTags(ApiGroupNameConstants.Blueprints);
 
             endpoints.MapPut("/blueprints/{id}", async (UpdateBlueprint command, Blueprint updateBlueprint, Guid id, ClaimsPrincipal claimsPrincipal, CancellationToken cancellation) =>
             {
@@ -67,10 +54,7 @@ namespace EngineBay.Blueprints
                 return Results.Ok(dto);
             }).RequireAuthorization()
             .WithGroupName(ApiGroupNameConstants.Blueprints)
-            .WithTags(new string[]
-            {
-                ApiGroupNameConstants.Blueprints,
-            });
+            .WithTags(ApiGroupNameConstants.Blueprints);
 
             endpoints.MapDelete("/blueprints/{id}", async (DeleteBlueprint command, Guid id, ClaimsPrincipal claimsPrincipal, CancellationToken cancellation) =>
             {
@@ -78,10 +62,7 @@ namespace EngineBay.Blueprints
                 return Results.Ok(dto);
             }).RequireAuthorization()
             .WithGroupName(ApiGroupNameConstants.Blueprints)
-            .WithTags(new string[]
-            {
-                ApiGroupNameConstants.Blueprints,
-            });
+            .WithTags(ApiGroupNameConstants.Blueprints);
         }
     }
 }
