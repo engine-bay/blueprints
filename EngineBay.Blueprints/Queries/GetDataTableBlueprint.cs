@@ -25,7 +25,7 @@ namespace EngineBay.Blueprints
                         .Select(dataTableBlueprint => new DataTableBlueprintDto(dataTableBlueprint))
                         .AsExpandable()
                         .FirstAsync(cancellation)
-                        .ConfigureAwait(false);
+                        ;
         }
     }
 }

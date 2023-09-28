@@ -21,7 +21,7 @@ namespace EngineBay.Blueprints
                 .Select(workbook => new WorkbookMetaDataDto(workbook))
                 .AsExpandable()
                 .FirstAsync(cancellation)
-                .ConfigureAwait(false);
+                ;
         }
     }
 }

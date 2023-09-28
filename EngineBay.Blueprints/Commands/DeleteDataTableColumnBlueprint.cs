@@ -19,8 +19,8 @@ namespace EngineBay.Blueprints
         /// <inheritdoc/>
         public async Task<DataTableColumnBlueprintDto> Handle(Guid id, ClaimsPrincipal claimsPrincipal, CancellationToken cancellation)
         {
-            var user = await this.getApplicationUserQuery.Handle(claimsPrincipal, cancellation).ConfigureAwait(false);
-            var dataTableColumnBlueprint = await this.db.DataTableColumnBlueprints.FindAsync(new object[] { id }, cancellation).ConfigureAwait(false);
+            var user = await this.getApplicationUserQuery.Handle(claimsPrincipal, cancellation);
+            var dataTableColumnBlueprint = await this.db.DataTableColumnBlueprints.FindAsync(new object[] { id }, cancellation);
 
             if (dataTableColumnBlueprint is null)
             {
@@ -28,7 +28,7 @@ namespace EngineBay.Blueprints
             }
 
             this.db.DataTableColumnBlueprints.Remove(dataTableColumnBlueprint);
-            await this.db.SaveChangesAsync(user, cancellation).ConfigureAwait(false);
+            await this.db.SaveChangesAsync(user, cancellation);
             return new DataTableColumnBlueprintDto(dataTableColumnBlueprint);
         }
     }

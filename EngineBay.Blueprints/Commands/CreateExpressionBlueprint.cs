@@ -22,10 +22,10 @@ namespace EngineBay.Blueprints
         /// <inheritdoc/>
         public async Task<ExpressionBlueprintDto> Handle(ExpressionBlueprint expressionBlueprint, ClaimsPrincipal claimsPrincipal, CancellationToken cancellation)
         {
-            var user = await this.getApplicationUserQuery.Handle(claimsPrincipal, cancellation).ConfigureAwait(false);
+            var user = await this.getApplicationUserQuery.Handle(claimsPrincipal, cancellation);
             this.validator.ValidateAndThrow(expressionBlueprint);
-            await this.db.ExpressionBlueprints.AddAsync(expressionBlueprint, cancellation).ConfigureAwait(false);
-            await this.db.SaveChangesAsync(user, cancellation).ConfigureAwait(false);
+            await this.db.ExpressionBlueprints.AddAsync(expressionBlueprint, cancellation);
+            await this.db.SaveChangesAsync(user, cancellation);
             return new ExpressionBlueprintDto(expressionBlueprint);
         }
     }

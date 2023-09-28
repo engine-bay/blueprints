@@ -28,7 +28,7 @@ namespace EngineBay.Blueprints
             var skip = limit > 0 ? filteredPaginationParameters.Skip : 0;
             var filterPredicate = filteredPaginationParameters.FilterPredicate is null ? x => true : filteredPaginationParameters.FilterPredicate;
 
-            var total = await this.db.DataTableRowBlueprints.Where(filterPredicate).CountAsync(cancellation).ConfigureAwait(false);
+            var total = await this.db.DataTableRowBlueprints.Where(filterPredicate).CountAsync(cancellation);
 
             var query = this.db.DataTableRowBlueprints.Include(x => x.DataTableCellBlueprints).Where(filterPredicate).AsExpandable();
 #pragma warning disable CA1305
@@ -48,7 +48,7 @@ namespace EngineBay.Blueprints
             var dataTableRowBlueprintDtos = limit > 0 ? await query
                 .Select(dataTableRowBlueprint => new DataTableRowBlueprintDto(dataTableRowBlueprint))
                 .ToListAsync(cancellation)
-                .ConfigureAwait(false) : new List<DataTableRowBlueprintDto>();
+                 : new List<DataTableRowBlueprintDto>();
 
             return new PaginatedDto<DataTableRowBlueprintDto>(total, skip, limit, dataTableRowBlueprintDtos);
         }

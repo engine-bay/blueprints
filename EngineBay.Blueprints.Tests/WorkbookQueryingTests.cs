@@ -40,7 +40,7 @@ namespace EngineBay.Blueprints.Tests
 
             var filteredPaginationParameters = new FilteredPaginationParameters<Workbook>();
 
-            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None).ConfigureAwait(false);
+            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None);
 
             Assert.Equal(3, dto.Total);
         }
@@ -52,7 +52,7 @@ namespace EngineBay.Blueprints.Tests
 
             var filteredPaginationParameters = new FilteredPaginationParameters<Workbook>();
 
-            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None).ConfigureAwait(false);
+            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None);
 
             Assert.Equal(3, dto.Data.Count());
         }
@@ -67,7 +67,7 @@ namespace EngineBay.Blueprints.Tests
                 Limit = 0,
             };
 
-            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None).ConfigureAwait(false);
+            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None);
 
             Assert.Empty(dto.Data);
         }
@@ -82,7 +82,7 @@ namespace EngineBay.Blueprints.Tests
                 Limit = 0,
             };
 
-            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None).ConfigureAwait(false);
+            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None);
 
             Assert.Equal(3, dto.Total);
         }
@@ -97,7 +97,7 @@ namespace EngineBay.Blueprints.Tests
                 Limit = 2,
             };
 
-            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None).ConfigureAwait(false);
+            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None);
 
             Assert.Equal(2, dto.Data.Count());
         }
@@ -113,7 +113,7 @@ namespace EngineBay.Blueprints.Tests
                 SortOrder = SortOrderType.Descending,
             };
 
-            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None).ConfigureAwait(false);
+            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None);
             var first = dto.Data.First();
             Assert.Equal("K-Factor 1 test workbook", first.Name);
         }
@@ -129,7 +129,7 @@ namespace EngineBay.Blueprints.Tests
                 SortOrder = SortOrderType.Ascending,
             };
 
-            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None).ConfigureAwait(false);
+            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None);
             var first = dto.Data.First();
             Assert.Equal("K-Factor 4 test workbook", first.Name);
         }
@@ -144,7 +144,7 @@ namespace EngineBay.Blueprints.Tests
                 SortBy = "Name",
             };
 
-            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None).ConfigureAwait(false);
+            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None);
             var first = dto.Data.First();
             Assert.Equal("K-Factor 1 test workbook", first.Name);
         }
@@ -159,7 +159,7 @@ namespace EngineBay.Blueprints.Tests
                 SortOrder = SortOrderType.Descending,
             };
 
-            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None).ConfigureAwait(false);
+            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None);
             var first = dto.Data.First();
             Assert.Equal("K-Factor 1 test workbook", first.Name);
         }
@@ -174,7 +174,7 @@ namespace EngineBay.Blueprints.Tests
                 Search = "2 test",
             };
 
-            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None).ConfigureAwait(false);
+            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None);
 
             var first = dto.Data.First();
             Assert.Equal("K-Factor 2 test workbook", first.Name);

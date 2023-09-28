@@ -29,7 +29,7 @@ namespace EngineBay.Blueprints
             var filterPredicate = filteredPaginationParameters.FilterPredicate is null ? x => true : filteredPaginationParameters.FilterPredicate;
             var search = filteredPaginationParameters.Search;
             Expression<Func<Blueprint, bool>>? searchPredicate = entity => entity.Name != null && EF.Functions.Like(entity.Name, $"%{search}%");
-            var total = await this.db.Blueprints.Where(filterPredicate).Where(searchPredicate).CountAsync(cancellation).ConfigureAwait(false);
+            var total = await this.db.Blueprints.Where(filterPredicate).Where(searchPredicate).CountAsync(cancellation);
 
             var query = this.db.Blueprints
                     .Where(filterPredicate)
@@ -54,7 +54,7 @@ namespace EngineBay.Blueprints
             var blueprintDtos = limit > 0 ? await query
                  .Select(blueprint => new BlueprintMetaDataDto(blueprint))
                  .ToListAsync(cancellation)
-                 .ConfigureAwait(false) : new List<BlueprintMetaDataDto>();
+                  : new List<BlueprintMetaDataDto>();
 
             return new PaginatedDto<BlueprintMetaDataDto>(total, skip, limit, blueprintDtos);
         }

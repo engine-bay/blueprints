@@ -40,7 +40,7 @@ namespace EngineBay.Blueprints
                         .Select(blueprint => new BlueprintDto(blueprint))
                         .AsExpandable()
                         .FirstAsync(cancellation)
-                        .ConfigureAwait(false);
+                        ;
         }
     }
 }

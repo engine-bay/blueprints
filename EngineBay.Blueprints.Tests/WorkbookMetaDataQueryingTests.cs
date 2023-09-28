@@ -34,7 +34,7 @@ namespace EngineBay.Blueprints.Tests
 
             var filteredPaginationParameters = new FilteredPaginationParameters<Workbook>();
 
-            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None).ConfigureAwait(false);
+            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None);
 
             Assert.Equal(3, dto.Total);
         }
@@ -49,7 +49,7 @@ namespace EngineBay.Blueprints.Tests
                 Search = "2 test",
             };
 
-            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None).ConfigureAwait(false);
+            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None);
 
             var first = dto.Data.First();
             Assert.Equal("K-Factor 2 test workbook", first.Name);
@@ -66,13 +66,13 @@ namespace EngineBay.Blueprints.Tests
                 Search = "2 test",
             };
 
-            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None).ConfigureAwait(false);
+            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None);
 
             var first = dto.Data.First();
 
             var entityQuery = new GetWorkbookMetaData(this.BlueprintsDbContext);
 
-            var metaData = await entityQuery.Handle(first.Id, CancellationToken.None).ConfigureAwait(false);
+            var metaData = await entityQuery.Handle(first.Id, CancellationToken.None);
             Assert.Equal("K-Factor 2 test workbook", metaData.Name);
         }
     }

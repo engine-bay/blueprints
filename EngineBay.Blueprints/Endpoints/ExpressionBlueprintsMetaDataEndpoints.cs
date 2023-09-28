@@ -1,5 +1,6 @@
 namespace EngineBay.Blueprints
 {
+    using System.Security.Claims;
     using EngineBay.Core;
 
     public static class ExpressionBlueprintsMetaDataEndpoints
@@ -11,7 +12,7 @@ namespace EngineBay.Blueprints
                 var searchParameters = new SearchParameters(search, skip, limit, sortBy, sortOrder);
                 var filteredPaginationParameters = new FilteredPaginationParameters<ExpressionBlueprint>(searchParameters, filter);
 
-                var paginatedDtos = await query.Handle(filteredPaginationParameters, cancellation).ConfigureAwait(false);
+                var paginatedDtos = await query.Handle(filteredPaginationParameters, cancellation);
                 return Results.Ok(paginatedDtos);
             }).RequireAuthorization()
             .WithTags(new string[]
@@ -25,7 +26,7 @@ namespace EngineBay.Blueprints
                 var searchParameters = new SearchParameters(search, skip, limit, sortBy, sortOrder);
                 var filteredPaginationParameters = new FilteredPaginationParameters<ExpressionBlueprint>(searchParameters, x => x.BlueprintId == blueprintId);
 
-                var paginatedDtos = await query.Handle(filteredPaginationParameters, cancellation).ConfigureAwait(false);
+                var paginatedDtos = await query.Handle(filteredPaginationParameters, cancellation);
                 return Results.Ok(paginatedDtos);
             }).RequireAuthorization()
             .WithTags(new string[]
@@ -36,7 +37,18 @@ namespace EngineBay.Blueprints
 
             endpoints.MapGet("/meta-data/expression-blueprints/{id}", async (GetExpressionBlueprintMetaData query, Guid id, CancellationToken cancellation) =>
             {
-                var dto = await query.Handle(id, cancellation).ConfigureAwait(false);
+                var dto = await query.Handle(id, cancellation);
+                return Results.Ok(dto);
+            }).RequireAuthorization()
+            .WithTags(new string[]
+            {
+                ApiGroupNameConstants.MetaData,
+                ApiGroupNameConstants.ExpressionBlueprints,
+            });
+
+            endpoints.MapDelete("/meta-data/expression-blueprints/{id}", async (DeleteExpressionBlueprint command, Guid id, ClaimsPrincipal claimsPrincipal, CancellationToken cancellation) =>
+            {
+                var dto = await command.Handle(id, claimsPrincipal, cancellation);
                 return Results.Ok(dto);
             }).RequireAuthorization()
             .WithTags(new string[]

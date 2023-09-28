@@ -24,7 +24,7 @@ namespace EngineBay.Blueprints
                             .Select(triggerBlueprint => new TriggerBlueprintDto(triggerBlueprint))
                             .AsExpandable()
                             .FirstAsync(cancellation)
-                            .ConfigureAwait(false);
+                            ;
         }
     }
 }

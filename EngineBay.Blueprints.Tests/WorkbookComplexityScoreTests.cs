@@ -37,7 +37,7 @@ namespace EngineBay.Blueprints.Tests
 
             var command = new GetWorkbookComplexityScore(this.BlueprintsDbContext, new GetWorkbook(this.BlueprintsDbContext));
 
-            var dto = await command.Handle(workbookId, CancellationToken.None).ConfigureAwait(false);
+            var dto = await command.Handle(workbookId, CancellationToken.None);
 
             Assert.Equal(2.6666666666666665, dto.Score);
         }
@@ -49,7 +49,7 @@ namespace EngineBay.Blueprints.Tests
 
             var command = new GetWorkbookComplexityScore(this.BlueprintsDbContext, new GetWorkbook(this.BlueprintsDbContext));
 
-            var dto = await command.Handle(workbookId, CancellationToken.None).ConfigureAwait(false);
+            var dto = await command.Handle(workbookId, CancellationToken.None);
 
             Assert.Equal(22, dto.Score);
         }
@@ -61,7 +61,7 @@ namespace EngineBay.Blueprints.Tests
 
             var command = new GetWorkbookComplexityScore(this.BlueprintsDbContext, new GetWorkbook(this.BlueprintsDbContext));
 
-            var dto = await command.Handle(workbookId, CancellationToken.None).ConfigureAwait(false);
+            var dto = await command.Handle(workbookId, CancellationToken.None);
 
             Assert.Equal(228.33333333333334, dto.Score);
         }
@@ -73,7 +73,7 @@ namespace EngineBay.Blueprints.Tests
 
             var command = new GetWorkbookComplexityScore(this.BlueprintsDbContext, new GetWorkbook(this.BlueprintsDbContext));
 
-            var dto = await command.Handle(workbookId, CancellationToken.None).ConfigureAwait(false);
+            var dto = await command.Handle(workbookId, CancellationToken.None);
 
             Assert.Equal(2715, dto.Score);
         }

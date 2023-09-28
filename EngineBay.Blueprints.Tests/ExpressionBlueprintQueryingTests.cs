@@ -40,7 +40,7 @@ namespace EngineBay.Blueprints.Tests
 
             var filteredPaginationParameters = new FilteredPaginationParameters<ExpressionBlueprint>();
 
-            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None).ConfigureAwait(false);
+            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None);
 
             Assert.Equal(8, dto.Total);
         }
@@ -52,7 +52,7 @@ namespace EngineBay.Blueprints.Tests
 
             var filteredPaginationParameters = new FilteredPaginationParameters<ExpressionBlueprint>();
 
-            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None).ConfigureAwait(false);
+            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None);
 
             Assert.Equal(8, dto.Data.Count());
         }
@@ -67,7 +67,7 @@ namespace EngineBay.Blueprints.Tests
                 Limit = 0,
             };
 
-            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None).ConfigureAwait(false);
+            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None);
 
             Assert.Empty(dto.Data);
         }
@@ -82,7 +82,7 @@ namespace EngineBay.Blueprints.Tests
                 Limit = 0,
             };
 
-            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None).ConfigureAwait(false);
+            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None);
 
             Assert.Equal(8, dto.Total);
         }
@@ -97,7 +97,7 @@ namespace EngineBay.Blueprints.Tests
                 Limit = 2,
             };
 
-            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None).ConfigureAwait(false);
+            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None);
 
             Assert.Equal(2, dto.Data.Count());
         }
@@ -113,7 +113,7 @@ namespace EngineBay.Blueprints.Tests
                 SortOrder = SortOrderType.Descending,
             };
 
-            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None).ConfigureAwait(false);
+            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None);
             var first = dto.Data.First();
             Assert.Equal("apparent_maroon_jackal", first.Expression);
         }
@@ -129,7 +129,7 @@ namespace EngineBay.Blueprints.Tests
                 SortOrder = SortOrderType.Ascending,
             };
 
-            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None).ConfigureAwait(false);
+            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None);
             var first = dto.Data.First();
             Assert.Equal("youngest_ivory_shrimp + musical_indigo_mink + enthusiastic_maroon_lark * enthusiastic_maroon_lark + musical_indigo_mink / ill_aquamarine_panther - cognitive_turquoise_coyote - youngest_ivory_shrimp", first.Expression);
         }
@@ -144,7 +144,7 @@ namespace EngineBay.Blueprints.Tests
                 SortBy = "Expression",
             };
 
-            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None).ConfigureAwait(false);
+            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None);
             var first = dto.Data.First();
             Assert.Equal("cognitive_turquoise_coyote - youngest_ivory_shrimp * enthusiastic_maroon_lark / musical_indigo_mink / ill_aquamarine_panther - youngest_ivory_shrimp - enthusiastic_maroon_lark - musical_indigo_mink", first.Expression);
         }
@@ -159,7 +159,7 @@ namespace EngineBay.Blueprints.Tests
                 SortOrder = SortOrderType.Descending,
             };
 
-            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None).ConfigureAwait(false);
+            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None);
             var first = dto.Data.First();
             Assert.Equal("cognitive_turquoise_coyote - youngest_ivory_shrimp * enthusiastic_maroon_lark / musical_indigo_mink / ill_aquamarine_panther - youngest_ivory_shrimp - enthusiastic_maroon_lark - musical_indigo_mink", first.Expression);
         }
@@ -174,7 +174,7 @@ namespace EngineBay.Blueprints.Tests
                 Search = "sneaky snakes",
             };
 
-            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None).ConfigureAwait(false);
+            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None);
 
             var first = dto.Data.First();
             Assert.Equal("An expression for blueprint 0 and sneaky snakes", first.Objective);

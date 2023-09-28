@@ -34,7 +34,7 @@ namespace EngineBay.Blueprints.Tests
 
             var filteredPaginationParameters = new FilteredPaginationParameters<ExpressionBlueprint>();
 
-            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None).ConfigureAwait(false);
+            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None);
 
             Assert.Equal(8, dto.Total);
         }
@@ -49,7 +49,7 @@ namespace EngineBay.Blueprints.Tests
                 Search = "sneaky snakes",
             };
 
-            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None).ConfigureAwait(false);
+            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None);
 
             var first = dto.Data.First();
             Assert.Equal("An expression for blueprint 0 and sneaky snakes", first.Objective);
@@ -66,13 +66,13 @@ namespace EngineBay.Blueprints.Tests
                 Search = "sneaky snakes",
             };
 
-            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None).ConfigureAwait(false);
+            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None);
 
             var first = dto.Data.First();
 
             var entityQuery = new GetExpressionBlueprintMetaData(this.BlueprintsDbContext);
 
-            var metaData = await entityQuery.Handle(first.Id, CancellationToken.None).ConfigureAwait(false);
+            var metaData = await entityQuery.Handle(first.Id, CancellationToken.None);
 
             Assert.Equal("An expression for blueprint 0 and sneaky snakes", metaData.Objective);
         }

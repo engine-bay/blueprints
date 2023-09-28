@@ -1,5 +1,6 @@
 namespace EngineBay.Blueprints
 {
+    using System.Security.Claims;
     using EngineBay.Core;
 
     public static class WorkbookMetaDataEndpoints
@@ -11,7 +12,7 @@ namespace EngineBay.Blueprints
                var searchParameters = new SearchParameters(search, skip, limit, sortBy, sortOrder);
                var filteredPaginationParameters = new FilteredPaginationParameters<Workbook>(searchParameters, filter);
 
-               var paginatedDtos = await query.Handle(filteredPaginationParameters, cancellation).ConfigureAwait(false);
+               var paginatedDtos = await query.Handle(filteredPaginationParameters, cancellation);
                return Results.Ok(paginatedDtos);
            }).RequireAuthorization()
             .WithTags(new string[]
@@ -22,7 +23,18 @@ namespace EngineBay.Blueprints
 
             endpoints.MapGet("/meta-data/workbooks/{id}", async (GetWorkbookMetaData query, Guid id, CancellationToken cancellation) =>
             {
-                var dto = await query.Handle(id, cancellation).ConfigureAwait(false);
+                var dto = await query.Handle(id, cancellation);
+                return Results.Ok(dto);
+            }).RequireAuthorization()
+            .WithTags(new string[]
+            {
+                ApiGroupNameConstants.MetaData,
+                ApiGroupNameConstants.Workbooks,
+            });
+
+            endpoints.MapDelete("/meta-data/workbooks/{id}", async (DeleteWorkbook command, Guid id, ClaimsPrincipal claimsPrincipal, CancellationToken cancellation) =>
+            {
+                var dto = await command.Handle(id, claimsPrincipal, cancellation);
                 return Results.Ok(dto);
             }).RequireAuthorization()
             .WithTags(new string[]

@@ -4,10 +4,9 @@ namespace EngineBay.Blueprints
     using EngineBay.Persistence;
     using FluentValidation;
 
-    public class BlueprintsModule : IModule
+    public class BlueprintsModule : BaseModule
     {
-        /// <inheritdoc/>
-        public IServiceCollection RegisterModule(IServiceCollection services, IConfiguration configuration)
+        public override IServiceCollection RegisterModule(IServiceCollection services, IConfiguration configuration)
         {
             // Register commands
             services.AddTransient<CreateBlueprint>();
@@ -102,8 +101,7 @@ namespace EngineBay.Blueprints
             return services;
         }
 
-        /// <inheritdoc/>
-        public IEndpointRouteBuilder MapEndpoints(IEndpointRouteBuilder endpoints)
+        public override RouteGroupBuilder MapEndpoints(RouteGroupBuilder endpoints)
         {
             BlueprintEndpoints.MapEndpoints(endpoints);
             BlueprintMetaDataEndpoints.MapEndpoints(endpoints);
@@ -122,11 +120,6 @@ namespace EngineBay.Blueprints
             TriggerExpressionBlueprints.MapEndpoints(endpoints);
 
             return endpoints;
-        }
-
-        public WebApplication AddMiddleware(WebApplication app)
-        {
-            return app;
         }
     }
 }
