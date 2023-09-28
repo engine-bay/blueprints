@@ -121,5 +121,11 @@ namespace EngineBay.Blueprints
 
             return endpoints;
         }
+
+        public override void SeedDatabase(string seedDataPath, IServiceProvider serviceProvider)
+        {
+            this.LoadSeedData<Workbook, WorkbookDto, CreateWorkbook>(seedDataPath, "*.workbooks.json", serviceProvider);
+            return;
+        }
     }
 }
