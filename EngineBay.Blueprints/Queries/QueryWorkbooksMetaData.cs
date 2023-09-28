@@ -31,7 +31,7 @@ namespace EngineBay.Blueprints
             var search = filteredPaginationParameters.Search;
             Expression<Func<Workbook, bool>>? searchPredicate = entity => entity.Name != null && EF.Functions.Like(entity.Name, $"%{search}%");
 
-            var total = await this.db.Workbooks.Where(filterPredicate).Where(searchPredicate).CountAsync(cancellation).ConfigureAwait(false);
+            var total = await this.db.Workbooks.Where(filterPredicate).Where(searchPredicate).CountAsync(cancellation);
 
             var query = this.db.Workbooks
                 .Where(filterPredicate)
@@ -56,7 +56,7 @@ namespace EngineBay.Blueprints
             var workbookDtos = limit > 0 ? await query
                 .Select(workbook => new WorkbookMetaDataDto(workbook))
                 .ToListAsync(cancellation)
-                .ConfigureAwait(false) : new List<WorkbookMetaDataDto>();
+                 : new List<WorkbookMetaDataDto>();
 
             return new PaginatedDto<WorkbookMetaDataDto>(total, skip, limit, workbookDtos);
         }

@@ -31,7 +31,7 @@ namespace EngineBay.Blueprints
             var search = filteredPaginationParameters.Search;
             Expression<Func<TriggerExpressionBlueprint, bool>>? searchPredicate = entity => entity.Objective != null && EF.Functions.Like(entity.Objective, $"%{search}%");
 
-            var total = await this.db.TriggerExpressionBlueprints.Where(filterPredicate).Where(searchPredicate).CountAsync(cancellation).ConfigureAwait(false);
+            var total = await this.db.TriggerExpressionBlueprints.Where(filterPredicate).Where(searchPredicate).CountAsync(cancellation);
 
             var query = this.db.TriggerExpressionBlueprints
                             .Include(x => x.InputDataVariableBlueprint)
@@ -57,7 +57,7 @@ namespace EngineBay.Blueprints
             var triggerExpressionBlueprintDtos = limit > 0 ? await query
                 .Select(triggerExpressionBlueprint => new TriggerExpressionBlueprintDto(triggerExpressionBlueprint))
                 .ToListAsync(cancellation)
-                .ConfigureAwait(false) : new List<TriggerExpressionBlueprintDto>();
+                 : new List<TriggerExpressionBlueprintDto>();
 
             return new PaginatedDto<TriggerExpressionBlueprintDto>(total, skip, limit, triggerExpressionBlueprintDtos);
         }

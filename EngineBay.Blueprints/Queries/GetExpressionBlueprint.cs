@@ -24,7 +24,7 @@ namespace EngineBay.Blueprints
                             .Select(expressionBlueprint => new ExpressionBlueprintDto(expressionBlueprint))
                             .AsExpandable()
                             .FirstAsync(cancellation)
-                            .ConfigureAwait(false);
+                            ;
         }
     }
 }

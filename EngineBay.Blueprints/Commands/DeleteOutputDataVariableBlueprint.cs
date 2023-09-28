@@ -19,8 +19,8 @@ namespace EngineBay.Blueprints
         /// <inheritdoc/>
         public async Task<OutputDataVariableBlueprintDto> Handle(Guid id, ClaimsPrincipal claimsPrincipal, CancellationToken cancellation)
         {
-            var user = await this.getApplicationUserQuery.Handle(claimsPrincipal, cancellation).ConfigureAwait(false);
-            var outputDataVariableBlueprint = await this.db.OutputDataVariableBlueprints.FindAsync(new object[] { id }, cancellation).ConfigureAwait(false);
+            var user = await this.getApplicationUserQuery.Handle(claimsPrincipal, cancellation);
+            var outputDataVariableBlueprint = await this.db.OutputDataVariableBlueprints.FindAsync(new object[] { id }, cancellation);
 
             if (outputDataVariableBlueprint is null)
             {
@@ -28,7 +28,7 @@ namespace EngineBay.Blueprints
             }
 
             this.db.OutputDataVariableBlueprints.Remove(outputDataVariableBlueprint);
-            await this.db.SaveChangesAsync(user, cancellation).ConfigureAwait(false);
+            await this.db.SaveChangesAsync(user, cancellation);
             return new OutputDataVariableBlueprintDto(outputDataVariableBlueprint);
         }
     }

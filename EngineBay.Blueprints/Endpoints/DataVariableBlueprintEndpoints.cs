@@ -12,7 +12,7 @@ namespace EngineBay.Blueprints
                 var searchParameters = new SearchParameters(search, skip, limit, sortBy, sortOrder);
                 var filteredPaginationParameters = new FilteredPaginationParameters<DataVariableBlueprint>(searchParameters, filter);
 
-                var paginatedDtos = await query.Handle(filteredPaginationParameters, cancellation).ConfigureAwait(false);
+                var paginatedDtos = await query.Handle(filteredPaginationParameters, cancellation);
                 return Results.Ok(paginatedDtos);
             }).RequireAuthorization()
             .WithTags(new string[]
@@ -25,7 +25,7 @@ namespace EngineBay.Blueprints
                 var searchParameters = new SearchParameters(search, skip, limit, sortBy, sortOrder);
                 var filteredPaginationParameters = new FilteredPaginationParameters<DataVariableBlueprint>(searchParameters, x => x.BlueprintId == blueprintId);
 
-                var paginatedDtos = await query.Handle(filteredPaginationParameters, cancellation).ConfigureAwait(false);
+                var paginatedDtos = await query.Handle(filteredPaginationParameters, cancellation);
                 return Results.Ok(paginatedDtos);
             }).RequireAuthorization()
             .WithTags(new string[]
@@ -35,7 +35,7 @@ namespace EngineBay.Blueprints
 
             endpoints.MapGet("/data-variable-blueprints/{id}", async (GetDataVariableBlueprint query, Guid id, CancellationToken cancellation) =>
             {
-                var dto = await query.Handle(id, cancellation).ConfigureAwait(false);
+                var dto = await query.Handle(id, cancellation);
                 return Results.Ok(dto);
             }).RequireAuthorization()
             .WithTags(new string[]
@@ -45,7 +45,7 @@ namespace EngineBay.Blueprints
 
             endpoints.MapPost("/data-variable-blueprints", async (CreateDataVariableBlueprint command, DataVariableBlueprint dataVariableBlueprint, ClaimsPrincipal claimsPrincipal, CancellationToken cancellation) =>
             {
-                var dto = await command.Handle(dataVariableBlueprint, claimsPrincipal, cancellation).ConfigureAwait(false);
+                var dto = await command.Handle(dataVariableBlueprint, claimsPrincipal, cancellation);
                 return Results.Created($"/data-variable-blueprints/{dataVariableBlueprint.Id}", dto);
             }).RequireAuthorization()
             .WithTags(new string[]
@@ -60,7 +60,7 @@ namespace EngineBay.Blueprints
                     Id = id,
                     Entity = updateDataVariableBlueprint,
                 };
-                var dto = await command.Handle(updateParameters, claimsPrincipal, cancellation).ConfigureAwait(false);
+                var dto = await command.Handle(updateParameters, claimsPrincipal, cancellation);
                 return Results.Ok(dto);
             }).RequireAuthorization()
             .WithTags(new string[]
@@ -70,7 +70,7 @@ namespace EngineBay.Blueprints
 
             endpoints.MapDelete("/data-variable-blueprints/{id}", async (DeleteBlueprint command, Guid id, ClaimsPrincipal claimsPrincipal, CancellationToken cancellation) =>
             {
-                var dto = await command.Handle(id, claimsPrincipal, cancellation).ConfigureAwait(false);
+                var dto = await command.Handle(id, claimsPrincipal, cancellation);
                 return Results.Ok(dto);
             }).RequireAuthorization()
             .WithTags(new string[]

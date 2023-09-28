@@ -16,7 +16,7 @@ namespace EngineBay.Blueprints
         /// <inheritdoc/>
         public async Task<WorkbookComplexityScoreDto> Handle(Guid id, CancellationToken cancellation)
         {
-            var workbook = await this.query.Handle(id, cancellation).ConfigureAwait(false);
+            var workbook = await this.query.Handle(id, cancellation);
 
             if (workbook is null)
             {

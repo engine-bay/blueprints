@@ -22,7 +22,7 @@ namespace EngineBay.Blueprints
         /// <inheritdoc/>
         public async Task<BlueprintDto> Handle(Guid id, ClaimsPrincipal claimsPrincipal, CancellationToken cancellation)
         {
-            var user = await this.getApplicationUserQuery.Handle(claimsPrincipal, cancellation).ConfigureAwait(false);
+            var user = await this.getApplicationUserQuery.Handle(claimsPrincipal, cancellation);
             var blueprint = await this.db.Blueprints
                     .Include(blueprint => blueprint.ExpressionBlueprints)
                         .ThenInclude(expressionBlueprint => expressionBlueprint.InputDataTableBlueprints)
@@ -44,7 +44,7 @@ namespace EngineBay.Blueprints
                 .Where(blueprint => blueprint.Id == id)
                 .AsExpandable()
                 .FirstAsync(cancellation)
-                .ConfigureAwait(false);
+                ;
 
             if (blueprint is null)
             {
@@ -52,7 +52,7 @@ namespace EngineBay.Blueprints
             }
 
             this.db.Blueprints.Remove(blueprint);
-            await this.db.SaveChangesAsync(user, cancellation).ConfigureAwait(false);
+            await this.db.SaveChangesAsync(user, cancellation);
             return new BlueprintDto(blueprint);
         }
     }

@@ -40,7 +40,7 @@ namespace EngineBay.Blueprints.Tests
 
             var filteredPaginationParameters = new FilteredPaginationParameters<DataVariableBlueprint>();
 
-            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None).ConfigureAwait(false);
+            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None);
 
             Assert.Equal(24, dto.Total);
         }
@@ -52,7 +52,7 @@ namespace EngineBay.Blueprints.Tests
 
             var filteredPaginationParameters = new FilteredPaginationParameters<DataVariableBlueprint>();
 
-            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None).ConfigureAwait(false);
+            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None);
 
             Assert.Equal(10, dto.Data.Count());
         }
@@ -67,7 +67,7 @@ namespace EngineBay.Blueprints.Tests
                 Limit = 0,
             };
 
-            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None).ConfigureAwait(false);
+            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None);
 
             Assert.Empty(dto.Data);
         }
@@ -82,7 +82,7 @@ namespace EngineBay.Blueprints.Tests
                 Limit = 0,
             };
 
-            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None).ConfigureAwait(false);
+            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None);
 
             Assert.Equal(24, dto.Total);
         }
@@ -97,7 +97,7 @@ namespace EngineBay.Blueprints.Tests
                 Limit = 2,
             };
 
-            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None).ConfigureAwait(false);
+            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None);
 
             Assert.Equal(2, dto.Data.Count());
         }
@@ -113,7 +113,7 @@ namespace EngineBay.Blueprints.Tests
                 SortOrder = SortOrderType.Descending,
             };
 
-            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None).ConfigureAwait(false);
+            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None);
             var first = dto.Data.First();
             Assert.Equal("AllNumbersComparedTruthy0", first.Name);
         }
@@ -129,7 +129,7 @@ namespace EngineBay.Blueprints.Tests
                 SortOrder = SortOrderType.Ascending,
             };
 
-            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None).ConfigureAwait(false);
+            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None);
             var first = dto.Data.First();
             Assert.Equal("youngest_ivory_shrimp", first.Name);
         }
@@ -144,7 +144,7 @@ namespace EngineBay.Blueprints.Tests
                 SortBy = "Name",
             };
 
-            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None).ConfigureAwait(false);
+            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None);
             var first = dto.Data.First();
             Assert.Equal("musical_indigo_mink", first.Name);
         }
@@ -159,7 +159,7 @@ namespace EngineBay.Blueprints.Tests
                 SortOrder = SortOrderType.Descending,
             };
 
-            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None).ConfigureAwait(false);
+            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None);
             var first = dto.Data.First();
             Assert.Equal("musical_indigo_mink", first.Name);
         }
@@ -174,7 +174,7 @@ namespace EngineBay.Blueprints.Tests
                 Search = "anaconda",
             };
 
-            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None).ConfigureAwait(false);
+            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None);
 
             var first = dto.Data.First();
             Assert.Equal("eager_lavender_anaconda", first.Name);

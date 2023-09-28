@@ -23,7 +23,7 @@ namespace EngineBay.Blueprints
         /// <inheritdoc/>
         public async Task<WorkbookDto> Handle(UpdateParameters<Workbook> updateParameters, ClaimsPrincipal claimsPrincipal, CancellationToken cancellation)
         {
-            var user = await this.getApplicationUserQuery.Handle(claimsPrincipal, cancellation).ConfigureAwait(false);
+            var user = await this.getApplicationUserQuery.Handle(claimsPrincipal, cancellation);
             if (updateParameters is null)
             {
                 throw new ArgumentNullException(nameof(updateParameters));
@@ -39,7 +39,7 @@ namespace EngineBay.Blueprints
 
             this.validator.ValidateAndThrow(updateWorkbook);
 
-            var workbook = await this.db.Workbooks.FindAsync(new object[] { id }, cancellation).ConfigureAwait(false);
+            var workbook = await this.db.Workbooks.FindAsync(new object[] { id }, cancellation);
 
             if (workbook is null)
             {
@@ -48,7 +48,7 @@ namespace EngineBay.Blueprints
 
             workbook.Name = updateWorkbook.Name;
             workbook.Description = updateWorkbook.Description;
-            await this.db.SaveChangesAsync(user, cancellation).ConfigureAwait(false);
+            await this.db.SaveChangesAsync(user, cancellation);
             return new WorkbookDto(workbook);
         }
     }

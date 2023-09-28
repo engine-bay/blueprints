@@ -22,10 +22,10 @@ namespace EngineBay.Blueprints
         /// <inheritdoc/>
         public async Task<DataTableCellBlueprintDto> Handle(DataTableCellBlueprint dataTableCellBlueprint, ClaimsPrincipal claimsPrincipal, CancellationToken cancellation)
         {
-            var user = await this.getApplicationUserQuery.Handle(claimsPrincipal, cancellation).ConfigureAwait(false);
+            var user = await this.getApplicationUserQuery.Handle(claimsPrincipal, cancellation);
             this.validator.ValidateAndThrow(dataTableCellBlueprint);
-            await this.db.DataTableCellBlueprints.AddAsync(dataTableCellBlueprint, cancellation).ConfigureAwait(false);
-            await this.db.SaveChangesAsync(user, cancellation).ConfigureAwait(false);
+            await this.db.DataTableCellBlueprints.AddAsync(dataTableCellBlueprint, cancellation);
+            await this.db.SaveChangesAsync(user, cancellation);
             return new DataTableCellBlueprintDto(dataTableCellBlueprint);
         }
     }

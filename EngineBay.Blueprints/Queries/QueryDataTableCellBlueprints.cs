@@ -31,7 +31,7 @@ namespace EngineBay.Blueprints
             var search = filteredPaginationParameters.Search;
             Expression<Func<DataTableCellBlueprint, bool>>? searchPredicate = entity => entity.Name != null && EF.Functions.Like(entity.Name, $"%{search}%");
 
-            var total = await this.db.DataTableCellBlueprints.Where(filterPredicate).Where(searchPredicate).CountAsync(cancellation).ConfigureAwait(false);
+            var total = await this.db.DataTableCellBlueprints.Where(filterPredicate).Where(searchPredicate).CountAsync(cancellation);
 
             var query = this.db.DataTableCellBlueprints.Where(filterPredicate).Where(searchPredicate).AsExpandable();
 #pragma warning disable CA1305
@@ -55,7 +55,7 @@ namespace EngineBay.Blueprints
             var dataTableCellBlueprintDtos = limit > 0 ? await query
                 .Select(dataTableCellBlueprint => new DataTableCellBlueprintDto(dataTableCellBlueprint))
                 .ToListAsync(cancellation)
-                .ConfigureAwait(false) : new List<DataTableCellBlueprintDto>();
+                 : new List<DataTableCellBlueprintDto>();
 
             return new PaginatedDto<DataTableCellBlueprintDto>(total, skip, limit, dataTableCellBlueprintDtos);
         }

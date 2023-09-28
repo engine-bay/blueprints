@@ -34,7 +34,7 @@ namespace EngineBay.Blueprints.Tests
 
             var filteredPaginationParameters = new FilteredPaginationParameters<Blueprint>();
 
-            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None).ConfigureAwait(false);
+            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None);
 
             Assert.Equal(8, dto.Total);
         }
@@ -49,7 +49,7 @@ namespace EngineBay.Blueprints.Tests
                 Search = "1",
             };
 
-            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None).ConfigureAwait(false);
+            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None);
 
             var first = dto.Data.First();
             Assert.Equal("Blueprint 1", first.Name);
@@ -66,13 +66,13 @@ namespace EngineBay.Blueprints.Tests
                 Search = "1",
             };
 
-            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None).ConfigureAwait(false);
+            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None);
 
             var first = dto.Data.First();
 
             var entityQuery = new GetBlueprintMetaData(this.BlueprintsDbContext);
 
-            var metaData = await entityQuery.Handle(first.Id, CancellationToken.None).ConfigureAwait(false);
+            var metaData = await entityQuery.Handle(first.Id, CancellationToken.None);
 
             Assert.Equal("Blueprint 1", metaData.Name);
         }
