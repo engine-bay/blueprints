@@ -3,7 +3,6 @@ namespace EngineBay.Blueprints
     using System.Security.Claims;
     using EngineBay.Authentication;
     using EngineBay.Core;
-    using EngineBay.Persistence;
 
     public class DeleteDataVariableBlueprint : ICommandHandler<Guid, DataVariableBlueprintDto>
     {
