@@ -29,7 +29,7 @@
 
   <ItemGroup>
     <PackageReference Include="EngineBay.Authentication" Version="1.0.0" />
-    <PackageReference Include="EngineBay.Persistence" Version="4.1.0" />
+    <PackageReference Include="EngineBay.Persistence" Version="4.1.1" />
     <PackageReference Include="HtmlSanitizer" Version="8.0.692" />
     <PackageReference Include="PrivateSetterContractResolver" Version="2.1.0" />
     <PackageReference Include="FluentValidation" Version="11.7.1" />
