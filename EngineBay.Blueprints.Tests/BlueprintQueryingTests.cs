@@ -27,9 +27,9 @@ namespace EngineBay.Blueprints.Tests
         {
             var query = new QueryBlueprints(this.DbContext);
 
-            var paginationParameters = new PaginationParameters();
+            var filteredPaginationParameters = new FilteredPaginationParameters<Blueprint>();
 
-            var dto = await query.Handle(paginationParameters, CancellationToken.None).ConfigureAwait(false);
+            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None);
 
             Assert.Equal(8, dto.Total);
         }
@@ -39,9 +39,9 @@ namespace EngineBay.Blueprints.Tests
         {
             var query = new QueryBlueprints(this.DbContext);
 
-            var paginationParameters = new PaginationParameters();
+            var filteredPaginationParameters = new FilteredPaginationParameters<Blueprint>();
 
-            var dto = await query.Handle(paginationParameters, CancellationToken.None).ConfigureAwait(false);
+            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None);
 
             Assert.Equal(8, dto.Data.Count());
         }
@@ -51,12 +51,12 @@ namespace EngineBay.Blueprints.Tests
         {
             var query = new QueryBlueprints(this.DbContext);
 
-            var paginationParameters = new PaginationParameters()
+            var filteredPaginationParameters = new FilteredPaginationParameters<Blueprint>()
             {
                 Limit = 0,
             };
 
-            var dto = await query.Handle(paginationParameters, CancellationToken.None).ConfigureAwait(false);
+            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None);
 
             Assert.Empty(dto.Data);
         }
@@ -66,12 +66,12 @@ namespace EngineBay.Blueprints.Tests
         {
             var query = new QueryBlueprints(this.DbContext);
 
-            var paginationParameters = new PaginationParameters()
+            var filteredPaginationParameters = new FilteredPaginationParameters<Blueprint>()
             {
                 Limit = 0,
             };
 
-            var dto = await query.Handle(paginationParameters, CancellationToken.None).ConfigureAwait(false);
+            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None);
 
             Assert.Equal(8, dto.Total);
         }
@@ -81,12 +81,12 @@ namespace EngineBay.Blueprints.Tests
         {
             var query = new QueryBlueprints(this.DbContext);
 
-            var paginationParameters = new PaginationParameters()
+            var filteredPaginationParameters = new FilteredPaginationParameters<Blueprint>()
             {
                 Limit = 2,
             };
 
-            var dto = await query.Handle(paginationParameters, CancellationToken.None).ConfigureAwait(false);
+            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None);
 
             Assert.Equal(2, dto.Data.Count());
         }
@@ -96,13 +96,13 @@ namespace EngineBay.Blueprints.Tests
         {
             var query = new QueryBlueprints(this.DbContext);
 
-            var paginationParameters = new PaginationParameters()
+            var filteredPaginationParameters = new FilteredPaginationParameters<Blueprint>()
             {
                 SortBy = "Name",
                 SortOrder = SortOrderType.Ascending,
             };
 
-            var dto = await query.Handle(paginationParameters, CancellationToken.None).ConfigureAwait(false);
+            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None);
             var first = dto.Data.First();
             Assert.Equal("Blueprint 0", first.Name);
         }
@@ -112,13 +112,13 @@ namespace EngineBay.Blueprints.Tests
         {
             var query = new QueryBlueprints(this.DbContext);
 
-            var paginationParameters = new PaginationParameters()
+            var filteredPaginationParameters = new FilteredPaginationParameters<Blueprint>()
             {
                 SortBy = "Name",
                 SortOrder = SortOrderType.Descending,
             };
 
-            var dto = await query.Handle(paginationParameters, CancellationToken.None).ConfigureAwait(false);
+            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None);
             var first = dto.Data.First();
             Assert.Equal("Blueprint 7", first.Name);
         }
@@ -128,12 +128,12 @@ namespace EngineBay.Blueprints.Tests
         {
             var query = new QueryBlueprints(this.DbContext);
 
-            var paginationParameters = new PaginationParameters()
+            var filteredPaginationParameters = new FilteredPaginationParameters<Blueprint>()
             {
                 SortBy = "Name",
             };
 
-            var dto = await query.Handle(paginationParameters, CancellationToken.None).ConfigureAwait(false);
+            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None);
             var first = dto.Data.First();
             Assert.Equal("Blueprint 0", first.Name);
         }
@@ -143,14 +143,31 @@ namespace EngineBay.Blueprints.Tests
         {
             var query = new QueryBlueprints(this.DbContext);
 
-            var paginationParameters = new PaginationParameters()
+            var filteredPaginationParameters = new FilteredPaginationParameters<Blueprint>()
             {
                 SortOrder = SortOrderType.Descending,
             };
 
-            var dto = await query.Handle(paginationParameters, CancellationToken.None).ConfigureAwait(false);
+            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None);
             var first = dto.Data.First();
             Assert.Equal("Blueprint 0", first.Name);
+        }
+
+        [Fact]
+        public async Task BlueprintsCanBeSearched()
+        {
+            var query = new QueryBlueprints(this.BlueprintsDbContext);
+
+            var filteredPaginationParameters = new FilteredPaginationParameters<Blueprint>()
+            {
+                Search = "1",
+            };
+
+            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None);
+
+            var first = dto.Data.First();
+            Assert.Equal("Blueprint 1", first.Name);
+            Assert.Equal(1, dto.Total);
         }
     }
 }

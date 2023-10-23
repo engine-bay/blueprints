@@ -21,7 +21,7 @@ namespace EngineBay.Blueprints
         /// <inheritdoc/>
         public async Task<WorkbookDto> Handle(Guid id, ClaimsPrincipal claimsPrincipal, CancellationToken cancellation)
         {
-            var user = await this.getApplicationUserQuery.Handle(claimsPrincipal, cancellation).ConfigureAwait(false);
+            var user = await this.getApplicationUserQuery.Handle(claimsPrincipal, cancellation);
             var workbook = await this.db.Workbooks
                 .Include(x => x.Blueprints)
                         .ThenInclude(blueprint => blueprint.ExpressionBlueprints)
@@ -51,7 +51,7 @@ namespace EngineBay.Blueprints
                 .Where(workbook => workbook.Id == id)
                 .AsExpandable()
                 .FirstAsync(cancellation)
-                .ConfigureAwait(false);
+                ;
 
             if (workbook is null)
             {
@@ -59,7 +59,7 @@ namespace EngineBay.Blueprints
             }
 
             this.db.Workbooks.Remove(workbook);
-            await this.db.SaveChangesAsync(user, cancellation).ConfigureAwait(false);
+            await this.db.SaveChangesAsync(user, cancellation);
             return new WorkbookDto(workbook);
         }
     }

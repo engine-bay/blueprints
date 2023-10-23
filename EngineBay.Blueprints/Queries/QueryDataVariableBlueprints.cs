@@ -7,7 +7,7 @@ namespace EngineBay.Blueprints
     using LinqKit;
     using Microsoft.EntityFrameworkCore;
 
-    public class QueryDataVariableBlueprints : PaginatedQuery<DataVariableBlueprint>, IQueryHandler<PaginationParameters, PaginatedDto<DataVariableBlueprintDto>>
+    public class QueryDataVariableBlueprints : PaginatedQuery<DataVariableBlueprint>, IQueryHandler<FilteredPaginationParameters<DataVariableBlueprint>, PaginatedDto<DataVariableBlueprintDto>>
     {
         private readonly BlueprintsQueryDbContext db;
 
@@ -17,39 +17,47 @@ namespace EngineBay.Blueprints
         }
 
         /// <inheritdoc/>
-        public async Task<PaginatedDto<DataVariableBlueprintDto>> Handle(PaginationParameters paginationParameters, CancellationToken cancellation)
+        public async Task<PaginatedDto<DataVariableBlueprintDto>> Handle(FilteredPaginationParameters<DataVariableBlueprint> filteredPaginationParameters, CancellationToken cancellation)
         {
-            if (paginationParameters is null)
+            if (filteredPaginationParameters is null)
             {
-                throw new ArgumentNullException(nameof(paginationParameters));
+                throw new ArgumentNullException(nameof(filteredPaginationParameters));
             }
 
-            var limit = paginationParameters.Limit;
-            var skip = limit > 0 ? paginationParameters.Skip : 0;
+            var limit = filteredPaginationParameters.Limit;
+            var skip = limit > 0 ? filteredPaginationParameters.Skip : 0;
+            var filterPredicate = filteredPaginationParameters.FilterPredicate is null ? x => true : filteredPaginationParameters.FilterPredicate;
 
-            var total = await this.db.DataVariableBlueprints.CountAsync(cancellation).ConfigureAwait(false);
+            var search = filteredPaginationParameters.Search;
+            Expression<Func<DataVariableBlueprint, bool>>? searchPredicate = entity => entity.Name != null && EF.Functions.Like(entity.Name, $"%{search}%");
 
-            var query = this.db.DataVariableBlueprints.AsExpandable();
+            var total = await this.db.DataVariableBlueprints.Where(filterPredicate).Where(searchPredicate).CountAsync(cancellation);
 
-            Expression<Func<DataVariableBlueprint, string?>> sortByPredicate = paginationParameters.SortBy switch
+            var query = this.db.DataVariableBlueprints.Where(filterPredicate).Where(searchPredicate).AsExpandable();
+
+#pragma warning disable CA1305
+
+            // DateTime Tostrings cannot CultureInfo.InvariantCulture because SQL does not know how to interpret this
+            Expression<Func<DataVariableBlueprint, string?>> sortByPredicate = filteredPaginationParameters.SortBy switch
             {
-                nameof(DataVariableBlueprint.CreatedAt) => dataVariableBlueprint => dataVariableBlueprint.CreatedAt.ToString(CultureInfo.InvariantCulture),
-                nameof(DataVariableBlueprint.LastUpdatedAt) => dataVariableBlueprint => dataVariableBlueprint.LastUpdatedAt.ToString(CultureInfo.InvariantCulture),
-                nameof(DataVariableBlueprint.Name) => dataVariableBlueprint => dataVariableBlueprint.Name,
-                nameof(DataVariableBlueprint.Namespace) => dataVariableBlueprint => dataVariableBlueprint.Namespace,
-                nameof(DataVariableBlueprint.Type) => dataVariableBlueprint => dataVariableBlueprint.Type,
-                nameof(DataVariableBlueprint.DefaultValue) => dataVariableBlueprint => dataVariableBlueprint.DefaultValue,
-                nameof(DataVariableBlueprint.Description) => dataVariableBlueprint => dataVariableBlueprint.Description,
-                _ => throw new ArgumentNullException(paginationParameters.SortBy),
+                string sortBy when sortBy.Equals(nameof(DataVariableBlueprint.Id), StringComparison.OrdinalIgnoreCase) => entity => entity.Id.ToString(),
+                string sortBy when sortBy.Equals(nameof(DataVariableBlueprint.CreatedAt), StringComparison.OrdinalIgnoreCase) => entity => entity.CreatedAt.ToString(),
+                string sortBy when sortBy.Equals(nameof(DataVariableBlueprint.LastUpdatedAt), StringComparison.OrdinalIgnoreCase) => entity => entity.LastUpdatedAt.ToString(),
+                string sortBy when sortBy.Equals(nameof(DataVariableBlueprint.Name), StringComparison.OrdinalIgnoreCase) => entity => entity.Name,
+                string sortBy when sortBy.Equals(nameof(DataVariableBlueprint.Description), StringComparison.OrdinalIgnoreCase) => entity => entity.Description,
+                string sortBy when sortBy.Equals(nameof(DataVariableBlueprint.Namespace), StringComparison.OrdinalIgnoreCase) => entity => entity.Namespace,
+                string sortBy when sortBy.Equals(nameof(DataVariableBlueprint.Type), StringComparison.OrdinalIgnoreCase) => entity => entity.Type,
+                string sortBy when sortBy.Equals(nameof(DataVariableBlueprint.DefaultValue), StringComparison.OrdinalIgnoreCase) => entity => entity.DefaultValue,
+                _ => throw new ArgumentNullException(filteredPaginationParameters.SortBy),
             };
-
-            query = this.Sort(query, sortByPredicate, paginationParameters);
-            query = this.Paginate(query, paginationParameters);
+#pragma warning restore CA1305
+            query = this.Sort(query, sortByPredicate, filteredPaginationParameters);
+            query = this.Paginate(query, filteredPaginationParameters);
 
             var dataVariableBlueprintDtos = limit > 0 ? await query
                 .Select(dataVariableBlueprint => new DataVariableBlueprintDto(dataVariableBlueprint))
                 .ToListAsync(cancellation)
-                .ConfigureAwait(false) : new List<DataVariableBlueprintDto>();
+                 : new List<DataVariableBlueprintDto>();
 
             return new PaginatedDto<DataVariableBlueprintDto>(total, skip, limit, dataVariableBlueprintDtos);
         }

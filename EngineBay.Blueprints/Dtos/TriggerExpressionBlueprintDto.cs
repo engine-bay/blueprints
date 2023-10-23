@@ -1,17 +1,18 @@
 namespace EngineBay.Blueprints
 {
     using System;
+    using EngineBay.Core;
 
-    public class TriggerExpressionBlueprintDto
+    public class TriggerExpressionBlueprintDto : BaseDto
     {
         public TriggerExpressionBlueprintDto(TriggerExpressionBlueprint triggerExpressionBlueprint)
+            : base(triggerExpressionBlueprint)
         {
             if (triggerExpressionBlueprint is null)
             {
                 throw new ArgumentNullException(nameof(triggerExpressionBlueprint));
             }
 
-            this.Id = triggerExpressionBlueprint.Id;
             this.TriggerBlueprintId = triggerExpressionBlueprint.TriggerBlueprintId;
             this.Expression = triggerExpressionBlueprint.Expression;
             this.Objective = triggerExpressionBlueprint.Objective;
@@ -22,8 +23,6 @@ namespace EngineBay.Blueprints
                 this.InputDataVariableBlueprint = new InputDataVariableBlueprintDto(triggerExpressionBlueprint.InputDataVariableBlueprint);
             }
         }
-
-        public Guid Id { get; set; }
 
         public Guid? TriggerBlueprintId { get; set; }
 

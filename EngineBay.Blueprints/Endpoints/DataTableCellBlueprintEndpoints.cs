@@ -7,27 +7,27 @@ namespace EngineBay.Blueprints
     {
         public static void MapEndpoints(IEndpointRouteBuilder endpoints)
         {
-            endpoints.MapGet("/data-table-cell-blueprints", async (QueryDataTableCellBlueprints query, int? skip, int? limit, string? sortBy, SortOrderType? sortOrder, CancellationToken cancellation) =>
+            endpoints.MapGet("/data-table-cell-blueprints", async (QueryDataTableCellBlueprints query, FilterParameters? filter, string? search, int? skip, int? limit, string? sortBy, SortOrderType? sortOrder, CancellationToken cancellation) =>
             {
-                var paginationParameters = new PaginationParameters(skip, limit, sortBy, sortOrder);
+                var searchParameters = new SearchParameters(search, skip, limit, sortBy, sortOrder);
+                var filteredPaginationParameters = new FilteredPaginationParameters<DataTableCellBlueprint>(searchParameters, filter);
 
-                var paginatedDtos = await query.Handle(paginationParameters, cancellation).ConfigureAwait(false);
+                var paginatedDtos = await query.Handle(filteredPaginationParameters, cancellation);
                 return Results.Ok(paginatedDtos);
             }).RequireAuthorization()
-            .WithGroupName(ApiGroupNameConstants.DataTableCellBlueprints)
             .WithTags(new string[]
             {
                 ApiGroupNameConstants.DataTableCellBlueprints,
             });
 
-            endpoints.MapGet("/workbooks/{workbookId}/blueprints/{blueprintId}/data-table-blueprints/{dataTableBlueprintId}/data-table-row-blueprints/{dataTableRowBlueprintId}/data-table-cell-blueprints", async (QueryFilteredDataTableCellBlueprints query, Guid dataTableRowBlueprintId, int? skip, int? limit, string? sortBy, SortOrderType? sortOrder, CancellationToken cancellation) =>
+            endpoints.MapGet("/workbooks/{workbookId}/blueprints/{blueprintId}/data-table-blueprints/{dataTableBlueprintId}/data-table-row-blueprints/{dataTableRowBlueprintId}/data-table-cell-blueprints", async (QueryDataTableCellBlueprints query, Guid dataTableRowBlueprintId, string? search, int? skip, int? limit, string? sortBy, SortOrderType? sortOrder, CancellationToken cancellation) =>
             {
-                var filteredPaginationParameters = new FilteredPaginationParameters<DataTableCellBlueprint>(skip, limit, sortBy, sortOrder, x => x.DataTableRowBlueprintId == dataTableRowBlueprintId);
+                var searchParameters = new SearchParameters(search, skip, limit, sortBy, sortOrder);
+                var filteredPaginationParameters = new FilteredPaginationParameters<DataTableCellBlueprint>(searchParameters, x => x.DataTableRowBlueprintId == dataTableRowBlueprintId);
 
-                var paginatedDtos = await query.Handle(filteredPaginationParameters, cancellation).ConfigureAwait(false);
+                var paginatedDtos = await query.Handle(filteredPaginationParameters, cancellation);
                 return Results.Ok(paginatedDtos);
             }).RequireAuthorization()
-            .WithGroupName(ApiGroupNameConstants.DataTableCellBlueprints)
             .WithTags(new string[]
             {
                 ApiGroupNameConstants.DataTableCellBlueprints,
@@ -35,10 +35,9 @@ namespace EngineBay.Blueprints
 
             endpoints.MapGet("/data-table-cell-blueprints/{id}", async (GetDataTableCellBlueprint query, Guid id, CancellationToken cancellation) =>
             {
-                var dto = await query.Handle(id, cancellation).ConfigureAwait(false);
+                var dto = await query.Handle(id, cancellation);
                 return Results.Ok(dto);
             }).RequireAuthorization()
-            .WithGroupName(ApiGroupNameConstants.DataTableCellBlueprints)
             .WithTags(new string[]
             {
                 ApiGroupNameConstants.DataTableCellBlueprints,
@@ -46,10 +45,9 @@ namespace EngineBay.Blueprints
 
             endpoints.MapPost("/data-table-cell-blueprints", async (CreateDataTableCellBlueprint command, DataTableCellBlueprint dataTableCellBlueprint, ClaimsPrincipal claimsPrincipal, CancellationToken cancellation) =>
             {
-                var dto = await command.Handle(dataTableCellBlueprint, claimsPrincipal, cancellation).ConfigureAwait(false);
+                var dto = await command.Handle(dataTableCellBlueprint, claimsPrincipal, cancellation);
                 return Results.Created($"/data-table-cell-blueprints/{dataTableCellBlueprint.Id}", dto);
             }).RequireAuthorization()
-            .WithGroupName(ApiGroupNameConstants.DataTableCellBlueprints)
             .WithTags(new string[]
             {
                 ApiGroupNameConstants.DataTableCellBlueprints,
@@ -62,10 +60,9 @@ namespace EngineBay.Blueprints
                     Id = id,
                     Entity = updateDataTableCellBlueprint,
                 };
-                var dto = await command.Handle(updateParameters, claimsPrincipal, cancellation).ConfigureAwait(false);
+                var dto = await command.Handle(updateParameters, claimsPrincipal, cancellation);
                 return Results.Ok(dto);
             }).RequireAuthorization()
-            .WithGroupName(ApiGroupNameConstants.DataTableCellBlueprints)
             .WithTags(new string[]
             {
                 ApiGroupNameConstants.DataTableCellBlueprints,
@@ -73,10 +70,9 @@ namespace EngineBay.Blueprints
 
             endpoints.MapDelete("/data-table-cell-blueprints/{id}", async (DeleteBlueprint command, Guid id, ClaimsPrincipal claimsPrincipal, CancellationToken cancellation) =>
             {
-                var dto = await command.Handle(id, claimsPrincipal, cancellation).ConfigureAwait(false);
+                var dto = await command.Handle(id, claimsPrincipal, cancellation);
                 return Results.Ok(dto);
             }).RequireAuthorization()
-            .WithGroupName(ApiGroupNameConstants.DataTableCellBlueprints)
             .WithTags(new string[]
             {
                 ApiGroupNameConstants.DataTableCellBlueprints,

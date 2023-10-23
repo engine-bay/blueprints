@@ -22,7 +22,7 @@ namespace EngineBay.Blueprints
         /// <inheritdoc/>
         public async Task<OutputDataVariableBlueprintDto> Handle(UpdateParameters<OutputDataVariableBlueprint> updateParameters, ClaimsPrincipal claimsPrincipal, CancellationToken cancellation)
         {
-            var user = await this.getApplicationUserQuery.Handle(claimsPrincipal, cancellation).ConfigureAwait(false);
+            var user = await this.getApplicationUserQuery.Handle(claimsPrincipal, cancellation);
             if (updateParameters is null)
             {
                 throw new ArgumentNullException(nameof(updateParameters));
@@ -38,7 +38,7 @@ namespace EngineBay.Blueprints
 
             this.validator.ValidateAndThrow(updateOutputDataVariableBlueprint);
 
-            var outputDataVariableBlueprint = await this.db.OutputDataVariableBlueprints.FindAsync(new object[] { id }, cancellation).ConfigureAwait(false);
+            var outputDataVariableBlueprint = await this.db.OutputDataVariableBlueprints.FindAsync(new object[] { id }, cancellation);
 
             if (outputDataVariableBlueprint is null)
             {
@@ -48,7 +48,7 @@ namespace EngineBay.Blueprints
             outputDataVariableBlueprint.Name = updateOutputDataVariableBlueprint.Name;
             outputDataVariableBlueprint.Namespace = updateOutputDataVariableBlueprint.Namespace;
             outputDataVariableBlueprint.Type = updateOutputDataVariableBlueprint.Type;
-            await this.db.SaveChangesAsync(user, cancellation).ConfigureAwait(false);
+            await this.db.SaveChangesAsync(user, cancellation);
             return new OutputDataVariableBlueprintDto(outputDataVariableBlueprint);
         }
     }

@@ -22,7 +22,7 @@ namespace EngineBay.Blueprints
                         .Select(dataTableRowBlueprint => new DataTableRowBlueprintDto(dataTableRowBlueprint))
                         .AsExpandable()
                         .FirstAsync(cancellation)
-                        .ConfigureAwait(false);
+                        ;
         }
     }
 }

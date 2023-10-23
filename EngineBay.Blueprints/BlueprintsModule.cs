@@ -4,10 +4,9 @@ namespace EngineBay.Blueprints
     using EngineBay.Persistence;
     using FluentValidation;
 
-    public class BlueprintsModule : IModule
+    public class BlueprintsModule : BaseModule
     {
-        /// <inheritdoc/>
-        public IServiceCollection RegisterModule(IServiceCollection services, IConfiguration configuration)
+        public override IServiceCollection RegisterModule(IServiceCollection services, IConfiguration configuration)
         {
             // Register commands
             services.AddTransient<CreateBlueprint>();
@@ -49,41 +48,35 @@ namespace EngineBay.Blueprints
 
             // Register queries
             services.AddTransient<QueryBlueprints>();
-            services.AddTransient<QueryFilteredBlueprints>();
+            services.AddTransient<QueryBlueprintsMetaData>();
             services.AddTransient<GetBlueprint>();
+            services.AddTransient<GetBlueprintMetaData>();
             services.AddTransient<GetDataVariableBlueprint>();
             services.AddTransient<QueryDataVariableBlueprints>();
-            services.AddTransient<QueryFilteredDataVariableBlueprints>();
             services.AddTransient<GetExpressionBlueprint>();
+            services.AddTransient<GetExpressionBlueprintMetaData>();
             services.AddTransient<QueryExpressionBlueprints>();
-            services.AddTransient<QueryFilteredExpressionBlueprints>();
+            services.AddTransient<QueryExpressionBlueprintsMetaData>();
             services.AddTransient<GetDataTableBlueprint>();
             services.AddTransient<QueryDataTableBlueprints>();
-            services.AddTransient<QueryFilteredDataTableBlueprints>();
             services.AddTransient<GetWorkbook>();
+            services.AddTransient<GetWorkbookMetaData>();
             services.AddTransient<QueryWorkbooks>();
+            services.AddTransient<QueryWorkbooksMetaData>();
             services.AddTransient<GetWorkbookComplexityScore>();
             services.AddTransient<GetInputDataVariableBlueprint>();
             services.AddTransient<QueryInputDataVariableBlueprints>();
-            services.AddTransient<QueryFilteredInputDataVariableBlueprints>();
-            services.AddTransient<QueryFilteredDataVariableBlueprints>();
-            services.AddTransient<QueryFilteredDataTableColumnBlueprints>();
             services.AddTransient<GetDataTableColumnBlueprint>();
             services.AddTransient<QueryDataTableColumnBlueprints>();
-            services.AddTransient<QueryFilteredDataTableRowBlueprints>();
             services.AddTransient<GetDataTableRowBlueprint>();
             services.AddTransient<QueryDataTableRowBlueprints>();
-            services.AddTransient<QueryFilteredDataTableCellBlueprints>();
             services.AddTransient<GetDataTableCellBlueprint>();
             services.AddTransient<QueryDataTableCellBlueprints>();
             services.AddTransient<QueryTriggerBlueprints>();
-            services.AddTransient<QueryFilteredTriggerBlueprints>();
             services.AddTransient<GetTriggerBlueprint>();
             services.AddTransient<QueryTriggerExpressionBlueprints>();
-            services.AddTransient<QueryFilteredTriggerExpressionBlueprints>();
             services.AddTransient<GetTriggerExpressionBlueprint>();
             services.AddTransient<QueryOutputDataVariableBlueprints>();
-            services.AddTransient<QueryFilteredOutputDataVariableBlueprints>();
             services.AddTransient<GetOutputDataVariableBlueprint>();
 
             // Register validators
@@ -108,14 +101,16 @@ namespace EngineBay.Blueprints
             return services;
         }
 
-        /// <inheritdoc/>
-        public IEndpointRouteBuilder MapEndpoints(IEndpointRouteBuilder endpoints)
+        public override RouteGroupBuilder MapEndpoints(RouteGroupBuilder endpoints)
         {
             BlueprintEndpoints.MapEndpoints(endpoints);
+            BlueprintMetaDataEndpoints.MapEndpoints(endpoints);
             DataVariableBlueprintEndpoints.MapEndpoints(endpoints);
             DataTableBlueprintEndpoints.MapEndpoints(endpoints);
             ExpressionBlueprints.MapEndpoints(endpoints);
+            ExpressionBlueprintsMetaDataEndpoints.MapEndpoints(endpoints);
             WorkbookEndpoints.MapEndpoints(endpoints);
+            WorkbookMetaDataEndpoints.MapEndpoints(endpoints);
             InputDataVariableBlueprintEndpoints.MapEndpoints(endpoints);
             OutputDataVariableBlueprintEndpoints.MapEndpoints(endpoints);
             DataTableColumnBlueprintEndpoints.MapEndpoints(endpoints);
@@ -127,9 +122,10 @@ namespace EngineBay.Blueprints
             return endpoints;
         }
 
-        public WebApplication AddMiddleware(WebApplication app)
+        public override void SeedDatabase(string seedDataPath, IServiceProvider serviceProvider)
         {
-            return app;
+            this.LoadSeedData<Workbook, WorkbookDto, CreateWorkbook>(seedDataPath, "*.workbooks.json", serviceProvider);
+            return;
         }
     }
 }

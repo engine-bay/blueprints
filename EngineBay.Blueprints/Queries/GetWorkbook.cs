@@ -49,7 +49,7 @@ namespace EngineBay.Blueprints
                 .Select(workbook => new WorkbookDto(workbook))
                 .AsExpandable()
                 .FirstAsync(cancellation)
-                .ConfigureAwait(false);
+                ;
         }
     }
 }

@@ -21,12 +21,12 @@ namespace EngineBay.Blueprints
         /// <inheritdoc/>
         public async Task<ExpressionBlueprintDto> Handle(Guid id, ClaimsPrincipal claimsPrincipal, CancellationToken cancellation)
         {
-            var user = await this.getApplicationUserQuery.Handle(claimsPrincipal, cancellation).ConfigureAwait(false);
+            var user = await this.getApplicationUserQuery.Handle(claimsPrincipal, cancellation);
             var expressionBlueprint = await this.db.ExpressionBlueprints
                                     .Where(blueprint => blueprint.Id == id)
                                     .AsExpandable()
                                     .FirstAsync(cancellation)
-                                    .ConfigureAwait(false);
+                                    ;
 
             if (expressionBlueprint is null)
             {
@@ -34,7 +34,7 @@ namespace EngineBay.Blueprints
             }
 
             this.db.ExpressionBlueprints.Remove(expressionBlueprint);
-            await this.db.SaveChangesAsync(user, cancellation).ConfigureAwait(false);
+            await this.db.SaveChangesAsync(user, cancellation);
             return new ExpressionBlueprintDto(expressionBlueprint);
         }
     }

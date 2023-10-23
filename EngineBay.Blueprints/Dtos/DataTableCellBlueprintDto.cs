@@ -1,25 +1,24 @@
 namespace EngineBay.Blueprints
 {
     using System;
+    using EngineBay.Core;
 
-    public class DataTableCellBlueprintDto
+    public class DataTableCellBlueprintDto : BaseDto
     {
         public DataTableCellBlueprintDto(DataTableCellBlueprint dataTableCellBlueprint)
+            : base(dataTableCellBlueprint)
         {
             if (dataTableCellBlueprint is null)
             {
                 throw new ArgumentNullException(nameof(dataTableCellBlueprint));
             }
 
-            this.Id = dataTableCellBlueprint.Id;
             this.DataTableRowBlueprintId = dataTableCellBlueprint.DataTableRowBlueprintId;
             this.Key = dataTableCellBlueprint.Key;
             this.Value = dataTableCellBlueprint.Value;
             this.Name = dataTableCellBlueprint.Name;
             this.Namespace = dataTableCellBlueprint.Namespace;
         }
-
-        public Guid Id { get; set; }
 
         public Guid? DataTableRowBlueprintId { get; set; }
 

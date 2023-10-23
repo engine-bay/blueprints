@@ -7,7 +7,7 @@ namespace EngineBay.Blueprints
     using LinqKit;
     using Microsoft.EntityFrameworkCore;
 
-    public class QueryTriggerBlueprints : PaginatedQuery<TriggerBlueprint>, IQueryHandler<PaginationParameters, PaginatedDto<TriggerBlueprintDto>>
+    public class QueryTriggerBlueprints : PaginatedQuery<TriggerBlueprint>, IQueryHandler<FilteredPaginationParameters<TriggerBlueprint>, PaginatedDto<TriggerBlueprintDto>>
     {
         private readonly BlueprintsQueryDbContext db;
 
@@ -17,40 +17,49 @@ namespace EngineBay.Blueprints
         }
 
         /// <inheritdoc/>
-        public async Task<PaginatedDto<TriggerBlueprintDto>> Handle(PaginationParameters paginationParameters, CancellationToken cancellation)
+        public async Task<PaginatedDto<TriggerBlueprintDto>> Handle(FilteredPaginationParameters<TriggerBlueprint> filteredPaginationParameters, CancellationToken cancellation)
         {
-            if (paginationParameters is null)
+            if (filteredPaginationParameters is null)
             {
-                throw new ArgumentNullException(nameof(paginationParameters));
+                throw new ArgumentNullException(nameof(filteredPaginationParameters));
             }
 
-            var limit = paginationParameters.Limit;
-            var skip = limit > 0 ? paginationParameters.Skip : 0;
+            var limit = filteredPaginationParameters.Limit;
+            var skip = limit > 0 ? filteredPaginationParameters.Skip : 0;
+            var filterPredicate = filteredPaginationParameters.FilterPredicate is null ? x => true : filteredPaginationParameters.FilterPredicate;
 
-            var total = await this.db.TriggerBlueprints.CountAsync(cancellation).ConfigureAwait(false);
+            var search = filteredPaginationParameters.Search;
+            Expression<Func<TriggerBlueprint, bool>>? searchPredicate = entity => entity.Name != null && EF.Functions.Like(entity.Name, $"%{search}%");
+
+            var total = await this.db.TriggerBlueprints.Where(filterPredicate).Where(searchPredicate).CountAsync(cancellation);
 
             var query = this.db.TriggerBlueprints
                             .Include(x => x.TriggerExpressionBlueprints)
                                 .ThenInclude(x => x.InputDataVariableBlueprint)
                             .Include(x => x.OutputDataVariableBlueprint)
+                            .Where(filterPredicate)
+                            .Where(searchPredicate)
                             .AsExpandable();
+#pragma warning disable CA1305
 
-            Expression<Func<TriggerBlueprint, string?>> sortByPredicate = paginationParameters.SortBy switch
+            // DateTime Tostrings cannot CultureInfo.InvariantCulture because SQL does not know how to interpret this
+            Expression<Func<TriggerBlueprint, string?>> sortByPredicate = filteredPaginationParameters.SortBy switch
             {
-                nameof(TriggerBlueprint.CreatedAt) => triggerBlueprint => triggerBlueprint.CreatedAt.ToString(CultureInfo.InvariantCulture),
-                nameof(TriggerBlueprint.LastUpdatedAt) => triggerBlueprint => triggerBlueprint.LastUpdatedAt.ToString(CultureInfo.InvariantCulture),
-                nameof(TriggerBlueprint.Name) => triggerBlueprint => triggerBlueprint.Name,
-                nameof(TriggerBlueprint.Description) => triggerBlueprint => triggerBlueprint.Description,
-                _ => throw new ArgumentNullException(paginationParameters.SortBy),
+                string sortBy when sortBy.Equals(nameof(TriggerBlueprint.Id), StringComparison.OrdinalIgnoreCase) => entity => entity.Id.ToString(),
+                string sortBy when sortBy.Equals(nameof(TriggerBlueprint.CreatedAt), StringComparison.OrdinalIgnoreCase) => entity => entity.CreatedAt.ToString(),
+                string sortBy when sortBy.Equals(nameof(TriggerBlueprint.LastUpdatedAt), StringComparison.OrdinalIgnoreCase) => entity => entity.LastUpdatedAt.ToString(),
+                string sortBy when sortBy.Equals(nameof(TriggerBlueprint.Name), StringComparison.OrdinalIgnoreCase) => entity => entity.Name,
+                string sortBy when sortBy.Equals(nameof(TriggerBlueprint.Description), StringComparison.OrdinalIgnoreCase) => entity => entity.Description,
+                _ => throw new ArgumentNullException(filteredPaginationParameters.SortBy),
             };
-
-            query = this.Sort(query, sortByPredicate, paginationParameters);
-            query = this.Paginate(query, paginationParameters);
+#pragma warning restore CA1305
+            query = this.Sort(query, sortByPredicate, filteredPaginationParameters);
+            query = this.Paginate(query, filteredPaginationParameters);
 
             var triggerBlueprintDtos = limit > 0 ? await query
                 .Select(triggerBlueprint => new TriggerBlueprintDto(triggerBlueprint))
                 .ToListAsync(cancellation)
-                .ConfigureAwait(false) : new List<TriggerBlueprintDto>();
+                 : new List<TriggerBlueprintDto>();
 
             return new PaginatedDto<TriggerBlueprintDto>(total, skip, limit, triggerBlueprintDtos);
         }

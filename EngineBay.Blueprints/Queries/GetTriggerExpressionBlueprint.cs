@@ -22,7 +22,7 @@ namespace EngineBay.Blueprints
                             .Select(triggerExpressionBlueprint => new TriggerExpressionBlueprintDto(triggerExpressionBlueprint))
                             .AsExpandable()
                             .FirstAsync(cancellation)
-                            .ConfigureAwait(false);
+                            ;
         }
     }
 }

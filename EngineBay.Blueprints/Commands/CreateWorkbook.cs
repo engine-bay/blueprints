@@ -22,10 +22,10 @@ namespace EngineBay.Blueprints
         /// <inheritdoc/>
         public async Task<WorkbookDto> Handle(Workbook workbook, ClaimsPrincipal claimsPrincipal, CancellationToken cancellation)
         {
-            var user = await this.getApplicationUserQuery.Handle(claimsPrincipal, cancellation).ConfigureAwait(false);
+            var user = await this.getApplicationUserQuery.Handle(claimsPrincipal, cancellation);
             this.validator.ValidateAndThrow(workbook);
-            await this.db.Workbooks.AddAsync(workbook, cancellation).ConfigureAwait(false);
-            await this.db.SaveChangesAsync(user, cancellation).ConfigureAwait(false);
+            await this.db.Workbooks.AddAsync(workbook, cancellation);
+            await this.db.SaveChangesAsync(user, cancellation);
             return new WorkbookDto(workbook);
         }
     }

@@ -22,7 +22,7 @@ namespace EngineBay.Blueprints
         /// <inheritdoc/>
         public async Task<BlueprintDto> Handle(UpdateParameters<Blueprint> updateParameters, ClaimsPrincipal claimsPrincipal, CancellationToken cancellation)
         {
-            var user = await this.getApplicationUserQuery.Handle(claimsPrincipal, cancellation).ConfigureAwait(false);
+            var user = await this.getApplicationUserQuery.Handle(claimsPrincipal, cancellation);
 
             if (updateParameters is null)
             {
@@ -39,7 +39,7 @@ namespace EngineBay.Blueprints
 
             this.validator.ValidateAndThrow(updateBlueprint);
 
-            var blueprint = await this.db.Blueprints.FindAsync(new object[] { id }, cancellation).ConfigureAwait(false);
+            var blueprint = await this.db.Blueprints.FindAsync(new object[] { id }, cancellation);
 
             if (blueprint is null)
             {
@@ -48,7 +48,7 @@ namespace EngineBay.Blueprints
 
             blueprint.Name = updateBlueprint.Name;
             blueprint.Description = updateBlueprint.Description;
-            await this.db.SaveChangesAsync(user, cancellation).ConfigureAwait(false);
+            await this.db.SaveChangesAsync(user, cancellation);
             return new BlueprintDto(blueprint);
         }
     }

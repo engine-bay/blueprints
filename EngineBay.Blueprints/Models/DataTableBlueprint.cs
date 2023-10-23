@@ -2,16 +2,39 @@ namespace EngineBay.Blueprints
 {
     using System;
     using EngineBay.Persistence;
+    using Ganss.Xss;
     using Humanizer;
     using Microsoft.EntityFrameworkCore;
 
     public class DataTableBlueprint : AuditableModel
     {
+        private HtmlSanitizer sanitizer = new HtmlSanitizer();
+
+        private string? description;
+
         public string? Namespace { get; set; }
 
         public string? Name { get; set; }
 
-        public string? Description { get; set; }
+        public string? Description
+        {
+            get
+            {
+                return this.description;
+            }
+
+            set
+            {
+                if (string.IsNullOrEmpty(value))
+                {
+                    this.description = null;
+                }
+                else
+                {
+                    this.description = this.sanitizer.Sanitize(value);
+                }
+            }
+        }
 
         public Guid? BlueprintId { get; set; }
 

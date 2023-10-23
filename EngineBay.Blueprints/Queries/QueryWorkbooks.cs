@@ -7,7 +7,7 @@ namespace EngineBay.Blueprints
     using LinqKit;
     using Microsoft.EntityFrameworkCore;
 
-    public class QueryWorkbooks : PaginatedQuery<Workbook>, IQueryHandler<PaginationParameters, PaginatedDto<WorkbookDto>>
+    public class QueryWorkbooks : PaginatedQuery<Workbook>, IQueryHandler<FilteredPaginationParameters<Workbook>, PaginatedDto<WorkbookDto>>
     {
         private readonly BlueprintsQueryDbContext db;
 
@@ -17,17 +17,21 @@ namespace EngineBay.Blueprints
         }
 
         /// <inheritdoc/>
-        public async Task<PaginatedDto<WorkbookDto>> Handle(PaginationParameters paginationParameters, CancellationToken cancellation)
+        public async Task<PaginatedDto<WorkbookDto>> Handle(FilteredPaginationParameters<Workbook> filteredPaginationParameters, CancellationToken cancellation)
         {
-            if (paginationParameters is null)
+            if (filteredPaginationParameters is null)
             {
-                throw new ArgumentNullException(nameof(paginationParameters));
+                throw new ArgumentNullException(nameof(filteredPaginationParameters));
             }
 
-            var limit = paginationParameters.Limit;
-            var skip = limit > 0 ? paginationParameters.Skip : 0;
+            var limit = filteredPaginationParameters.Limit;
+            var skip = limit > 0 ? filteredPaginationParameters.Skip : 0;
+            var filterPredicate = filteredPaginationParameters.FilterPredicate is null ? x => true : filteredPaginationParameters.FilterPredicate;
+            var search = filteredPaginationParameters.Search;
 
-            var total = await this.db.Workbooks.CountAsync(cancellation).ConfigureAwait(false);
+            Expression<Func<Workbook, bool>>? searchPredicate = entity => entity.Name != null && EF.Functions.Like(entity.Name, $"%{search}%");
+
+            var total = await this.db.Workbooks.Where(filterPredicate).Where(searchPredicate).CountAsync(cancellation);
 
             var query = this.db.Workbooks
                 .Include(x => x.Blueprints)
@@ -58,24 +62,29 @@ namespace EngineBay.Blueprints
                     .ThenInclude(x => x.DataTableBlueprints)
                         .ThenInclude(x => x.DataTableRowBlueprints)
                             .ThenInclude(x => x.DataTableCellBlueprints)
+                .Where(filterPredicate)
+                .Where(searchPredicate)
                 .AsExpandable();
+#pragma warning disable CA1305
 
-            Expression<Func<Workbook, string?>> sortByPredicate = paginationParameters.SortBy switch
+            // DateTime Tostrings cannot CultureInfo.InvariantCulture because SQL does not know how to interpret this
+            Expression<Func<Workbook, string?>> sortByPredicate = filteredPaginationParameters.SortBy switch
             {
-                nameof(Workbook.CreatedAt) => workbook => workbook.CreatedAt.ToString(CultureInfo.InvariantCulture),
-                nameof(Workbook.LastUpdatedAt) => workbook => workbook.LastUpdatedAt.ToString(CultureInfo.InvariantCulture),
-                nameof(Workbook.Name) => workbook => workbook.Name,
-                nameof(Workbook.Description) => workbook => workbook.Description,
-                _ => throw new ArgumentNullException(paginationParameters.SortBy),
+                string sortBy when sortBy.Equals(nameof(Workbook.Id), StringComparison.OrdinalIgnoreCase) => entity => entity.Id.ToString(),
+                string sortBy when sortBy.Equals(nameof(Workbook.CreatedAt), StringComparison.OrdinalIgnoreCase) => entity => entity.CreatedAt.ToString(),
+                string sortBy when sortBy.Equals(nameof(Workbook.LastUpdatedAt), StringComparison.OrdinalIgnoreCase) => entity => entity.LastUpdatedAt.ToString(),
+                string sortBy when sortBy.Equals(nameof(Workbook.Name), StringComparison.OrdinalIgnoreCase) => entity => entity.Name,
+                string sortBy when sortBy.Equals(nameof(Workbook.Description), StringComparison.OrdinalIgnoreCase) => entity => entity.Description,
+                _ => throw new ArgumentNullException(filteredPaginationParameters.SortBy),
             };
-
-            query = this.Sort(query, sortByPredicate, paginationParameters);
-            query = this.Paginate(query, paginationParameters);
+#pragma warning restore CA1305
+            query = this.Sort(query, sortByPredicate, filteredPaginationParameters);
+            query = this.Paginate(query, filteredPaginationParameters);
 
             var workbookDtos = limit > 0 ? await query
                 .Select(workbook => new WorkbookDto(workbook))
                 .ToListAsync(cancellation)
-                .ConfigureAwait(false) : new List<WorkbookDto>();
+                 : new List<WorkbookDto>();
 
             return new PaginatedDto<WorkbookDto>(total, skip, limit, workbookDtos);
         }

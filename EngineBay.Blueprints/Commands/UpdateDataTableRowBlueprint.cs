@@ -22,7 +22,7 @@ namespace EngineBay.Blueprints
         /// <inheritdoc/>
         public async Task<DataTableRowBlueprintDto> Handle(UpdateParameters<DataTableRowBlueprint> updateParameters, ClaimsPrincipal claimsPrincipal, CancellationToken cancellation)
         {
-            var user = await this.getApplicationUserQuery.Handle(claimsPrincipal, cancellation).ConfigureAwait(false);
+            var user = await this.getApplicationUserQuery.Handle(claimsPrincipal, cancellation);
             if (updateParameters is null)
             {
                 throw new ArgumentNullException(nameof(updateParameters));
@@ -38,7 +38,7 @@ namespace EngineBay.Blueprints
 
             this.validator.ValidateAndThrow(updateDataTableRowBlueprint);
 
-            var dataTableRowBlueprint = await this.db.DataTableRowBlueprints.FindAsync(new object[] { id }, cancellation).ConfigureAwait(false);
+            var dataTableRowBlueprint = await this.db.DataTableRowBlueprints.FindAsync(new object[] { id }, cancellation);
 
             if (dataTableRowBlueprint is null)
             {
@@ -49,7 +49,7 @@ namespace EngineBay.Blueprints
             // this will be added to when we eventually get to more well thought out data management features.
             // dataTableRowBlueprint.Name = updateDataTableRowBlueprint.Name;
             // dataTableRowBlueprint.Type = updateDataTableRowBlueprint.Type;
-            await this.db.SaveChangesAsync(user, cancellation).ConfigureAwait(false);
+            await this.db.SaveChangesAsync(user, cancellation);
             return new DataTableRowBlueprintDto(dataTableRowBlueprint);
         }
     }

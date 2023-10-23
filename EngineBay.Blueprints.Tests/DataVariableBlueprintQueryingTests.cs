@@ -27,9 +27,9 @@ namespace EngineBay.Blueprints.Tests
         {
             var query = new QueryDataVariableBlueprints(this.DbContext);
 
-            var paginationParameters = new PaginationParameters();
+            var filteredPaginationParameters = new FilteredPaginationParameters<DataVariableBlueprint>();
 
-            var dto = await query.Handle(paginationParameters, CancellationToken.None).ConfigureAwait(false);
+            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None);
 
             Assert.Equal(24, dto.Total);
         }
@@ -39,9 +39,9 @@ namespace EngineBay.Blueprints.Tests
         {
             var query = new QueryDataVariableBlueprints(this.DbContext);
 
-            var paginationParameters = new PaginationParameters();
+            var filteredPaginationParameters = new FilteredPaginationParameters<DataVariableBlueprint>();
 
-            var dto = await query.Handle(paginationParameters, CancellationToken.None).ConfigureAwait(false);
+            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None);
 
             Assert.Equal(10, dto.Data.Count());
         }
@@ -51,12 +51,12 @@ namespace EngineBay.Blueprints.Tests
         {
             var query = new QueryDataVariableBlueprints(this.DbContext);
 
-            var paginationParameters = new PaginationParameters()
+            var filteredPaginationParameters = new FilteredPaginationParameters<DataVariableBlueprint>()
             {
                 Limit = 0,
             };
 
-            var dto = await query.Handle(paginationParameters, CancellationToken.None).ConfigureAwait(false);
+            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None);
 
             Assert.Empty(dto.Data);
         }
@@ -66,12 +66,12 @@ namespace EngineBay.Blueprints.Tests
         {
             var query = new QueryDataVariableBlueprints(this.DbContext);
 
-            var paginationParameters = new PaginationParameters()
+            var filteredPaginationParameters = new FilteredPaginationParameters<DataVariableBlueprint>()
             {
                 Limit = 0,
             };
 
-            var dto = await query.Handle(paginationParameters, CancellationToken.None).ConfigureAwait(false);
+            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None);
 
             Assert.Equal(24, dto.Total);
         }
@@ -81,12 +81,12 @@ namespace EngineBay.Blueprints.Tests
         {
             var query = new QueryDataVariableBlueprints(this.DbContext);
 
-            var paginationParameters = new PaginationParameters()
+            var filteredPaginationParameters = new FilteredPaginationParameters<DataVariableBlueprint>()
             {
                 Limit = 2,
             };
 
-            var dto = await query.Handle(paginationParameters, CancellationToken.None).ConfigureAwait(false);
+            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None);
 
             Assert.Equal(2, dto.Data.Count());
         }
@@ -96,13 +96,13 @@ namespace EngineBay.Blueprints.Tests
         {
             var query = new QueryDataVariableBlueprints(this.DbContext);
 
-            var paginationParameters = new PaginationParameters()
+            var filteredPaginationParameters = new FilteredPaginationParameters<DataVariableBlueprint>()
             {
                 SortBy = "Name",
                 SortOrder = SortOrderType.Ascending,
             };
 
-            var dto = await query.Handle(paginationParameters, CancellationToken.None).ConfigureAwait(false);
+            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None);
             var first = dto.Data.First();
             Assert.Equal("AllNumbersComparedTruthy0", first.Name);
         }
@@ -112,13 +112,13 @@ namespace EngineBay.Blueprints.Tests
         {
             var query = new QueryDataVariableBlueprints(this.DbContext);
 
-            var paginationParameters = new PaginationParameters()
+            var filteredPaginationParameters = new FilteredPaginationParameters<DataVariableBlueprint>()
             {
                 SortBy = "Name",
                 SortOrder = SortOrderType.Descending,
             };
 
-            var dto = await query.Handle(paginationParameters, CancellationToken.None).ConfigureAwait(false);
+            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None);
             var first = dto.Data.First();
             Assert.Equal("youngest_ivory_shrimp", first.Name);
         }
@@ -128,12 +128,12 @@ namespace EngineBay.Blueprints.Tests
         {
             var query = new QueryDataVariableBlueprints(this.DbContext);
 
-            var paginationParameters = new PaginationParameters()
+            var filteredPaginationParameters = new FilteredPaginationParameters<DataVariableBlueprint>()
             {
                 SortBy = "Name",
             };
 
-            var dto = await query.Handle(paginationParameters, CancellationToken.None).ConfigureAwait(false);
+            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None);
             var first = dto.Data.First();
             Assert.Equal("musical_indigo_mink", first.Name);
         }
@@ -143,14 +143,31 @@ namespace EngineBay.Blueprints.Tests
         {
             var query = new QueryDataVariableBlueprints(this.DbContext);
 
-            var paginationParameters = new PaginationParameters()
+            var filteredPaginationParameters = new FilteredPaginationParameters<DataVariableBlueprint>()
             {
                 SortOrder = SortOrderType.Descending,
             };
 
-            var dto = await query.Handle(paginationParameters, CancellationToken.None).ConfigureAwait(false);
+            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None);
             var first = dto.Data.First();
             Assert.Equal("musical_indigo_mink", first.Name);
+        }
+
+        [Fact]
+        public async Task WorkbooksCanBeSearched()
+        {
+            var query = new QueryDataVariableBlueprints(this.BlueprintsDbContext);
+
+            var filteredPaginationParameters = new FilteredPaginationParameters<DataVariableBlueprint>()
+            {
+                Search = "anaconda",
+            };
+
+            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None);
+
+            var first = dto.Data.First();
+            Assert.Equal("eager_lavender_anaconda", first.Name);
+            Assert.Equal(1, dto.Total);
         }
     }
 }

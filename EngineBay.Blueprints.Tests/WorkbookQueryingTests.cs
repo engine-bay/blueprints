@@ -27,9 +27,9 @@ namespace EngineBay.Blueprints.Tests
         {
             var query = new QueryWorkbooks(this.DbContext);
 
-            var paginationParameters = new PaginationParameters();
+            var filteredPaginationParameters = new FilteredPaginationParameters<Workbook>();
 
-            var dto = await query.Handle(paginationParameters, CancellationToken.None).ConfigureAwait(false);
+            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None);
 
             Assert.Equal(3, dto.Total);
         }
@@ -39,9 +39,9 @@ namespace EngineBay.Blueprints.Tests
         {
             var query = new QueryWorkbooks(this.DbContext);
 
-            var paginationParameters = new PaginationParameters();
+            var filteredPaginationParameters = new FilteredPaginationParameters<Workbook>();
 
-            var dto = await query.Handle(paginationParameters, CancellationToken.None).ConfigureAwait(false);
+            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None);
 
             Assert.Equal(3, dto.Data.Count());
         }
@@ -51,12 +51,12 @@ namespace EngineBay.Blueprints.Tests
         {
             var query = new QueryWorkbooks(this.DbContext);
 
-            var paginationParameters = new PaginationParameters()
+            var filteredPaginationParameters = new FilteredPaginationParameters<Workbook>()
             {
                 Limit = 0,
             };
 
-            var dto = await query.Handle(paginationParameters, CancellationToken.None).ConfigureAwait(false);
+            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None);
 
             Assert.Empty(dto.Data);
         }
@@ -66,12 +66,12 @@ namespace EngineBay.Blueprints.Tests
         {
             var query = new QueryWorkbooks(this.DbContext);
 
-            var paginationParameters = new PaginationParameters()
+            var filteredPaginationParameters = new FilteredPaginationParameters<Workbook>()
             {
                 Limit = 0,
             };
 
-            var dto = await query.Handle(paginationParameters, CancellationToken.None).ConfigureAwait(false);
+            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None);
 
             Assert.Equal(3, dto.Total);
         }
@@ -81,12 +81,12 @@ namespace EngineBay.Blueprints.Tests
         {
             var query = new QueryWorkbooks(this.DbContext);
 
-            var paginationParameters = new PaginationParameters()
+            var filteredPaginationParameters = new FilteredPaginationParameters<Workbook>()
             {
                 Limit = 2,
             };
 
-            var dto = await query.Handle(paginationParameters, CancellationToken.None).ConfigureAwait(false);
+            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None);
 
             Assert.Equal(2, dto.Data.Count());
         }
@@ -96,13 +96,13 @@ namespace EngineBay.Blueprints.Tests
         {
             var query = new QueryWorkbooks(this.DbContext);
 
-            var paginationParameters = new PaginationParameters()
+            var filteredPaginationParameters = new FilteredPaginationParameters<Workbook>()
             {
                 SortBy = "Name",
                 SortOrder = SortOrderType.Ascending,
             };
 
-            var dto = await query.Handle(paginationParameters, CancellationToken.None).ConfigureAwait(false);
+            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None);
             var first = dto.Data.First();
             Assert.Equal("K-Factor 1 test workbook", first.Name);
         }
@@ -112,13 +112,13 @@ namespace EngineBay.Blueprints.Tests
         {
             var query = new QueryWorkbooks(this.DbContext);
 
-            var paginationParameters = new PaginationParameters()
+            var filteredPaginationParameters = new FilteredPaginationParameters<Workbook>()
             {
                 SortBy = "Name",
                 SortOrder = SortOrderType.Descending,
             };
 
-            var dto = await query.Handle(paginationParameters, CancellationToken.None).ConfigureAwait(false);
+            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None);
             var first = dto.Data.First();
             Assert.Equal("K-Factor 4 test workbook", first.Name);
         }
@@ -128,12 +128,12 @@ namespace EngineBay.Blueprints.Tests
         {
             var query = new QueryWorkbooks(this.DbContext);
 
-            var paginationParameters = new PaginationParameters()
+            var filteredPaginationParameters = new FilteredPaginationParameters<Workbook>()
             {
                 SortBy = "Name",
             };
 
-            var dto = await query.Handle(paginationParameters, CancellationToken.None).ConfigureAwait(false);
+            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None);
             var first = dto.Data.First();
             Assert.Equal("K-Factor 1 test workbook", first.Name);
         }
@@ -143,14 +143,31 @@ namespace EngineBay.Blueprints.Tests
         {
             var query = new QueryWorkbooks(this.DbContext);
 
-            var paginationParameters = new PaginationParameters()
+            var filteredPaginationParameters = new FilteredPaginationParameters<Workbook>()
             {
                 SortOrder = SortOrderType.Descending,
             };
 
-            var dto = await query.Handle(paginationParameters, CancellationToken.None).ConfigureAwait(false);
+            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None);
             var first = dto.Data.First();
             Assert.Equal("K-Factor 1 test workbook", first.Name);
+        }
+
+        [Fact]
+        public async Task WorkbooksCanBeSearched()
+        {
+            var query = new QueryWorkbooks(this.BlueprintsDbContext);
+
+            var filteredPaginationParameters = new FilteredPaginationParameters<Workbook>()
+            {
+                Search = "2 test",
+            };
+
+            var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None);
+
+            var first = dto.Data.First();
+            Assert.Equal("K-Factor 2 test workbook", first.Name);
+            Assert.Equal(1, dto.Total);
         }
     }
 }

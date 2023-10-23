@@ -21,12 +21,12 @@ namespace EngineBay.Blueprints
         /// <inheritdoc/>
         public async Task<TriggerBlueprintDto> Handle(Guid id, ClaimsPrincipal claimsPrincipal, CancellationToken cancellation)
         {
-            var user = await this.getApplicationUserQuery.Handle(claimsPrincipal, cancellation).ConfigureAwait(false);
+            var user = await this.getApplicationUserQuery.Handle(claimsPrincipal, cancellation);
             var triggerBlueprint = await this.db.TriggerBlueprints
                                     .Where(blueprint => blueprint.Id == id)
                                     .AsExpandable()
                                     .FirstAsync(cancellation)
-                                    .ConfigureAwait(false);
+                                    ;
 
             if (triggerBlueprint is null)
             {
@@ -34,7 +34,7 @@ namespace EngineBay.Blueprints
             }
 
             this.db.TriggerBlueprints.Remove(triggerBlueprint);
-            await this.db.SaveChangesAsync(user, cancellation).ConfigureAwait(false);
+            await this.db.SaveChangesAsync(user, cancellation);
             return new TriggerBlueprintDto(triggerBlueprint);
         }
     }

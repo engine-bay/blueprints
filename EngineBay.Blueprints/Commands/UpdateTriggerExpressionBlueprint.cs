@@ -22,7 +22,7 @@ namespace EngineBay.Blueprints
         /// <inheritdoc/>
         public async Task<TriggerExpressionBlueprintDto> Handle(UpdateParameters<TriggerExpressionBlueprint> updateParameters, ClaimsPrincipal claimsPrincipal, CancellationToken cancellation)
         {
-            var user = await this.getApplicationUserQuery.Handle(claimsPrincipal, cancellation).ConfigureAwait(false);
+            var user = await this.getApplicationUserQuery.Handle(claimsPrincipal, cancellation);
             if (updateParameters is null)
             {
                 throw new ArgumentNullException(nameof(updateParameters));
@@ -38,7 +38,7 @@ namespace EngineBay.Blueprints
 
             this.validator.ValidateAndThrow(updateTriggerExpressionBlueprint);
 
-            var triggerExpressionBlueprint = await this.db.TriggerExpressionBlueprints.FindAsync(new object[] { id }, cancellation).ConfigureAwait(false);
+            var triggerExpressionBlueprint = await this.db.TriggerExpressionBlueprints.FindAsync(new object[] { id }, cancellation);
 
             if (triggerExpressionBlueprint is null)
             {
@@ -48,7 +48,7 @@ namespace EngineBay.Blueprints
             triggerExpressionBlueprint.Expression = updateTriggerExpressionBlueprint.Expression;
             triggerExpressionBlueprint.Objective = updateTriggerExpressionBlueprint.Objective;
 
-            await this.db.SaveChangesAsync(user, cancellation).ConfigureAwait(false);
+            await this.db.SaveChangesAsync(user, cancellation);
             return new TriggerExpressionBlueprintDto(triggerExpressionBlueprint);
         }
     }

@@ -1,25 +1,24 @@
 namespace EngineBay.Blueprints
 {
     using System;
+    using EngineBay.Core;
 
-    public class OutputDataVariableBlueprintDto
+    public class OutputDataVariableBlueprintDto : BaseDto
     {
         public OutputDataVariableBlueprintDto(OutputDataVariableBlueprint outputDataVariableBlueprint)
+            : base(outputDataVariableBlueprint)
         {
             if (outputDataVariableBlueprint is null)
             {
                 throw new ArgumentNullException(nameof(outputDataVariableBlueprint));
             }
 
-            this.Id = outputDataVariableBlueprint.Id;
             this.ExpressionBlueprintId = outputDataVariableBlueprint.ExpressionBlueprintId;
             this.TriggerBlueprintId = outputDataVariableBlueprint.TriggerBlueprintId;
             this.Name = outputDataVariableBlueprint.Name;
             this.Namespace = outputDataVariableBlueprint.Namespace;
             this.Type = outputDataVariableBlueprint.Type;
         }
-
-        public Guid Id { get; set; }
 
         public Guid? ExpressionBlueprintId { get; set; }
 

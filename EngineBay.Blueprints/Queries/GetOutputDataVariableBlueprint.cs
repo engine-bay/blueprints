@@ -14,7 +14,7 @@ namespace EngineBay.Blueprints
         /// <inheritdoc/>
         public async Task<OutputDataVariableBlueprintDto> Handle(Guid id, CancellationToken cancellation)
         {
-            var outputDataVariableBlueprint = await this.db.OutputDataVariableBlueprints.FindAsync(new object[] { id }, cancellation).ConfigureAwait(false);
+            var outputDataVariableBlueprint = await this.db.OutputDataVariableBlueprints.FindAsync(new object[] { id }, cancellation);
 
             if (outputDataVariableBlueprint is null)
             {
