@@ -156,7 +156,7 @@ namespace EngineBay.Blueprints.Tests
         [Fact]
         public async Task WorkbooksCanBeSearched()
         {
-            var query = new QueryDataVariableBlueprints(this.BlueprintsDbContext);
+            var query = new QueryDataVariableBlueprints(this.DbContext);
 
             var filteredPaginationParameters = new FilteredPaginationParameters<DataVariableBlueprint>()
             {
