@@ -22,8 +22,10 @@
             var currentIdentity = new SystemUserIdentity();
             var interceptor = new AuditingInterceptor(currentIdentity, this.AuditDbContext);
 
-            var context = Activator.CreateInstance(typeof(TContext), dbContextOptions, interceptor) as TContext;
-            ArgumentNullException.ThrowIfNull(context);
+            if (Activator.CreateInstance(typeof(TContext), dbContextOptions, interceptor) is not TContext context)
+            {
+                throw new ArgumentException("Context is null");
+            }
 
             this.DbContext = context;
             this.DbContext.Database.EnsureDeleted();
