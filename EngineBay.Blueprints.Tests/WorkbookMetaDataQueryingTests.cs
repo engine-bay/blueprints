@@ -14,14 +14,10 @@ namespace EngineBay.Blueprints.Tests
             var path = Path.GetFullPath(@"./TestData/searchable-workbooks.json");
             List<Workbook>? workbooks = JsonConvert.DeserializeObject<List<Workbook>>(File.ReadAllText(path));
             var workbooksCount = this.DbContext.Workbooks.Count();
-            if (workbooks is not null)
+            if (workbooks is not null && workbooksCount == 0)
             {
-                if (workbooksCount == 0)
-                {
-                    this.DbContext.AddRange(workbooks);
-
-                    this.DbContext.SaveChanges();
-                }
+                this.DbContext.AddRange(workbooks);
+                this.DbContext.SaveChanges();
             }
         }
 

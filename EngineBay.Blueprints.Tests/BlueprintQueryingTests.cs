@@ -13,11 +13,10 @@ namespace EngineBay.Blueprints.Tests
         {
             var path = Path.GetFullPath(@"./TestData/searchable-blueprints.json");
             List<Blueprint>? blueprints = JsonConvert.DeserializeObject<List<Blueprint>>(File.ReadAllText(path));
-
-            if (blueprints is not null)
+            var blueprintsCount = this.DbContext.Blueprints.Count();
+            if (blueprints is not null && blueprintsCount == 0)
             {
                 this.DbContext.AddRange(blueprints);
-
                 this.DbContext.SaveChanges();
             }
         }
