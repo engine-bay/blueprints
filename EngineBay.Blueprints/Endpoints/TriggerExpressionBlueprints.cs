@@ -1,6 +1,5 @@
 namespace EngineBay.Blueprints
 {
-    using System.Security.Claims;
     using EngineBay.Core;
 
     public static class TriggerExpressionBlueprints
@@ -43,9 +42,9 @@ namespace EngineBay.Blueprints
                 ApiGroupNameConstants.TriggerExpressionBlueprints,
             });
 
-            endpoints.MapPost("/trigger-expression-blueprints", async (CreateTriggerExpressionBlueprint command, TriggerExpressionBlueprint triggerExpressionBlueprint, ClaimsPrincipal claimsPrincipal, CancellationToken cancellation) =>
+            endpoints.MapPost("/trigger-expression-blueprints", async (CreateTriggerExpressionBlueprint command, TriggerExpressionBlueprint triggerExpressionBlueprint, CancellationToken cancellation) =>
             {
-                var dto = await command.Handle(triggerExpressionBlueprint, claimsPrincipal, cancellation);
+                var dto = await command.Handle(triggerExpressionBlueprint, cancellation);
                 return Results.Created($"/trigger-expression-blueprints/{triggerExpressionBlueprint.Id}", dto);
             }).RequireAuthorization()
             .WithTags(new string[]
@@ -53,14 +52,14 @@ namespace EngineBay.Blueprints
                 ApiGroupNameConstants.TriggerExpressionBlueprints,
             });
 
-            endpoints.MapPut("/trigger-expression-blueprints/{id}", async (UpdateTriggerExpressionBlueprint command, TriggerExpressionBlueprint updateTriggerExpressionBlueprint, Guid id, ClaimsPrincipal claimsPrincipal, CancellationToken cancellation) =>
+            endpoints.MapPut("/trigger-expression-blueprints/{id}", async (UpdateTriggerExpressionBlueprint command, TriggerExpressionBlueprint updateTriggerExpressionBlueprint, Guid id, CancellationToken cancellation) =>
             {
                 var updateParameters = new UpdateParameters<TriggerExpressionBlueprint>
                 {
                     Id = id,
                     Entity = updateTriggerExpressionBlueprint,
                 };
-                var dto = await command.Handle(updateParameters, claimsPrincipal, cancellation);
+                var dto = await command.Handle(updateParameters, cancellation);
                 return Results.Ok(dto);
             }).RequireAuthorization()
             .WithTags(new string[]
@@ -68,9 +67,9 @@ namespace EngineBay.Blueprints
                 ApiGroupNameConstants.TriggerExpressionBlueprints,
             });
 
-            endpoints.MapDelete("/trigger-expression-blueprints/{id}", async (DeleteTriggerExpressionBlueprint command, Guid id, ClaimsPrincipal claimsPrincipal, CancellationToken cancellation) =>
+            endpoints.MapDelete("/trigger-expression-blueprints/{id}", async (DeleteTriggerExpressionBlueprint command, Guid id, CancellationToken cancellation) =>
             {
-                var dto = await command.Handle(id, claimsPrincipal, cancellation);
+                var dto = await command.Handle(id, cancellation);
                 return Results.Ok(dto);
             }).RequireAuthorization()
             .WithTags(new string[]

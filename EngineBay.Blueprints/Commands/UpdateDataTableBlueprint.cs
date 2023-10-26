@@ -1,7 +1,5 @@
 namespace EngineBay.Blueprints
 {
-    using System.Security.Claims;
-    using EngineBay.Authentication;
     using EngineBay.Core;
     using FluentValidation;
 
@@ -10,19 +8,15 @@ namespace EngineBay.Blueprints
         private readonly BlueprintsWriteDbContext db;
         private readonly IValidator<DataTableBlueprint> validator;
 
-        private readonly GetApplicationUser getApplicationUserQuery;
-
-        public UpdateDataTableBlueprint(GetApplicationUser getApplicationUserQuery, BlueprintsWriteDbContext db, IValidator<DataTableBlueprint> validator)
+        public UpdateDataTableBlueprint(BlueprintsWriteDbContext db, IValidator<DataTableBlueprint> validator)
         {
-            this.getApplicationUserQuery = getApplicationUserQuery;
             this.db = db;
             this.validator = validator;
         }
 
         /// <inheritdoc/>
-        public async Task<DataTableBlueprintDto> Handle(UpdateParameters<DataTableBlueprint> updateParameters, ClaimsPrincipal claimsPrincipal, CancellationToken cancellation)
+        public async Task<DataTableBlueprintDto> Handle(UpdateParameters<DataTableBlueprint> updateParameters, CancellationToken cancellation)
         {
-            var user = await this.getApplicationUserQuery.Handle(claimsPrincipal, cancellation);
             if (updateParameters is null)
             {
                 throw new ArgumentNullException(nameof(updateParameters));
@@ -48,7 +42,7 @@ namespace EngineBay.Blueprints
             dataTableBlueprint.Name = updateDataTableBlueprint.Name;
             dataTableBlueprint.Namespace = updateDataTableBlueprint.Namespace;
             dataTableBlueprint.Description = updateDataTableBlueprint.Description;
-            await this.db.SaveChangesAsync(user, cancellation);
+            await this.db.SaveChangesAsync(cancellation);
             return new DataTableBlueprintDto(dataTableBlueprint);
         }
     }

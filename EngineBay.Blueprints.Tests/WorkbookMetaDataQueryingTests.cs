@@ -6,23 +6,21 @@ namespace EngineBay.Blueprints.Tests
     using Newtonsoft.Json;
     using Xunit;
 
-    public class WorkbookMetaDataQueryingTests : BaseBlueprintsCommandTest
+    public class WorkbookMetaDataQueryingTests : BaseTestWithFullAuditedDb<BlueprintsWriteDbContext>
     {
         public WorkbookMetaDataQueryingTests()
             : base(nameof(WorkbookMetaDataQueryingTests))
         {
             var path = Path.GetFullPath(@"./TestData/searchable-workbooks.json");
             List<Workbook>? workbooks = JsonConvert.DeserializeObject<List<Workbook>>(File.ReadAllText(path));
-            var workbooksCount = this.BlueprintsDbContext.Workbooks.Count();
+            var workbooksCount = this.DbContext.Workbooks.Count();
             if (workbooks is not null)
             {
                 if (workbooksCount == 0)
                 {
-                    this.BlueprintsDbContext.AddRange(workbooks);
+                    this.DbContext.AddRange(workbooks);
 
-                    var applicationUser = new MockApplicationUser();
-
-                    this.BlueprintsDbContext.SaveChanges(applicationUser);
+                    this.DbContext.SaveChanges();
                 }
             }
         }
@@ -30,7 +28,7 @@ namespace EngineBay.Blueprints.Tests
         [Fact]
         public async Task EmptyParametersBringsBackAPagedSetOfData()
         {
-            var query = new QueryWorkbooksMetaData(this.BlueprintsDbContext);
+            var query = new QueryWorkbooksMetaData(this.DbContext);
 
             var filteredPaginationParameters = new FilteredPaginationParameters<Workbook>();
 
@@ -42,7 +40,7 @@ namespace EngineBay.Blueprints.Tests
         [Fact]
         public async Task MetaDataCanBeSearched()
         {
-            var query = new QueryWorkbooksMetaData(this.BlueprintsDbContext);
+            var query = new QueryWorkbooksMetaData(this.DbContext);
 
             var filteredPaginationParameters = new FilteredPaginationParameters<Workbook>()
             {
@@ -59,7 +57,7 @@ namespace EngineBay.Blueprints.Tests
         [Fact]
         public async Task ASingleMetaDataCanBeSearched()
         {
-            var query = new QueryWorkbooks(this.BlueprintsDbContext);
+            var query = new QueryWorkbooks(this.DbContext);
 
             var filteredPaginationParameters = new FilteredPaginationParameters<Workbook>()
             {
@@ -70,7 +68,7 @@ namespace EngineBay.Blueprints.Tests
 
             var first = dto.Data.First();
 
-            var entityQuery = new GetWorkbookMetaData(this.BlueprintsDbContext);
+            var entityQuery = new GetWorkbookMetaData(this.DbContext);
 
             var metaData = await entityQuery.Handle(first.Id, CancellationToken.None);
             Assert.Equal("K-Factor 2 test workbook", metaData.Name);

@@ -1,6 +1,5 @@
 namespace EngineBay.Blueprints
 {
-    using System.Security.Claims;
     using EngineBay.Core;
 
     public static class BlueprintEndpoints
@@ -15,10 +14,7 @@ namespace EngineBay.Blueprints
                 var paginatedDtos = await query.Handle(filteredPaginationParameters, cancellation);
                 return Results.Ok(paginatedDtos);
             }).RequireAuthorization()
-            .WithTags(new string[]
-            {
-                ApiGroupNameConstants.Blueprints,
-            });
+            .WithTags(ApiGroupNameConstants.Blueprints);
 
             endpoints.MapGet("/workbooks/{workbookId}/blueprints", async (QueryBlueprints query, Guid workbookId, string? search, int? skip, int? limit, string? sortBy, SortOrderType? sortOrder, CancellationToken cancellation) =>
             {
@@ -28,55 +24,40 @@ namespace EngineBay.Blueprints
                 var paginatedDtos = await query.Handle(filteredPaginationParameters, cancellation);
                 return Results.Ok(paginatedDtos);
             }).RequireAuthorization()
-            .WithTags(new string[]
-            {
-                ApiGroupNameConstants.Blueprints,
-            });
+            .WithTags(ApiGroupNameConstants.Blueprints);
 
             endpoints.MapGet("/blueprints/{id}", async (GetBlueprint query, Guid id, CancellationToken cancellation) =>
             {
                 var dto = await query.Handle(id, cancellation);
                 return Results.Ok(dto);
             }).RequireAuthorization()
-            .WithTags(new string[]
-            {
-                ApiGroupNameConstants.Blueprints,
-            });
+            .WithTags(ApiGroupNameConstants.Blueprints);
 
-            endpoints.MapPost("/blueprints", async (CreateBlueprint command, Blueprint blueprint, ClaimsPrincipal claimsPrincipal, CancellationToken cancellation) =>
+            endpoints.MapPost("/blueprints", async (CreateBlueprint command, Blueprint blueprint, CancellationToken cancellation) =>
             {
-                var dto = await command.Handle(blueprint, claimsPrincipal, cancellation);
+                var dto = await command.Handle(blueprint, cancellation);
                 return Results.Created($"/blueprints/{blueprint.Id}", dto);
             }).RequireAuthorization()
-            .WithTags(new string[]
-            {
-                ApiGroupNameConstants.Blueprints,
-            });
+            .WithTags(ApiGroupNameConstants.Blueprints);
 
-            endpoints.MapPut("/blueprints/{id}", async (UpdateBlueprint command, Blueprint updateBlueprint, Guid id, ClaimsPrincipal claimsPrincipal, CancellationToken cancellation) =>
+            endpoints.MapPut("/blueprints/{id}", async (UpdateBlueprint command, Blueprint updateBlueprint, Guid id, CancellationToken cancellation) =>
             {
                 var updateParameters = new UpdateParameters<Blueprint>
                 {
                     Id = id,
                     Entity = updateBlueprint,
                 };
-                var dto = await command.Handle(updateParameters, claimsPrincipal, cancellation);
+                var dto = await command.Handle(updateParameters, cancellation);
                 return Results.Ok(dto);
             }).RequireAuthorization()
-            .WithTags(new string[]
-            {
-                ApiGroupNameConstants.Blueprints,
-            });
+            .WithTags(ApiGroupNameConstants.Blueprints);
 
-            endpoints.MapDelete("/blueprints/{id}", async (DeleteBlueprint command, Guid id, ClaimsPrincipal claimsPrincipal, CancellationToken cancellation) =>
+            endpoints.MapDelete("/blueprints/{id}", async (DeleteBlueprint command, Guid id, CancellationToken cancellation) =>
             {
-                var dto = await command.Handle(id, claimsPrincipal, cancellation);
+                var dto = await command.Handle(id, cancellation);
                 return Results.Ok(dto);
             }).RequireAuthorization()
-            .WithTags(new string[]
-            {
-                ApiGroupNameConstants.Blueprints,
-            });
+            .WithTags(ApiGroupNameConstants.Blueprints);
         }
     }
 }

@@ -1,25 +1,19 @@
 namespace EngineBay.Blueprints
 {
-    using System.Security.Claims;
-    using EngineBay.Authentication;
     using EngineBay.Core;
 
     public class DeleteInputDataVariableBlueprint : ICommandHandler<Guid, InputDataVariableBlueprintDto>
     {
         private readonly BlueprintsWriteDbContext db;
 
-        private readonly GetApplicationUser getApplicationUserQuery;
-
-        public DeleteInputDataVariableBlueprint(GetApplicationUser getApplicationUserQuery, BlueprintsWriteDbContext db)
+        public DeleteInputDataVariableBlueprint(BlueprintsWriteDbContext db)
         {
-            this.getApplicationUserQuery = getApplicationUserQuery;
             this.db = db;
         }
 
         /// <inheritdoc/>
-        public async Task<InputDataVariableBlueprintDto> Handle(Guid id, ClaimsPrincipal claimsPrincipal, CancellationToken cancellation)
+        public async Task<InputDataVariableBlueprintDto> Handle(Guid id, CancellationToken cancellation)
         {
-            var user = await this.getApplicationUserQuery.Handle(claimsPrincipal, cancellation);
             var inputDataVariableBlueprint = await this.db.InputDataVariableBlueprints.FindAsync(new object[] { id }, cancellation);
 
             if (inputDataVariableBlueprint is null)
@@ -28,7 +22,7 @@ namespace EngineBay.Blueprints
             }
 
             this.db.InputDataVariableBlueprints.Remove(inputDataVariableBlueprint);
-            await this.db.SaveChangesAsync(user, cancellation);
+            await this.db.SaveChangesAsync(cancellation);
             return new InputDataVariableBlueprintDto(inputDataVariableBlueprint);
         }
     }

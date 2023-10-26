@@ -1,9 +1,6 @@
 namespace EngineBay.Blueprints
 {
-    using System.Security.Claims;
-    using EngineBay.Authentication;
     using EngineBay.Core;
-    using EngineBay.Persistence;
     using LinqKit;
     using Microsoft.EntityFrameworkCore;
 
@@ -11,18 +8,14 @@ namespace EngineBay.Blueprints
     {
         private readonly BlueprintsWriteDbContext db;
 
-        private readonly GetApplicationUser getApplicationUserQuery;
-
-        public DeleteExpressionBlueprint(GetApplicationUser getApplicationUserQuery, BlueprintsWriteDbContext db)
+        public DeleteExpressionBlueprint(BlueprintsWriteDbContext db)
         {
-            this.getApplicationUserQuery = getApplicationUserQuery;
             this.db = db;
         }
 
         /// <inheritdoc/>
-        public async Task<ExpressionBlueprintDto> Handle(Guid id, ClaimsPrincipal claimsPrincipal, CancellationToken cancellation)
+        public async Task<ExpressionBlueprintDto> Handle(Guid id, CancellationToken cancellation)
         {
-            var user = await this.getApplicationUserQuery.Handle(claimsPrincipal, cancellation);
             var expressionBlueprint = await this.db.ExpressionBlueprints
                                     .Where(blueprint => blueprint.Id == id)
                                     .AsExpandable()
@@ -35,7 +28,7 @@ namespace EngineBay.Blueprints
             }
 
             this.db.ExpressionBlueprints.Remove(expressionBlueprint);
-            await this.db.SaveChangesAsync(user, cancellation);
+            await this.db.SaveChangesAsync(cancellation);
             return new ExpressionBlueprintDto(expressionBlueprint);
         }
     }
