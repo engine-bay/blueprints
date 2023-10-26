@@ -6,31 +6,25 @@ namespace EngineBay.Blueprints.Tests
     using Newtonsoft.Json;
     using Xunit;
 
-    public class BlueprintMetaDataQueryingTests : BaseBlueprintsCommandTest
+    public class BlueprintMetaDataQueryingTests : BaseTestWithFullAuditedDb<BlueprintsWriteDbContext>
     {
         public BlueprintMetaDataQueryingTests()
             : base(nameof(BlueprintMetaDataQueryingTests))
         {
             var path = Path.GetFullPath(@"./TestData/searchable-blueprints.json");
             List<Blueprint>? blueprints = JsonConvert.DeserializeObject<List<Blueprint>>(File.ReadAllText(path));
-            var blueprintsCount = this.BlueprintsDbContext.Blueprints.Count();
-            if (blueprints is not null)
+            var blueprintsCount = this.DbContext.Blueprints.Count();
+            if (blueprints is not null && blueprintsCount == 0)
             {
-                if (blueprintsCount == 0)
-                {
-                    this.BlueprintsDbContext.AddRange(blueprints);
-
-                    var applicationUser = new MockApplicationUser();
-
-                    this.BlueprintsDbContext.SaveChanges(applicationUser);
-                }
+                this.DbContext.AddRange(blueprints);
+                this.DbContext.SaveChanges();
             }
         }
 
         [Fact]
         public async Task EmptyParametersBringsBackAPagedSetOfData()
         {
-            var query = new QueryBlueprintsMetaData(this.BlueprintsDbContext);
+            var query = new QueryBlueprintsMetaData(this.DbContext);
 
             var filteredPaginationParameters = new FilteredPaginationParameters<Blueprint>();
 
@@ -42,7 +36,7 @@ namespace EngineBay.Blueprints.Tests
         [Fact]
         public async Task MetaDataCanBeSearched()
         {
-            var query = new QueryBlueprintsMetaData(this.BlueprintsDbContext);
+            var query = new QueryBlueprintsMetaData(this.DbContext);
 
             var filteredPaginationParameters = new FilteredPaginationParameters<Blueprint>()
             {
@@ -59,7 +53,7 @@ namespace EngineBay.Blueprints.Tests
         [Fact]
         public async Task ASingleMetaDataCanBeSearched()
         {
-            var query = new QueryBlueprintsMetaData(this.BlueprintsDbContext);
+            var query = new QueryBlueprintsMetaData(this.DbContext);
 
             var filteredPaginationParameters = new FilteredPaginationParameters<Blueprint>()
             {
@@ -70,7 +64,7 @@ namespace EngineBay.Blueprints.Tests
 
             var first = dto.Data.First();
 
-            var entityQuery = new GetBlueprintMetaData(this.BlueprintsDbContext);
+            var entityQuery = new GetBlueprintMetaData(this.DbContext);
 
             var metaData = await entityQuery.Handle(first.Id, CancellationToken.None);
 

@@ -3,7 +3,6 @@ namespace EngineBay.Blueprints
     using System.Security.Claims;
     using EngineBay.Authentication;
     using EngineBay.Core;
-    using EngineBay.Persistence;
     using FluentValidation;
 
     public class UpdateWorkbook : ICommandHandler<UpdateParameters<Workbook>, WorkbookDto>

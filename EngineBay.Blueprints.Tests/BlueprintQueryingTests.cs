@@ -4,39 +4,27 @@ namespace EngineBay.Blueprints.Tests
     using EngineBay.Blueprints;
     using EngineBay.Core;
     using Newtonsoft.Json;
-    using Newtonsoft.Json.Serialization;
     using Xunit;
 
-    public class BlueprintQueryingTests : BaseBlueprintsCommandTest
+    public class BlueprintQueryingTests : BaseTestWithFullAuditedDb<BlueprintsWriteDbContext>
     {
         public BlueprintQueryingTests()
             : base(nameof(BlueprintQueryingTests))
         {
-            var settings = new JsonSerializerSettings
-            {
-                ContractResolver = new PrivateSetterContractResolver(),
-            };
-
             var path = Path.GetFullPath(@"./TestData/searchable-blueprints.json");
             List<Blueprint>? blueprints = JsonConvert.DeserializeObject<List<Blueprint>>(File.ReadAllText(path));
-            var blueprintsCount = this.BlueprintsDbContext.Blueprints.Count();
-            if (blueprints is not null)
+            var blueprintsCount = this.DbContext.Blueprints.Count();
+            if (blueprints is not null && blueprintsCount == 0)
             {
-                if (blueprintsCount == 0)
-                {
-                    this.BlueprintsDbContext.AddRange(blueprints);
-
-                    var applicationUser = new MockApplicationUser();
-
-                    this.BlueprintsDbContext.SaveChanges(applicationUser);
-                }
+                this.DbContext.AddRange(blueprints);
+                this.DbContext.SaveChanges();
             }
         }
 
         [Fact]
         public async Task EmptyPaginationParametersBringsBackAPagedSetOfBlueprints()
         {
-            var query = new QueryBlueprints(this.BlueprintsDbContext);
+            var query = new QueryBlueprints(this.DbContext);
 
             var filteredPaginationParameters = new FilteredPaginationParameters<Blueprint>();
 
@@ -48,7 +36,7 @@ namespace EngineBay.Blueprints.Tests
         [Fact]
         public async Task EmptyPaginationParametersBringsDataBlueprints()
         {
-            var query = new QueryBlueprints(this.BlueprintsDbContext);
+            var query = new QueryBlueprints(this.DbContext);
 
             var filteredPaginationParameters = new FilteredPaginationParameters<Blueprint>();
 
@@ -60,7 +48,7 @@ namespace EngineBay.Blueprints.Tests
         [Fact]
         public async Task LimitingPaginationParametersShouldBringBackNoBlueprints()
         {
-            var query = new QueryBlueprints(this.BlueprintsDbContext);
+            var query = new QueryBlueprints(this.DbContext);
 
             var filteredPaginationParameters = new FilteredPaginationParameters<Blueprint>()
             {
@@ -75,7 +63,7 @@ namespace EngineBay.Blueprints.Tests
         [Fact]
         public async Task LimitingPaginationParametersShouldBringBackNoBlueprintsButTheTotalShouldStillBeThere()
         {
-            var query = new QueryBlueprints(this.BlueprintsDbContext);
+            var query = new QueryBlueprints(this.DbContext);
 
             var filteredPaginationParameters = new FilteredPaginationParameters<Blueprint>()
             {
@@ -90,7 +78,7 @@ namespace EngineBay.Blueprints.Tests
         [Fact]
         public async Task ThePageSizeOfPaginatedBlueprintsCanBeControlled()
         {
-            var query = new QueryBlueprints(this.BlueprintsDbContext);
+            var query = new QueryBlueprints(this.DbContext);
 
             var filteredPaginationParameters = new FilteredPaginationParameters<Blueprint>()
             {
@@ -105,12 +93,12 @@ namespace EngineBay.Blueprints.Tests
         [Fact]
         public async Task PaginatedBlueprintsCanBeSorted()
         {
-            var query = new QueryBlueprints(this.BlueprintsDbContext);
+            var query = new QueryBlueprints(this.DbContext);
 
             var filteredPaginationParameters = new FilteredPaginationParameters<Blueprint>()
             {
                 SortBy = "Name",
-                SortOrder = SortOrderType.Descending,
+                SortOrder = SortOrderType.Ascending,
             };
 
             var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None);
@@ -121,12 +109,12 @@ namespace EngineBay.Blueprints.Tests
         [Fact]
         public async Task PaginatedBlueprintsCanBeSortedInReverse()
         {
-            var query = new QueryBlueprints(this.BlueprintsDbContext);
+            var query = new QueryBlueprints(this.DbContext);
 
             var filteredPaginationParameters = new FilteredPaginationParameters<Blueprint>()
             {
                 SortBy = "Name",
-                SortOrder = SortOrderType.Ascending,
+                SortOrder = SortOrderType.Descending,
             };
 
             var dto = await query.Handle(filteredPaginationParameters, CancellationToken.None);
@@ -137,7 +125,7 @@ namespace EngineBay.Blueprints.Tests
         [Fact]
         public async Task PaginatedBlueprintsCanBeSortedButWithNoSpecifiedOrder()
         {
-            var query = new QueryBlueprints(this.BlueprintsDbContext);
+            var query = new QueryBlueprints(this.DbContext);
 
             var filteredPaginationParameters = new FilteredPaginationParameters<Blueprint>()
             {
@@ -152,7 +140,7 @@ namespace EngineBay.Blueprints.Tests
         [Fact]
         public async Task PaginatedBlueprintsCanBeSortedButWithNoSpecifiedOrderingProperty()
         {
-            var query = new QueryBlueprints(this.BlueprintsDbContext);
+            var query = new QueryBlueprints(this.DbContext);
 
             var filteredPaginationParameters = new FilteredPaginationParameters<Blueprint>()
             {
@@ -167,7 +155,7 @@ namespace EngineBay.Blueprints.Tests
         [Fact]
         public async Task BlueprintsCanBeSearched()
         {
-            var query = new QueryBlueprints(this.BlueprintsDbContext);
+            var query = new QueryBlueprints(this.DbContext);
 
             var filteredPaginationParameters = new FilteredPaginationParameters<Blueprint>()
             {
