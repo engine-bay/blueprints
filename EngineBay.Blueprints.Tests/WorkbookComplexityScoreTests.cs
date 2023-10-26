@@ -16,7 +16,6 @@ namespace EngineBay.Blueprints.Tests
             if (workbooks is not null)
             {
                 this.DbContext.AddRange(workbooks);
-
                 this.DbContext.SaveChanges();
             }
         }

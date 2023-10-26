@@ -14,14 +14,10 @@ namespace EngineBay.Blueprints.Tests
             var path = Path.GetFullPath(@"./TestData/searchable-expression-blueprints.json");
             List<ExpressionBlueprint>? expressionBlueprints = JsonConvert.DeserializeObject<List<ExpressionBlueprint>>(File.ReadAllText(path));
             var expressionBlueprintsCount = this.DbContext.ExpressionBlueprints.Count();
-            if (expressionBlueprints is not null)
+            if (expressionBlueprints is not null && expressionBlueprintsCount == 0)
             {
-                if (expressionBlueprintsCount == 0)
-                {
-                    this.DbContext.AddRange(expressionBlueprints);
-
-                    this.DbContext.SaveChanges();
-                }
+                this.DbContext.AddRange(expressionBlueprints);
+                this.DbContext.SaveChanges();
             }
         }
 

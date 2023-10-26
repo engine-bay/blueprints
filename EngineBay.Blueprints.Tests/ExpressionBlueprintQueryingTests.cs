@@ -17,7 +17,6 @@ namespace EngineBay.Blueprints.Tests
             if (expressionBlueprints is not null && expressionBlueprintsCount == 0)
             {
                 this.DbContext.AddRange(expressionBlueprints);
-
                 this.DbContext.SaveChanges();
             }
         }
