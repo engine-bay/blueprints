@@ -17,7 +17,6 @@ namespace EngineBay.Blueprints.Tests
             if (dataVariableBlueprints is not null && dataVariableBlueprintsCount == 0)
             {
                 this.DbContext.AddRange(dataVariableBlueprints);
-
                 this.DbContext.SaveChanges();
             }
         }
