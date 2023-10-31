@@ -30,14 +30,12 @@
     <Choose>
         <When Condition="'$(ASPNETCORE_ENVIRONMENT)' == 'Development'">
             <ItemGroup>
-                <ProjectReference Include="../../auditing/EngineBay.Auditing/EngineBay.Auditing.csproj" />
                 <ProjectReference Include="../../authentication/EngineBay.Authentication/EngineBay.Authentication.csproj" />
                 <ProjectReference Include="../../persistence/EngineBay.Persistence/EngineBay.Persistence.csproj" />
             </ItemGroup>
         </When>
         <Otherwise>
             <ItemGroup>
-                <PackageReference Include="EngineBay.Auditing" Version="0.1.0" />
                 <PackageReference Include="EngineBay.Authentication" Version="1.0.3" />
                 <PackageReference Include="EngineBay.Persistence" Version="5.0.0" />
             </ItemGroup>
