@@ -37,9 +37,9 @@
         </When>
         <Otherwise>
             <ItemGroup>
-                <PackageReference Include="EngineBay.Auditing" Version="1.0.0" />
-                <PackageReference Include="EngineBay.Authentication" Version="1.0.2" />
-                <PackageReference Include="EngineBay.Persistence" Version="4.2.1" />
+                <PackageReference Include="EngineBay.Auditing" Version="0.1.0" />
+                <PackageReference Include="EngineBay.Authentication" Version="1.0.3" />
+                <PackageReference Include="EngineBay.Persistence" Version="5.0.0" />
             </ItemGroup>
         </Otherwise>
     </Choose>
