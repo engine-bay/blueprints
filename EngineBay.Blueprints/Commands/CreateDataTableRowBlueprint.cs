@@ -1,7 +1,5 @@
 namespace EngineBay.Blueprints
 {
-    using System.Security.Claims;
-    using EngineBay.Authentication;
     using EngineBay.Core;
     using FluentValidation;
 
@@ -10,22 +8,18 @@ namespace EngineBay.Blueprints
         private readonly BlueprintsWriteDbContext db;
         private readonly IValidator<DataTableRowBlueprint> validator;
 
-        private readonly GetApplicationUser getApplicationUserQuery;
-
-        public CreateDataTableRowBlueprint(GetApplicationUser getApplicationUserQuery, BlueprintsWriteDbContext db, IValidator<DataTableRowBlueprint> validator)
+        public CreateDataTableRowBlueprint(BlueprintsWriteDbContext db, IValidator<DataTableRowBlueprint> validator)
         {
-            this.getApplicationUserQuery = getApplicationUserQuery;
             this.db = db;
             this.validator = validator;
         }
 
         /// <inheritdoc/>
-        public async Task<DataTableRowBlueprintDto> Handle(DataTableRowBlueprint dataTableRowBlueprint, ClaimsPrincipal claimsPrincipal, CancellationToken cancellation)
+        public async Task<DataTableRowBlueprintDto> Handle(DataTableRowBlueprint dataTableRowBlueprint, CancellationToken cancellation)
         {
-            var user = await this.getApplicationUserQuery.Handle(claimsPrincipal, cancellation);
             this.validator.ValidateAndThrow(dataTableRowBlueprint);
             await this.db.DataTableRowBlueprints.AddAsync(dataTableRowBlueprint, cancellation);
-            await this.db.SaveChangesAsync(user, cancellation);
+            await this.db.SaveChangesAsync(cancellation);
             return new DataTableRowBlueprintDto(dataTableRowBlueprint);
         }
     }

@@ -1,7 +1,5 @@
 namespace EngineBay.Blueprints
 {
-    using System.Security.Claims;
-    using EngineBay.Authentication;
     using EngineBay.Core;
     using FluentValidation;
 
@@ -10,20 +8,15 @@ namespace EngineBay.Blueprints
         private readonly BlueprintsWriteDbContext db;
         private readonly IValidator<Blueprint> validator;
 
-        private readonly GetApplicationUser getApplicationUserQuery;
-
-        public UpdateBlueprint(GetApplicationUser getApplicationUserQuery, BlueprintsWriteDbContext db, IValidator<Blueprint> validator)
+        public UpdateBlueprint(BlueprintsWriteDbContext db, IValidator<Blueprint> validator)
         {
-            this.getApplicationUserQuery = getApplicationUserQuery;
             this.db = db;
             this.validator = validator;
         }
 
         /// <inheritdoc/>
-        public async Task<BlueprintDto> Handle(UpdateParameters<Blueprint> updateParameters, ClaimsPrincipal claimsPrincipal, CancellationToken cancellation)
+        public async Task<BlueprintDto> Handle(UpdateParameters<Blueprint> updateParameters, CancellationToken cancellation)
         {
-            var user = await this.getApplicationUserQuery.Handle(claimsPrincipal, cancellation);
-
             if (updateParameters is null)
             {
                 throw new ArgumentNullException(nameof(updateParameters));
@@ -48,7 +41,7 @@ namespace EngineBay.Blueprints
 
             blueprint.Name = updateBlueprint.Name;
             blueprint.Description = updateBlueprint.Description;
-            await this.db.SaveChangesAsync(user, cancellation);
+            await this.db.SaveChangesAsync(cancellation);
             return new BlueprintDto(blueprint);
         }
     }

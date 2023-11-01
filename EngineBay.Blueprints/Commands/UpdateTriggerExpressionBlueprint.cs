@@ -1,7 +1,5 @@
 namespace EngineBay.Blueprints
 {
-    using System.Security.Claims;
-    using EngineBay.Authentication;
     using EngineBay.Core;
     using FluentValidation;
 
@@ -10,19 +8,15 @@ namespace EngineBay.Blueprints
         private readonly BlueprintsWriteDbContext db;
         private readonly IValidator<TriggerExpressionBlueprint> validator;
 
-        private readonly GetApplicationUser getApplicationUserQuery;
-
-        public UpdateTriggerExpressionBlueprint(GetApplicationUser getApplicationUserQuery, BlueprintsWriteDbContext db, IValidator<TriggerExpressionBlueprint> validator)
+        public UpdateTriggerExpressionBlueprint(BlueprintsWriteDbContext db, IValidator<TriggerExpressionBlueprint> validator)
         {
-            this.getApplicationUserQuery = getApplicationUserQuery;
             this.db = db;
             this.validator = validator;
         }
 
         /// <inheritdoc/>
-        public async Task<TriggerExpressionBlueprintDto> Handle(UpdateParameters<TriggerExpressionBlueprint> updateParameters, ClaimsPrincipal claimsPrincipal, CancellationToken cancellation)
+        public async Task<TriggerExpressionBlueprintDto> Handle(UpdateParameters<TriggerExpressionBlueprint> updateParameters, CancellationToken cancellation)
         {
-            var user = await this.getApplicationUserQuery.Handle(claimsPrincipal, cancellation);
             if (updateParameters is null)
             {
                 throw new ArgumentNullException(nameof(updateParameters));
@@ -48,7 +42,7 @@ namespace EngineBay.Blueprints
             triggerExpressionBlueprint.Expression = updateTriggerExpressionBlueprint.Expression;
             triggerExpressionBlueprint.Objective = updateTriggerExpressionBlueprint.Objective;
 
-            await this.db.SaveChangesAsync(user, cancellation);
+            await this.db.SaveChangesAsync(cancellation);
             return new TriggerExpressionBlueprintDto(triggerExpressionBlueprint);
         }
     }

@@ -1,25 +1,19 @@
 namespace EngineBay.Blueprints
 {
-    using System.Security.Claims;
-    using EngineBay.Authentication;
     using EngineBay.Core;
 
     public class DeleteDataTableBlueprint : ICommandHandler<Guid, DataTableBlueprintDto>
     {
         private readonly BlueprintsWriteDbContext db;
 
-        private readonly GetApplicationUser getApplicationUserQuery;
-
-        public DeleteDataTableBlueprint(GetApplicationUser getApplicationUserQuery, BlueprintsWriteDbContext db)
+        public DeleteDataTableBlueprint(BlueprintsWriteDbContext db)
         {
-            this.getApplicationUserQuery = getApplicationUserQuery;
             this.db = db;
         }
 
         /// <inheritdoc/>
-        public async Task<DataTableBlueprintDto> Handle(Guid id, ClaimsPrincipal claimsPrincipal, CancellationToken cancellation)
+        public async Task<DataTableBlueprintDto> Handle(Guid id, CancellationToken cancellation)
         {
-            var user = await this.getApplicationUserQuery.Handle(claimsPrincipal, cancellation);
             var dataTableBlueprint = await this.db.DataTableBlueprints.FindAsync(new object[] { id }, cancellation);
 
             if (dataTableBlueprint is null)
@@ -28,7 +22,7 @@ namespace EngineBay.Blueprints
             }
 
             this.db.DataTableBlueprints.Remove(dataTableBlueprint);
-            await this.db.SaveChangesAsync(user, cancellation);
+            await this.db.SaveChangesAsync(cancellation);
             return new DataTableBlueprintDto(dataTableBlueprint);
         }
     }

@@ -1,6 +1,5 @@
 namespace EngineBay.Blueprints
 {
-    using System.Security.Claims;
     using EngineBay.Core;
 
     public static class OutputDataVariableBlueprintEndpoints
@@ -56,9 +55,9 @@ namespace EngineBay.Blueprints
                 ApiGroupNameConstants.OutputDataVariableBlueprints,
             });
 
-            endpoints.MapPost("/output-data-variable-blueprints", async (CreateOutputDataVariableBlueprint command, OutputDataVariableBlueprint outputDataVariableBlueprint, ClaimsPrincipal claimsPrincipal, CancellationToken cancellation) =>
+            endpoints.MapPost("/output-data-variable-blueprints", async (CreateOutputDataVariableBlueprint command, OutputDataVariableBlueprint outputDataVariableBlueprint, CancellationToken cancellation) =>
             {
-                var dto = await command.Handle(outputDataVariableBlueprint, claimsPrincipal, cancellation);
+                var dto = await command.Handle(outputDataVariableBlueprint, cancellation);
                 return Results.Created($"/data-variable-blueprints/{outputDataVariableBlueprint.Id}", dto);
             }).RequireAuthorization()
             .WithTags(new string[]
@@ -66,14 +65,14 @@ namespace EngineBay.Blueprints
                 ApiGroupNameConstants.OutputDataVariableBlueprints,
             });
 
-            endpoints.MapPut("/output-data-variable-blueprints/{id}", async (UpdateOutputDataVariableBlueprint command, OutputDataVariableBlueprint updateOutputDataVariableBlueprint, Guid id, ClaimsPrincipal claimsPrincipal, CancellationToken cancellation) =>
+            endpoints.MapPut("/output-data-variable-blueprints/{id}", async (UpdateOutputDataVariableBlueprint command, OutputDataVariableBlueprint updateOutputDataVariableBlueprint, Guid id, CancellationToken cancellation) =>
             {
                 var updateParameters = new UpdateParameters<OutputDataVariableBlueprint>
                 {
                     Id = id,
                     Entity = updateOutputDataVariableBlueprint,
                 };
-                var dto = await command.Handle(updateParameters, claimsPrincipal, cancellation);
+                var dto = await command.Handle(updateParameters, cancellation);
                 return Results.Ok(dto);
             }).RequireAuthorization()
             .WithTags(new string[]
@@ -81,9 +80,9 @@ namespace EngineBay.Blueprints
                 ApiGroupNameConstants.OutputDataVariableBlueprints,
             });
 
-            endpoints.MapDelete("/output-data-variable-blueprints/{id}", async (DeleteBlueprint command, Guid id, ClaimsPrincipal claimsPrincipal, CancellationToken cancellation) =>
+            endpoints.MapDelete("/output-data-variable-blueprints/{id}", async (DeleteBlueprint command, Guid id, CancellationToken cancellation) =>
             {
-                var dto = await command.Handle(id, claimsPrincipal, cancellation);
+                var dto = await command.Handle(id, cancellation);
                 return Results.Ok(dto);
             }).RequireAuthorization()
             .WithTags(new string[]

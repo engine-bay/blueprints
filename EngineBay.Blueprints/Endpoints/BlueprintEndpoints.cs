@@ -1,6 +1,5 @@
 namespace EngineBay.Blueprints
 {
-    using System.Security.Claims;
     using EngineBay.Core;
 
     public static class BlueprintEndpoints
@@ -34,28 +33,28 @@ namespace EngineBay.Blueprints
             }).RequireAuthorization()
             .WithTags(ApiGroupNameConstants.Blueprints);
 
-            endpoints.MapPost("/blueprints", async (CreateBlueprint command, Blueprint blueprint, ClaimsPrincipal claimsPrincipal, CancellationToken cancellation) =>
+            endpoints.MapPost("/blueprints", async (CreateBlueprint command, Blueprint blueprint, CancellationToken cancellation) =>
             {
-                var dto = await command.Handle(blueprint, claimsPrincipal, cancellation);
+                var dto = await command.Handle(blueprint, cancellation);
                 return Results.Created($"/blueprints/{blueprint.Id}", dto);
             }).RequireAuthorization()
             .WithTags(ApiGroupNameConstants.Blueprints);
 
-            endpoints.MapPut("/blueprints/{id}", async (UpdateBlueprint command, Blueprint updateBlueprint, Guid id, ClaimsPrincipal claimsPrincipal, CancellationToken cancellation) =>
+            endpoints.MapPut("/blueprints/{id}", async (UpdateBlueprint command, Blueprint updateBlueprint, Guid id, CancellationToken cancellation) =>
             {
                 var updateParameters = new UpdateParameters<Blueprint>
                 {
                     Id = id,
                     Entity = updateBlueprint,
                 };
-                var dto = await command.Handle(updateParameters, claimsPrincipal, cancellation);
+                var dto = await command.Handle(updateParameters, cancellation);
                 return Results.Ok(dto);
             }).RequireAuthorization()
             .WithTags(ApiGroupNameConstants.Blueprints);
 
-            endpoints.MapDelete("/blueprints/{id}", async (DeleteBlueprint command, Guid id, ClaimsPrincipal claimsPrincipal, CancellationToken cancellation) =>
+            endpoints.MapDelete("/blueprints/{id}", async (DeleteBlueprint command, Guid id, CancellationToken cancellation) =>
             {
-                var dto = await command.Handle(id, claimsPrincipal, cancellation);
+                var dto = await command.Handle(id, cancellation);
                 return Results.Ok(dto);
             }).RequireAuthorization()
             .WithTags(ApiGroupNameConstants.Blueprints);

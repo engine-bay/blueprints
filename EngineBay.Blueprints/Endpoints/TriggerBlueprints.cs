@@ -1,6 +1,5 @@
 namespace EngineBay.Blueprints
 {
-    using System.Security.Claims;
     using EngineBay.Core;
 
     public static class TriggerBlueprints
@@ -43,9 +42,9 @@ namespace EngineBay.Blueprints
                 ApiGroupNameConstants.TriggerBlueprints,
             });
 
-            endpoints.MapPost("/trigger-blueprints", async (CreateTriggerBlueprint command, TriggerBlueprint triggerBlueprint, ClaimsPrincipal claimsPrincipal, CancellationToken cancellation) =>
+            endpoints.MapPost("/trigger-blueprints", async (CreateTriggerBlueprint command, TriggerBlueprint triggerBlueprint, CancellationToken cancellation) =>
             {
-                var dto = await command.Handle(triggerBlueprint, claimsPrincipal, cancellation);
+                var dto = await command.Handle(triggerBlueprint, cancellation);
                 return Results.Created($"/trigger-blueprints/{triggerBlueprint.Id}", dto);
             }).RequireAuthorization()
             .WithTags(new string[]
@@ -53,14 +52,14 @@ namespace EngineBay.Blueprints
                 ApiGroupNameConstants.TriggerBlueprints,
             });
 
-            endpoints.MapPut("/trigger-blueprints/{id}", async (UpdateTriggerBlueprint command, TriggerBlueprint updateTriggerBlueprint, Guid id, ClaimsPrincipal claimsPrincipal, CancellationToken cancellation) =>
+            endpoints.MapPut("/trigger-blueprints/{id}", async (UpdateTriggerBlueprint command, TriggerBlueprint updateTriggerBlueprint, Guid id, CancellationToken cancellation) =>
             {
                 var updateParameters = new UpdateParameters<TriggerBlueprint>
                 {
                     Id = id,
                     Entity = updateTriggerBlueprint,
                 };
-                var dto = await command.Handle(updateParameters, claimsPrincipal, cancellation);
+                var dto = await command.Handle(updateParameters, cancellation);
                 return Results.Ok(dto);
             }).RequireAuthorization()
             .WithTags(new string[]
@@ -68,9 +67,9 @@ namespace EngineBay.Blueprints
                 ApiGroupNameConstants.TriggerBlueprints,
             });
 
-            endpoints.MapDelete("/trigger-blueprints/{id}", async (DeleteTriggerBlueprint command, Guid id, ClaimsPrincipal claimsPrincipal, CancellationToken cancellation) =>
+            endpoints.MapDelete("/trigger-blueprints/{id}", async (DeleteTriggerBlueprint command, Guid id, CancellationToken cancellation) =>
             {
-                var dto = await command.Handle(id, claimsPrincipal, cancellation);
+                var dto = await command.Handle(id, cancellation);
                 return Results.Ok(dto);
             }).RequireAuthorization()
             .WithTags(new string[]
