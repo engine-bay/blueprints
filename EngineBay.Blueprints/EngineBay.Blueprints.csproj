@@ -39,7 +39,7 @@
         <Otherwise>
             <ItemGroup>
                 <PackageReference Include="EngineBay.Authentication" Version="1.0.4" />
-                <PackageReference Include="EngineBay.Persistence" Version="5.0.0" />
+                <PackageReference Include="EngineBay.Persistence" Version="5.0.4" />
             </ItemGroup>
         </Otherwise>
     </Choose>
