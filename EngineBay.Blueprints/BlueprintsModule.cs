@@ -3,8 +3,9 @@ namespace EngineBay.Blueprints
     using EngineBay.Core;
     using EngineBay.Persistence;
     using FluentValidation;
+    using Microsoft.EntityFrameworkCore;
 
-    public class BlueprintsModule : BaseModule
+    public class BlueprintsModule : BaseModule, IDatabaseModule
     {
         public override IServiceCollection RegisterModule(IServiceCollection services, IConfiguration configuration)
         {
@@ -126,6 +127,11 @@ namespace EngineBay.Blueprints
         {
             this.LoadSeedData<Workbook, WorkbookDto, CreateWorkbook>(seedDataPath, "*.workbooks.json", serviceProvider);
             return;
+        }
+
+        public IReadOnlyCollection<IModuleDbContext> GetRegisteredDbContexts(DbContextOptions<ModuleWriteDbContext> dbOptions)
+        {
+            return new IModuleDbContext[] { new BlueprintsDbContext(dbOptions) };
         }
     }
 }
