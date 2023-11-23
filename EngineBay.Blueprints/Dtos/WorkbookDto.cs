@@ -7,10 +7,7 @@ namespace EngineBay.Blueprints
         public WorkbookDto(Workbook workbook)
             : base(workbook)
         {
-            if (workbook is null)
-            {
-                throw new ArgumentNullException(nameof(workbook));
-            }
+            ArgumentNullException.ThrowIfNull(workbook);
 
             this.Blueprints = workbook.Blueprints?.Select(x => new BlueprintDto(x)).ToList();
         }

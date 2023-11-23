@@ -17,10 +17,7 @@ namespace EngineBay.Blueprints
         /// <inheritdoc/>
         public async Task<DataVariableBlueprintDto> Handle(UpdateParameters<DataVariableBlueprint> updateParameters, CancellationToken cancellation)
         {
-            if (updateParameters is null)
-            {
-                throw new ArgumentNullException(nameof(updateParameters));
-            }
+            ArgumentNullException.ThrowIfNull(updateParameters);
 
             var id = updateParameters.Id;
             var updateDataVariableBlueprint = updateParameters.Entity;

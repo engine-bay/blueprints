@@ -8,10 +8,7 @@ namespace EngineBay.Blueprints
         public InputDataVariableBlueprintDto(InputDataVariableBlueprint inputDataVariableBlueprint)
             : base(inputDataVariableBlueprint)
         {
-            if (inputDataVariableBlueprint is null)
-            {
-                throw new ArgumentNullException(nameof(inputDataVariableBlueprint));
-            }
+            ArgumentNullException.ThrowIfNull(inputDataVariableBlueprint);
 
             this.ExpressionBlueprintId = inputDataVariableBlueprint.ExpressionBlueprintId;
             this.DataTableBlueprintId = inputDataVariableBlueprint.DataTableBlueprintId;

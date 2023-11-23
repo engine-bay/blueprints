@@ -46,10 +46,7 @@ namespace EngineBay.Blueprints
 
         public static new void CreateDataAnnotations(ModelBuilder modelBuilder)
         {
-            if (modelBuilder is null)
-            {
-                throw new ArgumentNullException(nameof(modelBuilder));
-            }
+            ArgumentNullException.ThrowIfNull(modelBuilder);
 
             modelBuilder.Entity<TriggerBlueprint>().ToTable(typeof(TriggerBlueprint).Name.Pluralize());
 

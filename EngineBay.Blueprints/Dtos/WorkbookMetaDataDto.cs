@@ -8,10 +8,7 @@ namespace EngineBay.Blueprints
         public WorkbookMetaDataDto(Workbook workbook)
             : base(workbook)
         {
-            if (workbook is null)
-            {
-                throw new ArgumentNullException(nameof(workbook));
-            }
+            ArgumentNullException.ThrowIfNull(workbook);
 
             this.Name = workbook.Name;
             this.Description = workbook.Description;

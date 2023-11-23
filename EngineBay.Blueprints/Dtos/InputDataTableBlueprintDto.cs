@@ -8,10 +8,7 @@ namespace EngineBay.Blueprints
         public InputDataTableBlueprintDto(InputDataTableBlueprint inputDataTableBlueprint)
             : base(inputDataTableBlueprint)
         {
-            if (inputDataTableBlueprint is null)
-            {
-                throw new ArgumentNullException(nameof(inputDataTableBlueprint));
-            }
+            ArgumentNullException.ThrowIfNull(inputDataTableBlueprint);
 
             this.ExpressionBlueprintId = inputDataTableBlueprint.ExpressionBlueprintId;
             this.Name = inputDataTableBlueprint.Name;

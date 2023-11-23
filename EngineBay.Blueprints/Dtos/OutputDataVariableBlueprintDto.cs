@@ -8,10 +8,7 @@ namespace EngineBay.Blueprints
         public OutputDataVariableBlueprintDto(OutputDataVariableBlueprint outputDataVariableBlueprint)
             : base(outputDataVariableBlueprint)
         {
-            if (outputDataVariableBlueprint is null)
-            {
-                throw new ArgumentNullException(nameof(outputDataVariableBlueprint));
-            }
+            ArgumentNullException.ThrowIfNull(outputDataVariableBlueprint);
 
             this.ExpressionBlueprintId = outputDataVariableBlueprint.ExpressionBlueprintId;
             this.TriggerBlueprintId = outputDataVariableBlueprint.TriggerBlueprintId;
