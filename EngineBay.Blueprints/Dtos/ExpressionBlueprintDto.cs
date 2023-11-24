@@ -7,10 +7,7 @@ namespace EngineBay.Blueprints
         public ExpressionBlueprintDto(ExpressionBlueprint expressionBlueprint)
             : base(expressionBlueprint)
         {
-            if (expressionBlueprint is null)
-            {
-                throw new ArgumentNullException(nameof(expressionBlueprint));
-            }
+            ArgumentNullException.ThrowIfNull(expressionBlueprint);
 
             this.InputDataVariableBlueprints = expressionBlueprint.InputDataVariableBlueprints?.Select(x => new InputDataVariableBlueprintDto(x)).ToList();
             this.InputDataTableBlueprints = expressionBlueprint.InputDataTableBlueprints?.Select(x => new InputDataTableBlueprintDto(x)).ToList();

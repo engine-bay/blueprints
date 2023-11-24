@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
     <PropertyGroup>
-        <TargetFramework>net7.0</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
         <RootNamespace>EngineBay.Blueprints</RootNamespace>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
@@ -38,8 +38,8 @@
         </When>
         <Otherwise>
             <ItemGroup>
-                <PackageReference Include="EngineBay.Authentication" Version="1.1.0" />
-                <PackageReference Include="EngineBay.Persistence" Version="5.0.5" />
+                <PackageReference Include="EngineBay.Authentication" Version="2.0.0" />
+                <PackageReference Include="EngineBay.Persistence" Version="6.0.1" />
             </ItemGroup>
         </Otherwise>
     </Choose>

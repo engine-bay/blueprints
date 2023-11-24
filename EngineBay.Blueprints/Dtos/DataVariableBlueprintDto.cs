@@ -8,10 +8,7 @@ namespace EngineBay.Blueprints
         public DataVariableBlueprintDto(DataVariableBlueprint dataVariableBlueprint)
             : base(dataVariableBlueprint)
         {
-            if (dataVariableBlueprint is null)
-            {
-                throw new ArgumentNullException(nameof(dataVariableBlueprint));
-            }
+            ArgumentNullException.ThrowIfNull(dataVariableBlueprint);
 
             this.BlueprintId = dataVariableBlueprint.BlueprintId;
             this.Name = dataVariableBlueprint.Name;

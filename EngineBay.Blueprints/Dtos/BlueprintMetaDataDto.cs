@@ -8,10 +8,7 @@ namespace EngineBay.Blueprints
         public BlueprintMetaDataDto(Blueprint blueprint)
             : base(blueprint)
         {
-            if (blueprint is null)
-            {
-                throw new ArgumentNullException(nameof(blueprint));
-            }
+            ArgumentNullException.ThrowIfNull(blueprint);
 
             this.WorkbookId = blueprint.WorkbookId;
             this.Name = blueprint.Name;
