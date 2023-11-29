@@ -45,9 +45,9 @@
     </Choose>
 
     <ItemGroup>
-        <PackageReference Include="HtmlSanitizer" Version="8.0.746" />
+        <PackageReference Include="HtmlSanitizer" Version="8.0.795" />
         <PackageReference Include="PrivateSetterContractResolver" Version="2.1.0" />
-        <PackageReference Include="FluentValidation" Version="11.8.0" />
+        <PackageReference Include="FluentValidation" Version="11.8.1" />
         <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
             <PrivateAssets>all</PrivateAssets>
