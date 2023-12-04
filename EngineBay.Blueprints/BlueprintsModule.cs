@@ -96,7 +96,9 @@ namespace EngineBay.Blueprints
             services.AddTransient<IValidator<OutputDataVariableBlueprint>, OutputDataVariableBlueprintValidator>();
 
             // register persistence services
-            var databaseConfiguration = new CQRSDatabaseConfiguration<BlueprintsDbContext, BlueprintsQueryDbContext, BlueprintsWriteDbContext>();
+            var databaseConfiguration =
+                new CQRSDatabaseConfiguration<BlueprintsDbContext, BlueprintsQueryDbContext,
+                    BlueprintsWriteDbContext>();
             databaseConfiguration.RegisterDatabases(services);
 
             return services;
@@ -129,7 +131,8 @@ namespace EngineBay.Blueprints
             return;
         }
 
-        public IReadOnlyCollection<IModuleDbContext> GetRegisteredDbContexts(DbContextOptions<ModuleWriteDbContext> dbOptions)
+        public IReadOnlyCollection<IModuleDbContext> GetRegisteredDbContexts(
+            DbContextOptions<ModuleWriteDbContext> dbOptions)
         {
             return new IModuleDbContext[] { new BlueprintsDbContext(dbOptions) };
         }
