@@ -2,9 +2,10 @@
 {
     using System;
     using EngineBay.Auditing;
-    using EngineBay.Authentication;
+    using EngineBay.Core;
     using EngineBay.Persistence;
     using Microsoft.EntityFrameworkCore;
+    using NSubstitute;
 
     public class BaseTestWithFullAuditedDb<TContext> : BaseTestWithDbContext<AuditingWriteDbContext>
         where TContext : ModuleDbContext
@@ -21,7 +22,10 @@
                     .EnableSensitiveDataLogging()
                     .Options;
 
-            var currentIdentity = new SystemUserIdentity();
+            var currentIdentity = Substitute.For<ICurrentIdentity>();
+            currentIdentity.UserId.Returns(Guid.NewGuid());
+            currentIdentity.Username.Returns("bob");
+
             var interceptor = new AuditingInterceptor(currentIdentity, this.AuditDbContext);
 
             if (Activator.CreateInstance(typeof(TContext), dbContextOptions, interceptor) is not TContext context)
