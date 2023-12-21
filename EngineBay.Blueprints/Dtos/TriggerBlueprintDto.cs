@@ -8,10 +8,7 @@ namespace EngineBay.Blueprints
         public TriggerBlueprintDto(TriggerBlueprint triggerBlueprint)
             : base(triggerBlueprint)
         {
-            if (triggerBlueprint is null)
-            {
-                throw new ArgumentNullException(nameof(triggerBlueprint));
-            }
+            ArgumentNullException.ThrowIfNull(triggerBlueprint);
 
             this.BlueprintId = triggerBlueprint.BlueprintId;
             this.Name = triggerBlueprint.Name;

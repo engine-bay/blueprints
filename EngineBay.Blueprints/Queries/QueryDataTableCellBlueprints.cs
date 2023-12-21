@@ -19,10 +19,7 @@ namespace EngineBay.Blueprints
         /// <inheritdoc/>
         public async Task<PaginatedDto<DataTableCellBlueprintDto>> Handle(FilteredPaginationParameters<DataTableCellBlueprint> filteredPaginationParameters, CancellationToken cancellation)
         {
-            if (filteredPaginationParameters is null)
-            {
-                throw new ArgumentNullException(nameof(filteredPaginationParameters));
-            }
+            ArgumentNullException.ThrowIfNull(filteredPaginationParameters);
 
             var limit = filteredPaginationParameters.Limit;
             var skip = limit > 0 ? filteredPaginationParameters.Skip : 0;
@@ -46,7 +43,7 @@ namespace EngineBay.Blueprints
                 string sortBy when sortBy.Equals(nameof(DataTableCellBlueprint.Namespace), StringComparison.OrdinalIgnoreCase) => entity => entity.Namespace,
                 string sortBy when sortBy.Equals(nameof(DataTableCellBlueprint.Key), StringComparison.OrdinalIgnoreCase) => entity => entity.Key,
                 string sortBy when sortBy.Equals(nameof(DataTableCellBlueprint.Value), StringComparison.OrdinalIgnoreCase) => entity => entity.Value,
-                _ => throw new ArgumentNullException(filteredPaginationParameters.SortBy),
+                _ => throw new ArgumentException(filteredPaginationParameters.SortBy),
             };
 #pragma warning restore CA1305
             query = this.Sort(query, sortByPredicate, filteredPaginationParameters);

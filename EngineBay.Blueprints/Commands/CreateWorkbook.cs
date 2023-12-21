@@ -1,9 +1,6 @@
 namespace EngineBay.Blueprints
 {
-    using System.Security.Claims;
-    using EngineBay.Authentication;
     using EngineBay.Core;
-    using EngineBay.Persistence;
     using FluentValidation;
 
     public class CreateWorkbook : ICommandHandler<Workbook, WorkbookDto>
@@ -11,22 +8,18 @@ namespace EngineBay.Blueprints
         private readonly BlueprintsWriteDbContext db;
         private readonly IValidator<Workbook> validator;
 
-        private readonly GetApplicationUser getApplicationUserQuery;
-
-        public CreateWorkbook(GetApplicationUser getApplicationUserQuery, BlueprintsWriteDbContext db, IValidator<Workbook> validator)
+        public CreateWorkbook(BlueprintsWriteDbContext db, IValidator<Workbook> validator)
         {
-            this.getApplicationUserQuery = getApplicationUserQuery;
             this.db = db;
             this.validator = validator;
         }
 
         /// <inheritdoc/>
-        public async Task<WorkbookDto> Handle(Workbook workbook, ClaimsPrincipal claimsPrincipal, CancellationToken cancellation)
+        public async Task<WorkbookDto> Handle(Workbook workbook, CancellationToken cancellation)
         {
-            var user = await this.getApplicationUserQuery.Handle(claimsPrincipal, cancellation);
             this.validator.ValidateAndThrow(workbook);
             await this.db.Workbooks.AddAsync(workbook, cancellation);
-            await this.db.SaveChangesAsync(user, cancellation);
+            await this.db.SaveChangesAsync(cancellation);
             return new WorkbookDto(workbook);
         }
     }

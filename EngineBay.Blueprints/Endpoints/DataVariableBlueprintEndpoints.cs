@@ -43,9 +43,9 @@ namespace EngineBay.Blueprints
                 ApiGroupNameConstants.DataVariableBlueprints,
             });
 
-            endpoints.MapPost("/data-variable-blueprints", async (CreateDataVariableBlueprint command, DataVariableBlueprint dataVariableBlueprint, ClaimsPrincipal claimsPrincipal, CancellationToken cancellation) =>
+            endpoints.MapPost("/data-variable-blueprints", async (CreateDataVariableBlueprint command, DataVariableBlueprint dataVariableBlueprint, CancellationToken cancellation) =>
             {
-                var dto = await command.Handle(dataVariableBlueprint, claimsPrincipal, cancellation);
+                var dto = await command.Handle(dataVariableBlueprint, cancellation);
                 return Results.Created($"/data-variable-blueprints/{dataVariableBlueprint.Id}", dto);
             }).RequireAuthorization()
             .WithTags(new string[]
@@ -53,14 +53,14 @@ namespace EngineBay.Blueprints
                 ApiGroupNameConstants.DataVariableBlueprints,
             });
 
-            endpoints.MapPut("/data-variable-blueprints/{id}", async (UpdateDataVariableBlueprint command, DataVariableBlueprint updateDataVariableBlueprint, Guid id, ClaimsPrincipal claimsPrincipal, CancellationToken cancellation) =>
+            endpoints.MapPut("/data-variable-blueprints/{id}", async (UpdateDataVariableBlueprint command, DataVariableBlueprint updateDataVariableBlueprint, Guid id, CancellationToken cancellation) =>
             {
                 var updateParameters = new UpdateParameters<DataVariableBlueprint>
                 {
                     Id = id,
                     Entity = updateDataVariableBlueprint,
                 };
-                var dto = await command.Handle(updateParameters, claimsPrincipal, cancellation);
+                var dto = await command.Handle(updateParameters, cancellation);
                 return Results.Ok(dto);
             }).RequireAuthorization()
             .WithTags(new string[]
@@ -68,9 +68,9 @@ namespace EngineBay.Blueprints
                 ApiGroupNameConstants.DataVariableBlueprints,
             });
 
-            endpoints.MapDelete("/data-variable-blueprints/{id}", async (DeleteBlueprint command, Guid id, ClaimsPrincipal claimsPrincipal, CancellationToken cancellation) =>
+            endpoints.MapDelete("/data-variable-blueprints/{id}", async (DeleteBlueprint command, Guid id, CancellationToken cancellation) =>
             {
-                var dto = await command.Handle(id, claimsPrincipal, cancellation);
+                var dto = await command.Handle(id, cancellation);
                 return Results.Ok(dto);
             }).RequireAuthorization()
             .WithTags(new string[]

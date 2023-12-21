@@ -8,10 +8,7 @@ namespace EngineBay.Blueprints
         public TriggerExpressionBlueprintDto(TriggerExpressionBlueprint triggerExpressionBlueprint)
             : base(triggerExpressionBlueprint)
         {
-            if (triggerExpressionBlueprint is null)
-            {
-                throw new ArgumentNullException(nameof(triggerExpressionBlueprint));
-            }
+            ArgumentNullException.ThrowIfNull(triggerExpressionBlueprint);
 
             this.TriggerBlueprintId = triggerExpressionBlueprint.TriggerBlueprintId;
             this.Expression = triggerExpressionBlueprint.Expression;

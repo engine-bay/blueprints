@@ -1,7 +1,5 @@
 namespace EngineBay.Blueprints
 {
-    using System.Security.Claims;
-    using EngineBay.Authentication;
     using EngineBay.Core;
     using FluentValidation;
 
@@ -10,23 +8,16 @@ namespace EngineBay.Blueprints
         private readonly BlueprintsWriteDbContext db;
         private readonly IValidator<ExpressionBlueprint> validator;
 
-        private readonly GetApplicationUser getApplicationUserQuery;
-
-        public UpdateExpressionBlueprint(GetApplicationUser getApplicationUserQuery, BlueprintsWriteDbContext db, IValidator<ExpressionBlueprint> validator)
+        public UpdateExpressionBlueprint(BlueprintsWriteDbContext db, IValidator<ExpressionBlueprint> validator)
         {
-            this.getApplicationUserQuery = getApplicationUserQuery;
             this.db = db;
             this.validator = validator;
         }
 
         /// <inheritdoc/>
-        public async Task<ExpressionBlueprintDto> Handle(UpdateParameters<ExpressionBlueprint> updateParameters, ClaimsPrincipal claimsPrincipal, CancellationToken cancellation)
+        public async Task<ExpressionBlueprintDto> Handle(UpdateParameters<ExpressionBlueprint> updateParameters, CancellationToken cancellation)
         {
-            var user = await this.getApplicationUserQuery.Handle(claimsPrincipal, cancellation);
-            if (updateParameters is null)
-            {
-                throw new ArgumentNullException(nameof(updateParameters));
-            }
+            ArgumentNullException.ThrowIfNull(updateParameters);
 
             var id = updateParameters.Id;
             var updateExpressionBlueprint = updateParameters.Entity;
@@ -48,7 +39,7 @@ namespace EngineBay.Blueprints
             expressionBlueprint.Expression = updateExpressionBlueprint.Expression;
             expressionBlueprint.Objective = updateExpressionBlueprint.Objective;
 
-            await this.db.SaveChangesAsync(user, cancellation);
+            await this.db.SaveChangesAsync(cancellation);
             return new ExpressionBlueprintDto(expressionBlueprint);
         }
     }

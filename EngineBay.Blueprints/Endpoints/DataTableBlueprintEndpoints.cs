@@ -1,6 +1,5 @@
 namespace EngineBay.Blueprints
 {
-    using System.Security.Claims;
     using EngineBay.Core;
 
     public static class DataTableBlueprintEndpoints
@@ -43,9 +42,9 @@ namespace EngineBay.Blueprints
                 ApiGroupNameConstants.DataTableBlueprints,
             });
 
-            endpoints.MapPost("/data-table-blueprints", async (CreateDataTableBlueprint command, DataTableBlueprint dataTableBlueprint, ClaimsPrincipal claimsPrincipal, CancellationToken cancellation) =>
+            endpoints.MapPost("/data-table-blueprints", async (CreateDataTableBlueprint command, DataTableBlueprint dataTableBlueprint, CancellationToken cancellation) =>
             {
-                var dto = await command.Handle(dataTableBlueprint, claimsPrincipal, cancellation);
+                var dto = await command.Handle(dataTableBlueprint, cancellation);
                 return Results.Created($"/data-table-blueprints/{dataTableBlueprint.Id}", dto);
             }).RequireAuthorization()
             .WithTags(new string[]
@@ -53,14 +52,14 @@ namespace EngineBay.Blueprints
                 ApiGroupNameConstants.DataTableBlueprints,
             });
 
-            endpoints.MapPut("/data-table-blueprints/{id}", async (UpdateDataTableBlueprint command, DataTableBlueprint updateDataTableBlueprint, Guid id, ClaimsPrincipal claimsPrincipal, CancellationToken cancellation) =>
+            endpoints.MapPut("/data-table-blueprints/{id}", async (UpdateDataTableBlueprint command, DataTableBlueprint updateDataTableBlueprint, Guid id, CancellationToken cancellation) =>
             {
                 var updateParameters = new UpdateParameters<DataTableBlueprint>
                 {
                     Id = id,
                     Entity = updateDataTableBlueprint,
                 };
-                var dto = await command.Handle(updateParameters, claimsPrincipal, cancellation);
+                var dto = await command.Handle(updateParameters, cancellation);
                 return Results.Ok(dto);
             }).RequireAuthorization()
             .WithTags(new string[]
@@ -68,9 +67,9 @@ namespace EngineBay.Blueprints
                 ApiGroupNameConstants.DataTableBlueprints,
             });
 
-            endpoints.MapDelete("/data-table-blueprints/{id}", async (DeleteBlueprint command, Guid id, ClaimsPrincipal claimsPrincipal, CancellationToken cancellation) =>
+            endpoints.MapDelete("/data-table-blueprints/{id}", async (DeleteBlueprint command, Guid id, CancellationToken cancellation) =>
             {
-                var dto = await command.Handle(id, claimsPrincipal, cancellation);
+                var dto = await command.Handle(id, cancellation);
                 return Results.Ok(dto);
             }).RequireAuthorization()
             .WithTags(new string[]

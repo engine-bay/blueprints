@@ -8,10 +8,7 @@ namespace EngineBay.Blueprints
         public DataTableBlueprintDto(DataTableBlueprint dataTableBlueprint)
             : base(dataTableBlueprint)
         {
-            if (dataTableBlueprint is null)
-            {
-                throw new ArgumentNullException(nameof(dataTableBlueprint));
-            }
+            ArgumentNullException.ThrowIfNull(dataTableBlueprint);
 
             this.BlueprintId = dataTableBlueprint.BlueprintId;
             this.Name = dataTableBlueprint.Name;

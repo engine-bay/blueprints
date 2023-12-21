@@ -1,6 +1,5 @@
 namespace EngineBay.Blueprints
 {
-    using System.Security.Claims;
     using EngineBay.Core;
 
     public static class WorkbookEndpoints
@@ -40,9 +39,9 @@ namespace EngineBay.Blueprints
                 ApiGroupNameConstants.Workbooks,
             });
 
-            endpoints.MapPost("/workbooks", async (CreateWorkbook command, Workbook workbook, ClaimsPrincipal claimsPrincipal, CancellationToken cancellation) =>
+            endpoints.MapPost("/workbooks", async (CreateWorkbook command, Workbook workbook, CancellationToken cancellation) =>
             {
-                var dto = await command.Handle(workbook, claimsPrincipal, cancellation);
+                var dto = await command.Handle(workbook, cancellation);
                 return Results.Created($"/workbooks/{workbook.Id}", dto);
             }).RequireAuthorization()
             .WithTags(new string[]
@@ -50,14 +49,14 @@ namespace EngineBay.Blueprints
                 ApiGroupNameConstants.Workbooks,
             });
 
-            endpoints.MapPut("/workbooks/{id}", async (UpdateWorkbook command, Workbook updateWorkbook, Guid id, ClaimsPrincipal claimsPrincipal, CancellationToken cancellation) =>
+            endpoints.MapPut("/workbooks/{id}", async (UpdateWorkbook command, Workbook updateWorkbook, Guid id, CancellationToken cancellation) =>
             {
                 var updateParameters = new UpdateParameters<Workbook>
                 {
                     Id = id,
                     Entity = updateWorkbook,
                 };
-                var dto = await command.Handle(updateParameters, claimsPrincipal, cancellation);
+                var dto = await command.Handle(updateParameters, cancellation);
                 return Results.Ok(dto);
             }).RequireAuthorization()
             .WithTags(new string[]
@@ -65,9 +64,9 @@ namespace EngineBay.Blueprints
                 ApiGroupNameConstants.Workbooks,
             });
 
-            endpoints.MapDelete("/workbooks/{id}", async (DeleteWorkbook command, Guid id, ClaimsPrincipal claimsPrincipal, CancellationToken cancellation) =>
+            endpoints.MapDelete("/workbooks/{id}", async (DeleteWorkbook command, Guid id, CancellationToken cancellation) =>
             {
-                var dto = await command.Handle(id, claimsPrincipal, cancellation);
+                var dto = await command.Handle(id, cancellation);
                 return Results.Ok(dto);
             }).RequireAuthorization()
             .WithTags(new string[]

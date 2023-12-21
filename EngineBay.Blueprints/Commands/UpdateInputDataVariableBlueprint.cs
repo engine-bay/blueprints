@@ -1,7 +1,5 @@
 namespace EngineBay.Blueprints
 {
-    using System.Security.Claims;
-    using EngineBay.Authentication;
     using EngineBay.Core;
     using FluentValidation;
 
@@ -10,23 +8,16 @@ namespace EngineBay.Blueprints
         private readonly BlueprintsWriteDbContext db;
         private readonly IValidator<InputDataVariableBlueprint> validator;
 
-        private readonly GetApplicationUser getApplicationUserQuery;
-
-        public UpdateInputDataVariableBlueprint(GetApplicationUser getApplicationUserQuery, BlueprintsWriteDbContext db, IValidator<InputDataVariableBlueprint> validator)
+        public UpdateInputDataVariableBlueprint(BlueprintsWriteDbContext db, IValidator<InputDataVariableBlueprint> validator)
         {
-            this.getApplicationUserQuery = getApplicationUserQuery;
             this.db = db;
             this.validator = validator;
         }
 
         /// <inheritdoc/>
-        public async Task<InputDataVariableBlueprintDto> Handle(UpdateParameters<InputDataVariableBlueprint> updateParameters, ClaimsPrincipal claimsPrincipal, CancellationToken cancellation)
+        public async Task<InputDataVariableBlueprintDto> Handle(UpdateParameters<InputDataVariableBlueprint> updateParameters, CancellationToken cancellation)
         {
-            var user = await this.getApplicationUserQuery.Handle(claimsPrincipal, cancellation);
-            if (updateParameters is null)
-            {
-                throw new ArgumentNullException(nameof(updateParameters));
-            }
+            ArgumentNullException.ThrowIfNull(updateParameters);
 
             var id = updateParameters.Id;
             var updateInputDataVariableBlueprint = updateParameters.Entity;
@@ -48,7 +39,7 @@ namespace EngineBay.Blueprints
             inputDataVariableBlueprint.Name = updateInputDataVariableBlueprint.Name;
             inputDataVariableBlueprint.Namespace = updateInputDataVariableBlueprint.Namespace;
             inputDataVariableBlueprint.Type = updateInputDataVariableBlueprint.Type;
-            await this.db.SaveChangesAsync(user, cancellation);
+            await this.db.SaveChangesAsync(cancellation);
             return new InputDataVariableBlueprintDto(inputDataVariableBlueprint);
         }
     }

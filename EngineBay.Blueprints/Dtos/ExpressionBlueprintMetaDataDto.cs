@@ -8,10 +8,7 @@ namespace EngineBay.Blueprints
         public ExpressionBlueprintMetaDataDto(ExpressionBlueprint expressionBlueprint)
             : base(expressionBlueprint)
         {
-            if (expressionBlueprint is null)
-            {
-                throw new ArgumentNullException(nameof(expressionBlueprint));
-            }
+            ArgumentNullException.ThrowIfNull(expressionBlueprint);
 
             this.BlueprintId = expressionBlueprint.BlueprintId;
             this.Expression = expressionBlueprint.Expression;

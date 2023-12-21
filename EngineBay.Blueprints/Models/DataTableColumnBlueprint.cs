@@ -17,10 +17,7 @@ namespace EngineBay.Blueprints
 
         public static new void CreateDataAnnotations(ModelBuilder modelBuilder)
         {
-            if (modelBuilder is null)
-            {
-                throw new ArgumentNullException(nameof(modelBuilder));
-            }
+            ArgumentNullException.ThrowIfNull(modelBuilder);
 
             modelBuilder.Entity<DataTableColumnBlueprint>().ToTable(typeof(DataTableColumnBlueprint).Name.Pluralize());
 
