@@ -3,6 +3,7 @@ namespace EngineBay.Blueprints
     using System;
     using System.Linq.Expressions;
     using EngineBay.Core;
+    using EngineBay.Persistence;
     using LinqKit;
     using Microsoft.EntityFrameworkCore;
 

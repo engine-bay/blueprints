@@ -2,7 +2,7 @@ namespace EngineBay.Blueprints.Tests
 {
     using System.Threading.Tasks;
     using EngineBay.Blueprints;
-    using EngineBay.Core;
+    using EngineBay.Persistence;
     using Newtonsoft.Json;
     using Xunit;
 
