@@ -1,7 +1,7 @@
 namespace EngineBay.Blueprints
 {
     using System;
-    using EngineBay.Core;
+    using EngineBay.Persistence;
 
     public class BlueprintMetaDataDto : BaseDto
     {

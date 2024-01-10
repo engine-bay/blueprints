@@ -1,22 +1,18 @@
 ﻿namespace EngineBay.Blueprints.Tests
 {
     using System;
-    using EngineBay.Auditing;
     using EngineBay.Core;
     using EngineBay.Persistence;
     using Microsoft.EntityFrameworkCore;
     using NSubstitute;
 
-    public class BaseTestWithFullAuditedDb<TContext> : BaseTestWithDbContext<AuditingWriteDbContext>
+    public class BaseTestWithFullAuditedDb<TContext> : IDisposable
         where TContext : ModuleDbContext
     {
         private bool isDisposed;
 
         public BaseTestWithFullAuditedDb(string databaseName)
-            : base(databaseName + "AuditDb")
         {
-            this.AuditDbContext = base.DbContext;
-
             var dbContextOptions = new DbContextOptionsBuilder<ModuleWriteDbContext>()
                     .UseInMemoryDatabase(databaseName)
                     .EnableSensitiveDataLogging()
@@ -26,9 +22,10 @@
             currentIdentity.UserId.Returns(Guid.NewGuid());
             currentIdentity.Username.Returns("bob");
 
-            var interceptor = new AuditingInterceptor(currentIdentity, this.AuditDbContext);
+            var auditingInterceptor = Substitute.For<IAuditingInterceptor>();
+            var auditableModelInterceptor = new AuditableModelInterceptor(currentIdentity);
 
-            if (Activator.CreateInstance(typeof(TContext), dbContextOptions, interceptor) is not TContext context)
+            if (Activator.CreateInstance(typeof(TContext), dbContextOptions, auditingInterceptor, auditableModelInterceptor) is not TContext context)
             {
                 throw new ArgumentException("Context is null");
             }
@@ -38,18 +35,16 @@
             this.DbContext.Database.EnsureCreated();
         }
 
-        protected new TContext DbContext { get; set; }
+        protected TContext DbContext { get; set; }
 
-        protected AuditingWriteDbContext AuditDbContext { get; set; }
-
-        protected void ResetAuditEntries()
+        public void Dispose()
         {
-            this.AuditDbContext.AuditEntries.RemoveRange(this.AuditDbContext.AuditEntries);
-            this.AuditDbContext.SaveChanges();
+            this.Dispose(true);
+            GC.SuppressFinalize(this);
         }
 
         /// <inheritdoc/>
-        protected override void Dispose(bool disposing)
+        protected virtual void Dispose(bool disposing)
         {
             if (this.isDisposed)
             {
@@ -61,8 +56,6 @@
                 // free managed resources
                 this.DbContext.Database.EnsureDeleted();
                 this.DbContext.Dispose();
-
-                base.Dispose(disposing);
             }
 
             this.isDisposed = true;

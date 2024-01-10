@@ -1,6 +1,7 @@
 namespace EngineBay.Blueprints
 {
     using EngineBay.Core;
+    using EngineBay.Persistence;
 
     public static class TriggerExpressionBlueprints
     {
