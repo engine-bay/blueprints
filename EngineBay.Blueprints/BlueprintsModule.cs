@@ -3,7 +3,6 @@ namespace EngineBay.Blueprints
     using EngineBay.Core;
     using EngineBay.Persistence;
     using FluentValidation;
-    using Microsoft.EntityFrameworkCore;
 
     public class BlueprintsModule : BaseModule, IDatabaseModule
     {
@@ -129,9 +128,11 @@ namespace EngineBay.Blueprints
             return;
         }
 
-        public IReadOnlyCollection<IModuleDbContext> GetRegisteredDbContexts(DbContextOptions<ModuleWriteDbContext> dbOptions)
+        public IReadOnlyCollection<IModuleDbContext> GetRegisteredDbContexts(IDbContextOptionsFactory dbContextOptionsFactory)
         {
-            return new IModuleDbContext[] { new BlueprintsDbContext(dbOptions) };
+            ArgumentNullException.ThrowIfNull(dbContextOptionsFactory);
+
+            return new IModuleDbContext[] { new BlueprintsDbContext(dbContextOptionsFactory.GetDbContextOptions<ModuleWriteDbContext>()) };
         }
     }
 }
